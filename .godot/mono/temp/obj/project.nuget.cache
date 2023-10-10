@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "DSewh7QYqCPVmozBRk3LAogasqwPwGYWYAbILOgkWGSTQfu7OG7caAHvKzCPs3pTCK0K6QqRy3TTgp+MvWleSg==",
+  "success": true,
+  "projectFilePath": "E:\\Programming\\Projects\\Godot\\GF4\\GF4.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\soyar\\.nuget\\packages\\godot.sourcegenerators\\4.1.2\\godot.sourcegenerators.4.1.2.nupkg.sha512",
+    "C:\\Users\\soyar\\.nuget\\packages\\godotsharp\\4.1.2\\godotsharp.4.1.2.nupkg.sha512",
+    "C:\\Users\\soyar\\.nuget\\packages\\godotsharpeditor\\4.1.2\\godotsharpeditor.4.1.2.nupkg.sha512",
+    "C:\\Users\\soyar\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.15\\microsoft.netcore.app.ref.6.0.15.nupkg.sha512",
+    "C:\\Users\\soyar\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.15\\microsoft.windowsdesktop.app.ref.6.0.15.nupkg.sha512",
+    "C:\\Users\\soyar\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.15\\microsoft.aspnetcore.app.ref.6.0.15.nupkg.sha512"
+  ],
+  "logs": []
+}

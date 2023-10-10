@@ -1,0 +1,23 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://defsabp1lju2w"]
+
+[ext_resource type="Script" path="res://Character/CharacterDataResource.cs" id="1_f2fpm"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_f2fpm")
+Hp = 15
+HpMax = 10
+Sp = 15
+SpMax = 15
+Lv = 1
+Xp = 10
+XpForNextLevel = 0
+IsEnemy = false
+St = 3
+Ma = 2
+Ag = 3
+Co = 1
+Lu = 1
+WeaponDamage = 10
+ArmorDefense = 5
+IsDefending = false

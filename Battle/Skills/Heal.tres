@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://qpvk5kirxtam"]
+
+[ext_resource type="Script" path="res://Battle/Skills/SkillResource.cs" id="1_flr16"]
+
+[resource]
+script = ExtResource("1_flr16")
+SkillName = ""
+Damage = 10
+SpCost = 0
+IsAllReceiveDamage = false
+SkillType = 0

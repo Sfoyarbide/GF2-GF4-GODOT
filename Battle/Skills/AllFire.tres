@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://d1g3ubisv8y8c"]
+
+[ext_resource type="Script" path="res://Battle/Skills/SkillResource.cs" id="1_vhtdc"]
+
+[resource]
+script = ExtResource("1_vhtdc")
+SkillName = "All Fire"
+Damage = 5
+SpCost = 6
+IsAllReceiveDamage = true
+SkillType = 0

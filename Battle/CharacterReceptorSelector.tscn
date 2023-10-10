@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://0dp5kn1r6sid"]
+
+[ext_resource type="Script" path="res://Battle/CharacterReceptorSelector.cs" id="1_0lnwd"]
+
+[node name="CharacterReceptorSelector" type="Node3D"]
+script = ExtResource("1_0lnwd")
