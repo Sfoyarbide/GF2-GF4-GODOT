@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public partial class CharacterDataResource : Resource
 {
+    private Character _character;
     private int _hp;
     private int _hpMax;
     private int _sp;
@@ -24,10 +25,49 @@ public partial class CharacterDataResource : Resource
     private bool _isDefending;
     private int _weaponDamage; // Temp!!!
     private int _armorDefense; // Temp!!!
+    public static event EventHandler<OnHpChangedEventArgs> OnHpChanged;
+    public class OnHpChangedEventArgs : EventArgs
+    {
+        public Character character;
+        public bool isLessThanBefore;
+    }
 
-
+    public Character Character
+    {
+        get{ return _character;}
+        set{ _character = value;}
+    }
 	[Export]
-    public int Hp {get {return _hp;} set {_hp = value;}} 
+    public int Hp 
+    {
+        get 
+        {
+            return _hp;
+        } 
+        set 
+        {
+            int previousHp = _hp;
+            _hp = value;
+
+            if(_hp > HpMax)
+            {
+                _hp = HpMax;
+            }
+
+            if(_hp < 0)
+            {
+                // Die.
+            }
+
+            if(_hp < previousHp)
+            {
+                OnHpChanged?.Invoke(this, new OnHpChangedEventArgs{
+                    character = _character,
+                    isLessThanBefore = true
+                });
+            }  
+        }
+    } 
 	[Export]
     public int HpMax {get {return _hpMax;} set {_hpMax = value;}} 
 	[Export]

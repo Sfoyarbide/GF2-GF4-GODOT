@@ -26,9 +26,9 @@ public partial class BattleCameraManager : Node
 
         _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
         _battleDatabase.BattleManager.OnTurnEnd += BattleManager_OnTurnEnd;
-        _battleDatabase.BattleManager.OnCurrentCharacterChanged += BattleManager_OnCurrentCharacterChanged;
+        BattleManager.OnCurrentCharacterChanged += BattleManager_OnCurrentCharacterChanged;
         _battleDatabase.CharacterReceptorSelector.OnCharacterSelectorStarted += CharacterReceptorSelector_OnCharacterSelectorStarted;
-        _battleDatabase.CharacterReceptorSelector.OnCharacterSelectorCanceled += CharacterReceptorSelector_OnCharacterSelectorCanceled;
+        CharacterReceptorSelector.OnCharacterSelectorCanceled += CharacterReceptorSelector_OnCharacterSelectorCanceled;
         CharacterReceptorSelector.OnCharacterReceptorSelected += CharacterReceptorSelector_OnCharacterReceptorSelected;
     }
 
@@ -53,7 +53,7 @@ public partial class BattleCameraManager : Node
         }
     }
 
-    private void UpdateCamera(Camera3D camera, Vector3 characterPosition, bool isOnlyLookAt=false, bool isOnlyFollow=false)
+    private void UpdateCamera(Camera3D camera, Transform3D newCameraTransform, Vector3 characterPosition, bool isOnlyLookAt=false, bool isOnlyFollow=false)
     {
         // Updates a camera to their target Transform.
         if(!isOnlyFollow) // if is only follow then, we won't change the lookAt.
@@ -62,12 +62,7 @@ public partial class BattleCameraManager : Node
         }
         if(!isOnlyLookAt) // if is only lookAt then, we won't change the follow.
         {
-            float distanceFromCharacterZ = 2;
-            if(characterPosition.Z < 0)
-            {
-                distanceFromCharacterZ = -distanceFromCharacterZ;
-            }
-            camera.Position = characterPosition + Vector3.Forward * distanceFromCharacterZ + Vector3.Up;
+            camera.Transform = newCameraTransform;
         }
         
         //_currentCamera = camera;
@@ -77,22 +72,23 @@ public partial class BattleCameraManager : Node
     {
         Character currentCharacter = _battleDatabase.BattleManager.GetCurrentCharacter();
         Vector3 currentCharacterPosition = currentCharacter.Position;
-        UpdateCamera(_currentCharacterCamera, currentCharacterPosition);
-        UpdateCamera(_characterSelectorCamera, currentCharacterPosition, false, true); // Update the characterSelectingReceptorCamera follow
+        _currentCharacterCamera.GlobalTransform = currentCharacter.GetMarkerChildTransform(0);
+        UpdateCamera(_currentCharacterCamera, currentCharacter.GetMarkerChildTransform(0), currentCharacterPosition);
+        UpdateCamera(_characterSelectorCamera, currentCharacter.GetMarkerChildTransform(1), currentCharacterPosition, false, true); // Update the characterSelectingReceptorCamera follow
     }
 
     private void UpdateCharacterSelectorCamera() // Updates the CharacterSelectingReceptorCamera.
     {
         Character currentCharacterReceptor = _battleDatabase.CharacterReceptorSelector.GetCharacterReceptor();
         Vector3 currentCharacterReceptorPosition = currentCharacterReceptor.Position;
-        UpdateCamera(_characterSelectorCamera, currentCharacterReceptorPosition, true);
+        UpdateCamera(_characterSelectorCamera, currentCharacterReceptor.GetMarkerChildTransform(1), currentCharacterReceptorPosition, true);
     }
 
     private void UpdateCharacterSkillCamera() // Updates the CharacterSkillActionCamera.
     {
         Character currentCharacter = _battleDatabase.BattleManager.GetCurrentCharacter();
         Vector3 currentCharacterPosition = currentCharacter.Position;
-        UpdateCamera(_skillCamera, currentCharacterPosition);
+        UpdateCamera(_skillCamera, currentCharacter.GetMarkerChildTransform(0), currentCharacterPosition);
     }
 
     private void SetAllCamerasToState(bool state, Camera3D notThisCamera=null)

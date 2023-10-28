@@ -20,7 +20,7 @@ public partial class BattleManager : Node3D
 
     public event EventHandler OnBattleStart;
     public event EventHandler OnTurnEnd;
-    public event EventHandler<OnCurrentCharacterChangedEventArgs> OnCurrentCharacterChanged;
+    public static event EventHandler<OnCurrentCharacterChangedEventArgs> OnCurrentCharacterChanged;
     public event EventHandler<OnActionExecuteEventArgs> OnActionExecute;
     public class OnCurrentCharacterChangedEventArgs : EventArgs
     {
@@ -48,9 +48,9 @@ public partial class BattleManager : Node3D
         _characterTurnList = new List<Character>();
         _allyList = new List<Character>();
         _enemyList = new List<Character>();
-        for(int x = 0; x < GetChildCount(); x++)
+        for(int x = 0; x < GetChild(0).GetChildCount(); x++)
         {
-            newCharacterTurnList.Add((Character)GetChild(x));
+            newCharacterTurnList.Add(GetChild(0).GetChild(x) as Character);
         }
 
         _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
@@ -70,24 +70,29 @@ public partial class BattleManager : Node3D
             return;
         }
 
+        BaseAction selectedAction = GetCurrentCharacter().DataContainer.SelectedAction;
+
         if(Input.IsActionJustPressed("confirm"))
         {
-            BaseAction selectedAction = GetCurrentCharacter().DataContainer.SelectedAction;
-            if(selectedAction is SkillAction skillAction)
+            switch(selectedAction)
             {
-                SkillResource skill = GetCurrentCharacter().DataContainer.SelectedSkill;
-                if(skill.IsAllReceiveDamage)
-                {
-                    ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptorList());
-                }
-                else
-                {
+                case AttackAction attackAction:
                     ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptor());
-                }
-            }
-            else
-            {
-                ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptor());
+                    break;
+                case SkillAction skillAction:
+                    SkillResource skill = GetCurrentCharacter().DataContainer.SelectedSkill;
+                    if(skill.IsAllReceiveDamage)
+                    {
+                        ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptorList());
+                    }
+                    else
+                    {
+                        ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptor());
+                    }
+                    break;
+                case DefendAction defendAction:
+                    ExecuteAction(GetCurrentCharacter());
+                    break;
             }
             return;
         }
@@ -113,7 +118,18 @@ public partial class BattleManager : Node3D
 
         if(Input.IsActionJustPressed("select"))
         {
-            _battleDatabase.CharacterReceptorSelector.SetupSelection(skillResource.IsAllReceiveDamage, false);
+            switch(selectedAction)
+            {
+                case AttackAction:
+                    _battleDatabase.CharacterReceptorSelector.SetupSelection(false, false);
+                    break;
+                case SkillAction:
+                    _battleDatabase.CharacterReceptorSelector.SetupSelection(skillResource.IsAllReceiveDamage, false);
+                    break;
+                case DefendAction:
+                    _battleDatabase.CharacterReceptorSelector.SetupSelection(false, false, true);
+                    break;
+            }
             return;
         }
     }
@@ -207,6 +223,6 @@ public partial class BattleManager : Node3D
 
     public void UpdateAllyList()
     {
-        _allyList = CombatCalculations.ObtainCharacterListByIsEnemy(_characterTurnList, true);
+        _allyList = CombatCalculations.ObtainCharacterListByIsEnemy(_characterTurnList, false);
     }
 }

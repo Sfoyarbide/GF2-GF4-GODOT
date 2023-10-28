@@ -10,12 +10,17 @@ public partial class CharacterReceptorSelector : Node3D
     private bool _canSelect;
     private bool _selectsAll;
     public event EventHandler OnCharacterSelectorStarted;
-    public event EventHandler OnCharacterSelectorCanceled;
-    public event EventHandler OnCharacterSelectorCompleted;
+    public static event EventHandler OnCharacterSelectorCanceled;
+    public static event EventHandler OnCharacterSelectorCompleted;
     public static event EventHandler<OnCharacterReceptorSelectedEventArgs> OnCharacterReceptorSelected;
+    public static event EventHandler<OnSelectsAllEventArgs> OnSelectsAll;
     public class OnCharacterReceptorSelectedEventArgs : EventArgs
     {
         public Character characterRecepetor;
+    }
+    public class OnSelectsAllEventArgs : EventArgs
+    {
+        public List<Character> characterReceptorList;
     }
 
     public override void _Ready()
@@ -41,12 +46,6 @@ public partial class CharacterReceptorSelector : Node3D
         _receptorIndex = MoveTheIndex(0, _characterReceptorList.Count - 1, _receptorIndex);//PlayerInputCombat.Instance.MoveTheIndex(0, selectableCharacterList.Count - 1, index);
         if(previousReceptorIndex != _receptorIndex)
         {
-            /*
-            OnSelectedCharacterReceptorChanged?.Invoke(this, new OnSelectedCharacterReceptorEventArgs{
-                characterReceptor = GetCharacterReceptor()
-            });
-            */
-
             OnCharacterReceptorSelected?.Invoke(this, new OnCharacterReceptorSelectedEventArgs{
                 characterRecepetor = GetCharacterReceptor()
             });
@@ -55,7 +54,7 @@ public partial class CharacterReceptorSelector : Node3D
         }
     }
 
-    public void SetupSelection(bool selectsAll, bool invertCollection)
+    public void SetupSelection(bool selectsAll, bool invertCollection, bool onlySelectOnlyCharacter=false)
     {
         if(_canSelect)
         {
@@ -63,22 +62,30 @@ public partial class CharacterReceptorSelector : Node3D
         }
 
         _selectsAll = selectsAll;
-        UpdateCharacterReceptorList(_selectsAll, invertCollection);
-        /*
-        if(!dealsAllPosibleReceptors) // If not selects all enemys, then it means that is an indivual selection.
+
+        if(!onlySelectOnlyCharacter) 
         {
-            OnSelectedCharacterReceptorChanged?.Invoke(this, new OnSelectedCharacterReceptorEventArgs{
-                characterReceptor = GetCharacterReceptor()
+            UpdateCharacterReceptorList(_selectsAll, invertCollection);
+        }
+        else // Selects only the character that is doing the action.
+        {
+            _characterReceptorList.Clear();
+            _characterReceptorList.Add(_battleDatabase.BattleManager.GetCurrentCharacter());
+        }
+
+        if(!_selectsAll) // If not selects all enemys, then it means that is an indivual selection.
+        {
+            OnCharacterReceptorSelected?.Invoke(this, new OnCharacterReceptorSelectedEventArgs{
+                characterRecepetor = GetCharacterReceptor()
             });
         }
         else // If selects all enemys, then it means is a grupal selection.
         {
-            OnAllEnemySelected?.Invoke(this, new OnAllEnemysSelectedEventArgs
+            OnSelectsAll?.Invoke(this, new OnSelectsAllEventArgs
             {
-                allEnemySelected = selectableCharacterList
+                characterReceptorList = _characterReceptorList
             });
         }
-        */
         OnCharacterSelectorStarted?.Invoke(this, EventArgs.Empty);
         _canSelect = true;
     }
@@ -112,7 +119,14 @@ public partial class CharacterReceptorSelector : Node3D
 
     public Character GetCharacterReceptor()
     {
-        return _characterReceptorList[_receptorIndex];
+        if(_characterReceptorList.Count > 0)
+        {
+            return _characterReceptorList[_receptorIndex];
+        }
+        else
+        {
+            return _characterReceptorList[0];
+        }
     }
 
     public List<Character> GetCharacterReceptorList()

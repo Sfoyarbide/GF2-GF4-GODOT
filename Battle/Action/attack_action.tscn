@@ -4,3 +4,6 @@
 
 [node name="AttackAction" type="Node3D"]
 script = ExtResource("1_x6hd6")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true

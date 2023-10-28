@@ -1,23 +1,21 @@
 [gd_scene load_steps=9 format=3 uid="uid://bxswhqw6n3hrm"]
 
 [ext_resource type="Script" path="res://Character/Character.cs" id="1_6vy4c"]
-[ext_resource type="Resource" uid="uid://defsabp1lju2w" path="res://Character/CharacterData.tres" id="2_20amu"]
+[ext_resource type="Resource" uid="uid://defsabp1lju2w" path="res://Character/CharacterData.tres" id="2_xeqon"]
+[ext_resource type="PackedScene" uid="uid://f7mok8e0f216" path="res://Character/xbot.tscn" id="3_dbojm"]
 [ext_resource type="PackedScene" uid="uid://bnspedmfihk28" path="res://Battle/Action/attack_action.tscn" id="3_w5da2"]
 [ext_resource type="PackedScene" uid="uid://cjnl1b6fr1q0" path="res://Battle/Action/defend_action.tscn" id="4_qnvke"]
 [ext_resource type="PackedScene" uid="uid://bhh125x13531l" path="res://Battle/Action/skill_action.tscn" id="5_5dh2b"]
 [ext_resource type="Texture2D" uid="uid://b80efljl4m58l" path="res://icon.svg" id="6_n20yk"]
 [ext_resource type="Script" path="res://Character/CharacterSelectedVisual.cs" id="7_56rjq"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_iupmt"]
-
 [node name="Character" type="Node3D"]
 script = ExtResource("1_6vy4c")
-_dataContainer = ExtResource("2_20amu")
+_dataContainer = ExtResource("2_xeqon")
 
 [node name="Pivot" type="Node3D" parent="."]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Pivot"]
-mesh = SubResource("BoxMesh_iupmt")
+[node name="Model" parent="Pivot" instance=ExtResource("3_dbojm")]
 
 [node name="ActionContainer" type="Node" parent="."]
 
@@ -28,6 +26,17 @@ mesh = SubResource("BoxMesh_iupmt")
 [node name="skill_action" parent="ActionContainer" instance=ExtResource("5_5dh2b")]
 
 [node name="SelectedVisual" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.21607, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.55164, 0)
 texture = ExtResource("6_n20yk")
 script = ExtResource("7_56rjq")
+
+[node name="MarkerContainer" type="Node3D" parent="."]
+
+[node name="CurrentCameraTransform" type="Marker3D" parent="MarkerContainer"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1, 1, -2)
+
+[node name="CameraSelectorTransform" type="Marker3D" parent="MarkerContainer"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 1, -1)
+
+[node name="DamagePointTransform" type="Marker3D" parent="MarkerContainer"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 1)

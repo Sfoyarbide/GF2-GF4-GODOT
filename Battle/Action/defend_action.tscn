@@ -4,3 +4,5 @@
 
 [node name="defend_action" type="Node3D"]
 script = ExtResource("1_7trmx")
+
+[node name="Timer" type="Timer" parent="."]

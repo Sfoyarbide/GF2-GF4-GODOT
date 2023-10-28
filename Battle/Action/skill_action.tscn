@@ -4,3 +4,6 @@
 
 [node name="skill_action" type="Node3D"]
 script = ExtResource("1_ibllu")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0

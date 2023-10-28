@@ -43,7 +43,6 @@ public partial class BrainCamera : Node3D
         _tween.TweenProperty(_camera3D, "fov", to.Fov, duration).From(from.Fov);
 
         await ToSignal(_tween, Tween.SignalName.Finished);
-        GD.Print(_isTransitioning);
 
         to.Current = true;
         _isTransitioning = false;

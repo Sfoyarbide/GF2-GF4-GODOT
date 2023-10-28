@@ -5,6 +5,13 @@ using System.Collections.Generic;
 public partial class SkillAction : BaseAction
 {
     private List<Character> characterReceptorList = new List<Character>();
+    public static event EventHandler<OnSkillEventArgs> OnSkillCast;
+    public static event EventHandler<OnSkillEventArgs> OnSkillEnd;
+    public class OnSkillEventArgs : EventArgs
+    {
+        public Character character;
+        public SkillResource skill;
+    }
 
     public override void _Ready()
     {
@@ -71,20 +78,6 @@ public partial class SkillAction : BaseAction
         characterReceptor.DataContainer.Hp = newHp;
     }
 
-    private void ExecuteSkill(SkillResource skill)
-    {
-        if(skill.SkillType != SkillType.Heal) 
-        {
-            InvokeSkillToCharacterReceptorList(characterReceptorList, skill);
-        }
-        else // If the skill type is healing, you cannot fail the cast, therefore you use HealSkill function.
-        {
-            InvokeHealSkillToCharacterReceptorList(characterReceptorList, skill);
-        }
-
-        OnActionComplete();
-    }
-
     private void InvokeSkillToCharacterReceptorList(List<Character> characterReceptorList, SkillResource skill)
     {
         if(skill.IsAllReceiveDamage)
@@ -141,6 +134,37 @@ public partial class SkillAction : BaseAction
             });
             */
         }
+    }
+
+    private void ExecuteSkill(SkillResource skill)
+    {
+        if(skill.SkillType != SkillType.Heal) 
+        {
+            InvokeSkillToCharacterReceptorList(characterReceptorList, skill);
+        }
+        else // If the skill type is healing, you cannot fail the cast, therefore you use HealSkill function.
+        {
+            InvokeHealSkillToCharacterReceptorList(characterReceptorList, skill);
+        }
+
+        OnSkillCast?.Invoke(this, new OnSkillEventArgs{
+            character = Character,
+            skill = skill
+        });
+
+        EndingAction();
+    }
+
+    public override async void EndingAction()
+    {
+        Timer.Start();
+        await ToSignal(Timer, Timer.SignalName.Timeout);
+
+        OnSkillEnd?.Invoke(this, new OnSkillEventArgs{
+            character = Character
+        });
+
+        OnActionComplete();
     }
 
     private SkillResource GetCurrentSkill()

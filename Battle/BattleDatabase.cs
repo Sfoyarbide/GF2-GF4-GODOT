@@ -21,7 +21,7 @@ public partial class BattleDatabase : Node
     public override void _Ready()
     {
     	_battleManager = GetTree().Root.GetNode<BattleManager>("Level1/BattleManager");	
-		_characterReceptorSelector = GetTree().Root.GetNode<CharacterReceptorSelector>("Level1/CharacterReceptorSelector");	
+		_characterReceptorSelector = GetTree().Root.GetNode<CharacterReceptorSelector>("Level1/BattleManager/ManagerContainer/CharacterReceptorSelector");	
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
