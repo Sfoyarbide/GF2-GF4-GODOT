@@ -1,3 +1,8 @@
+Label
+TextEdit
+Button
+GridContainer
+Control
 Timer
 AnimationTree
 Node
@@ -5,11 +10,8 @@ Node3D
 Marker3D
 Camera3D
 Sprite3D
-Control
 DirectionalLight3D
 MeshInstance3D
-Button
 Sprite2D
-Label
 SpotLight3D
 CollisionShape3D

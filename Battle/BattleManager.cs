@@ -43,6 +43,9 @@ public partial class BattleManager : Node3D
 
     public override void _Ready()
     {
+        BattleUI.OnActionSelectedChanged += BattleUI_OnActionSelectedChanged;
+        //OnBattleStart?.Invoke(this, EventArgs.Empty);
+
         // TEMP
         List<Character> newCharacterTurnList = new List<Character>();
         _characterTurnList = new List<Character>();
@@ -187,6 +190,10 @@ public partial class BattleManager : Node3D
         UpdateAllyList();
         UpdateEnemyList();
         _inCombat = true;
+
+        OnCurrentCharacterChanged?.Invoke(this, new OnCurrentCharacterChangedEventArgs{
+            currentCharacter = GetCurrentCharacter()
+        });
     }
 
     public void AddQueueCharacter(Character newCharacter)
@@ -224,5 +231,10 @@ public partial class BattleManager : Node3D
     public void UpdateAllyList()
     {
         _allyList = CombatCalculations.ObtainCharacterListByIsEnemy(_characterTurnList, false);
+    }
+
+    private void BattleUI_OnActionSelectedChanged(object sender, BattleUI.OnActionSelectedChangedEventArgs e)
+    {
+        GetCurrentCharacter().DataContainer.SelectedAction = GetCurrentCharacter().DataContainer.ActionList[e.actionIndex];
     }
 }

@@ -121,4 +121,32 @@ public partial class CombatCalculations
 
         data.Xp = 0;
     }
+
+    public static int MoveTheIndex(int min, int max, int index)
+    {
+        int newIndexValue = index;
+        if(Input.IsActionJustPressed("left"))
+        {
+            if(index > min)
+            {
+                newIndexValue--;
+            }
+            else
+            {
+                newIndexValue = max;
+            }
+        }
+        if(Input.IsActionJustPressed("right"))
+        { 
+            if(index < max)
+            {
+                newIndexValue++;
+            }
+            else
+            {
+                newIndexValue = min;
+            }
+        }
+        return newIndexValue;
+    }
 }

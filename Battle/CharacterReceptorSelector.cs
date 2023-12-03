@@ -9,7 +9,7 @@ public partial class CharacterReceptorSelector : Node3D
     private int _receptorIndex;
     private bool _canSelect;
     private bool _selectsAll;
-    public event EventHandler OnCharacterSelectorStarted;
+    public static event EventHandler OnCharacterSelectorStarted;
     public static event EventHandler OnCharacterSelectorCanceled;
     public static event EventHandler OnCharacterSelectorCompleted;
     public static event EventHandler<OnCharacterReceptorSelectedEventArgs> OnCharacterReceptorSelected;
@@ -43,7 +43,7 @@ public partial class CharacterReceptorSelector : Node3D
         }
 
         int previousReceptorIndex = _receptorIndex;
-        _receptorIndex = MoveTheIndex(0, _characterReceptorList.Count - 1, _receptorIndex);//PlayerInputCombat.Instance.MoveTheIndex(0, selectableCharacterList.Count - 1, index);
+        _receptorIndex = CombatCalculations.MoveTheIndex(0, _characterReceptorList.Count - 1, _receptorIndex);//PlayerInputCombat.Instance.MoveTheIndex(0, selectableCharacterList.Count - 1, index);
         if(previousReceptorIndex != _receptorIndex)
         {
             OnCharacterReceptorSelected?.Invoke(this, new OnCharacterReceptorSelectedEventArgs{
@@ -69,7 +69,6 @@ public partial class CharacterReceptorSelector : Node3D
         }
         else // Selects only the character that is doing the action.
         {
-            _characterReceptorList.Clear();
             _characterReceptorList.Add(_battleDatabase.BattleManager.GetCurrentCharacter());
         }
 
@@ -151,33 +150,5 @@ public partial class CharacterReceptorSelector : Node3D
         OnCharacterSelectorCompleted?.Invoke(this, EventArgs.Empty);
         _characterReceptorList.Clear();
         _canSelect = false;
-    }
-
-    public int MoveTheIndex(int min, int max, int index)
-    {
-        int newIndexValue = index;
-        if(Input.IsActionJustPressed("left"))
-        {
-            if(index > min)
-            {
-                newIndexValue--;
-            }
-            else
-            {
-                newIndexValue = max;
-            }
-        }
-        if(Input.IsActionJustPressed("right"))
-        { 
-            if(index < max)
-            {
-                newIndexValue++;
-            }
-            else
-            {
-                newIndexValue = min;
-            }
-        }
-        return newIndexValue;
     }
 }

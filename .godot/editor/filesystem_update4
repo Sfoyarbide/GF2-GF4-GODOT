@@ -1,9 +1,7 @@
-res://Character/xbot.tscn
-res://Battle/Skills/Heal.tres
-res://Battle/Skills/Fire.tres
-res://Character/character.tscn
 res://Levels/Level1.tscn
-res://Battle/Action/defend_action.tscn
+res://Battle/Skills/Heal.tres
+res://Character/CharacterData.tres
+res://Battle/Skills/Fire.tres
 res://Battle/Action/AttackAction.cs
 res://Battle/Action/BaseAction.cs
 res://Battle/Action/DefendAction.cs
@@ -13,9 +11,10 @@ res://Battle/BattleDatabase.cs
 res://Battle/BattleManager.cs
 res://Battle/CharacterReceptorSelector.cs
 res://Battle/Skills/SkillResource.cs
+res://Battle/UI/ActionButton.cs
+res://Battle/UI/BattleUI.cs
 res://Character/Character.cs
 res://Character/CharacterAnimator.cs
 res://Character/CharacterDataResource.cs
 res://Character/CharacterSelectedVisual.cs
 res://Levels/BrainCamera.cs
-res://Character/CharacterData.tres
