@@ -40,7 +40,7 @@ SpMax = 20
 Lv = 1
 Xp = 0
 XpForNextLevel = 0
-IsEnemy = false
+IsEnemy = true
 St = 2
 Ma = 3
 Ag = 1
@@ -60,7 +60,7 @@ SpMax = 20
 Lv = 1
 Xp = 0
 XpForNextLevel = 0
-IsEnemy = false
+IsEnemy = true
 St = 2
 Ma = 3
 Ag = 1
@@ -72,51 +72,51 @@ IsDefending = false
 
 [node name="Level1" type="Node3D"]
 
-[node name="BattleManager" parent="." instance=ExtResource("1_gteq7")]
+[node name="Battle" parent="." instance=ExtResource("1_gteq7")]
 skillResource = ExtResource("2_73vbs")
 
-[node name="CharacterContainer" type="Node3D" parent="BattleManager"]
+[node name="CharacterContainer" type="Node3D" parent="Battle"]
 
-[node name="Character0" parent="BattleManager/CharacterContainer" instance=ExtResource("2_fidtg")]
+[node name="Character0" parent="Battle/CharacterContainer" instance=ExtResource("2_fidtg")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 4)
 _dataContainer = SubResource("Resource_2ta1x")
 _skillResource = ExtResource("2_sxlui")
 
-[node name="Character1" parent="BattleManager/CharacterContainer" instance=ExtResource("2_fidtg")]
+[node name="Character1" parent="Battle/CharacterContainer" instance=ExtResource("2_fidtg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 _dataContainer = SubResource("Resource_sskod")
 _skillResource = ExtResource("2_sxlui")
 
-[node name="Character2" parent="BattleManager/CharacterContainer" instance=ExtResource("2_fidtg")]
+[node name="Character2" parent="Battle/CharacterContainer" instance=ExtResource("2_fidtg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -4)
 _dataContainer = SubResource("Resource_2i74r")
 _skillResource = ExtResource("2_sxlui")
 
-[node name="BattleEnvironment" type="Node3D" parent="BattleManager"]
+[node name="Stage" type="Node3D" parent="Battle"]
 
-[node name="CameraManager" type="Node3D" parent="BattleManager/BattleEnvironment"]
+[node name="CameraManager" type="Node3D" parent="Battle/Stage"]
 script = ExtResource("8_q6j7v")
 
-[node name="CurrentCharacter" type="Camera3D" parent="BattleManager/BattleEnvironment/CameraManager"]
+[node name="CurrentCharacter" type="Camera3D" parent="Battle/Stage/CameraManager"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 6)
 current = true
 fov = 100.0
 
-[node name="CharacterSelector" type="Camera3D" parent="BattleManager/BattleEnvironment/CameraManager"]
+[node name="CharacterSelector" type="Camera3D" parent="Battle/Stage/CameraManager"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, 5)
 
-[node name="Skill" type="Camera3D" parent="BattleManager/BattleEnvironment/CameraManager"]
+[node name="Skill" type="Camera3D" parent="Battle/Stage/CameraManager"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 6)
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="BattleManager/BattleEnvironment"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Battle/Stage"]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
 light_bake_mode = 1
 
-[node name="BrainCamera" parent="BattleManager" instance=ExtResource("7_jdvbv")]
+[node name="BrainCamera" parent="Battle" instance=ExtResource("7_jdvbv")]
 
-[node name="ManagerContainer" type="Node" parent="BattleManager"]
+[node name="ManagerContainer" type="Node" parent="Battle"]
 
-[node name="CharacterReceptorSelector" parent="BattleManager/ManagerContainer" instance=ExtResource("4_ickuk")]
+[node name="CharacterReceptorSelector" parent="Battle/ManagerContainer" instance=ExtResource("4_ickuk")]
 
-[node name="BattleUI" parent="BattleManager" instance=ExtResource("9_m5fxk")]
+[node name="BattleUI" parent="Battle" instance=ExtResource("9_m5fxk")]
 _canSelect = true

@@ -14,4 +14,4 @@ text = "Attack"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="button_down" from="." to="." method="OnButtonDown"]
+[connection signal="pressed" from="." to="." method="OnPressed"]

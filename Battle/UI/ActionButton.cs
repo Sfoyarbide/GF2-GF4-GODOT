@@ -23,7 +23,7 @@ public partial class ActionButton : Button
         _label.Text = actionName;
     }
 
-    private void OnButtonDown()
+    private void OnPressed()
     {
         OnActionButtonDown?.Invoke(this, new OnActionButtonDownEventArgs{
             selectedActionIndex = _actionIndex

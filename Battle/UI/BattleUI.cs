@@ -10,6 +10,7 @@ public partial class BattleUI : Control
     private GridContainer _actionGridContainer;
     [Export]
     private PackedScene _actionButtonScene;
+    private BattleDatabase _battleDatabase;
     public static event EventHandler<OnActionSelectedChangedEventArgs> OnActionSelectedChanged;
     public class OnActionSelectedChangedEventArgs : EventArgs
     {
@@ -23,6 +24,7 @@ public partial class BattleUI : Control
         CharacterReceptorSelector.OnCharacterSelectorCanceled += CharacterReceptorSelector_OnCharacterSelectorCanceled;
         CharacterReceptorSelector.OnCharacterSelectorStarted += CharacterReceptorSelector_OnCharacterSelectorStarted;
         ActionButton.OnActionButtonDown += ActionButton_OnActionButtonDown;
+        _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
     }
 
     public override void _Process(double delta)
@@ -33,13 +35,13 @@ public partial class BattleUI : Control
         }
 
         int previousActionIndex = _actionIndex;
-        _actionIndex = CombatCalculations.MoveTheIndex(0, _actionGridContainer.GetChildCount(), _actionIndex);
+        //_actionIndex = CombatCalculations.MoveTheIndex(0, _actionGridContainer.GetChildCount(), _actionIndex);
         if(_actionIndex != previousActionIndex)
         {
             OnActionSelectedChanged?.Invoke(this, new OnActionSelectedChangedEventArgs{
                 actionIndex = _actionIndex
             });
-        } 
+        }
     }
 
     private void CreateActionButtons(Character currentCharacter)
@@ -82,6 +84,9 @@ public partial class BattleUI : Control
         if(_canSelect == true)
         {
             _actionIndex = e.selectedActionIndex;
+            OnActionSelectedChanged?.Invoke(this, new OnActionSelectedChangedEventArgs{
+                actionIndex = _actionIndex
+            });
         }
     }
 

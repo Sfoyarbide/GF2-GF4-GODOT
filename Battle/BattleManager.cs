@@ -22,6 +22,8 @@ public partial class BattleManager : Node3D
     public event EventHandler OnTurnEnd;
     public static event EventHandler<OnCurrentCharacterChangedEventArgs> OnCurrentCharacterChanged;
     public event EventHandler<OnActionExecuteEventArgs> OnActionExecute;
+    public event EventHandler<OnSelectionStartedEventArgs> OnSelectionStarted;
+    public event EventHandler OnItemSelectionStarted;
     public class OnCurrentCharacterChangedEventArgs : EventArgs
     {
         public Character currentCharacter;
@@ -29,6 +31,16 @@ public partial class BattleManager : Node3D
     public class OnActionExecuteEventArgs : EventArgs
     {
         public BaseAction action;
+    }
+    public class OnSelectionStartedEventArgs : EventArgs
+    {
+        public BaseAction action;
+        public bool allReceiveDamage;
+    }
+
+    public List<Character> CharacterTurnList
+    {
+        get { return _characterTurnList; }
     }
 
     public List<Character> AllyList 
@@ -96,22 +108,20 @@ public partial class BattleManager : Node3D
                 case DefendAction defendAction:
                     ExecuteAction(GetCurrentCharacter());
                     break;
+                case ItemAction itemAction:
+                    
+                    if(!itemAction.CurrentItem.ForAllReceptors)
+                    {    
+                        ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptor());
+                    }
+                    else
+                    {
+                        ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptorList());
+                    }
+                    break;
             }
             return;
         }
-
-        /* TEST FOR ALL ENEMYS
-        if(Input.IsKeyPressed(Key.X) && !temp)
-        {
-            _characterTurnList[0].DataContainer.SelectedAction = _characterTurnList[0].DataContainer.ActionList[2];
-            _characterTurnList[0].DataContainer.SelectedSkill = skillResource;
-            List<Character> characterReceptors = new List<Character>();
-            characterReceptors.Add(_characterTurnList[1]); 
-            characterReceptors.Add(_characterTurnList[2]); 
-            ExecuteAction(characterReceptors);
-            temp = true;
-        }
-        */
 
         if(Input.IsActionJustPressed("cancel"))
         {
@@ -123,14 +133,14 @@ public partial class BattleManager : Node3D
         {
             switch(selectedAction)
             {
-                case AttackAction:
-                    _battleDatabase.CharacterReceptorSelector.SetupSelection(false, false);
+                case ItemAction:
+                    OnItemSelectionStarted?.Invoke(this, EventArgs.Empty);
                     break;
-                case SkillAction:
-                    _battleDatabase.CharacterReceptorSelector.SetupSelection(skillResource.IsAllReceiveDamage, false);
-                    break;
-                case DefendAction:
-                    _battleDatabase.CharacterReceptorSelector.SetupSelection(false, false, true);
+                default:
+                    OnSelectionStarted?.Invoke(this, new OnSelectionStartedEventArgs{
+                        action = selectedAction,
+                        allReceiveDamage = skillResource.IsAllReceiveDamage // check!!!
+                    });
                     break;
             }
             return;

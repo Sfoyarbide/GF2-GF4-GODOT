@@ -2,6 +2,12 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
+public enum ReceptorCriteria
+{
+    Enemy,
+    Ally
+}
+
 public partial class CharacterReceptorSelector : Node3D
 {
     private BattleDatabase _battleDatabase;
@@ -9,7 +15,7 @@ public partial class CharacterReceptorSelector : Node3D
     private int _receptorIndex;
     private bool _canSelect;
     private bool _selectsAll;
-    public static event EventHandler OnCharacterSelectorStarted;
+    public static event EventHandler<OnCharacterReceptorSelectedEventArgs> OnCharacterSelectorStarted;
     public static event EventHandler OnCharacterSelectorCanceled;
     public static event EventHandler OnCharacterSelectorCompleted;
     public static event EventHandler<OnCharacterReceptorSelectedEventArgs> OnCharacterReceptorSelected;
@@ -26,7 +32,9 @@ public partial class CharacterReceptorSelector : Node3D
     public override void _Ready()
     {
         _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
+        _battleDatabase.BattleManager.OnSelectionStarted += BattleManager_OnSelectionStarted;
         _characterReceptorList = new List<Character>();
+        ItemUI.OnConfirmItem += ItemUI_OnConfirmItem;
     }
 
     public override void _Process(double delta)
@@ -85,8 +93,59 @@ public partial class CharacterReceptorSelector : Node3D
                 characterReceptorList = _characterReceptorList
             });
         }
-        OnCharacterSelectorStarted?.Invoke(this, EventArgs.Empty);
+        OnCharacterSelectorStarted?.Invoke(this, new OnCharacterReceptorSelectedEventArgs{
+            characterRecepetor = _characterReceptorList[_receptorIndex]
+        });
         _canSelect = true;
+    }
+
+    public void SetupSelection(List<ReceptorCriteria> receptorCriteriaList, bool selectsAll=false)
+    {
+        if(_canSelect)
+        {
+            return;
+        }
+
+        _characterReceptorList.Clear();
+
+        foreach(Character character in _battleDatabase.BattleManager.CharacterTurnList)
+        {
+            bool hasMeetCriterias = false;
+            foreach(ReceptorCriteria receptorCriteria in receptorCriteriaList)
+            {
+                if(MeetCriteria(character, receptorCriteria))
+                {
+                    hasMeetCriterias = true;
+                }
+                else
+                {
+                    hasMeetCriterias = false;
+                    break;
+                }
+            }
+
+            if(hasMeetCriterias)
+            {
+                _characterReceptorList.Add(character);
+            }
+        }
+
+        if(_characterReceptorList.Count > 0)
+        {
+            OnCharacterSelectorStarted?.Invoke(this, new OnCharacterReceptorSelectedEventArgs{
+                characterRecepetor = _characterReceptorList[_receptorIndex]
+            });
+
+            if(selectsAll)
+            {
+                OnSelectsAll?.Invoke(this, new OnSelectsAllEventArgs
+                {
+                    characterReceptorList = _characterReceptorList
+                });
+            }
+
+            _canSelect = true;
+        }
     }
 
     private void UpdateCharacterReceptorList(bool _selectsAll, bool invertCollection) // Recheck logic.
@@ -150,5 +209,39 @@ public partial class CharacterReceptorSelector : Node3D
         OnCharacterSelectorCompleted?.Invoke(this, EventArgs.Empty);
         _characterReceptorList.Clear();
         _canSelect = false;
+    }
+
+    private void BattleManager_OnSelectionStarted(object sender, BattleManager.OnSelectionStartedEventArgs e)
+    {
+        switch (e.action)
+        {
+            case AttackAction:
+                SetupSelection(false, false);
+                break;
+            case SkillAction:
+                SetupSelection(e.allReceiveDamage, false);
+                break;
+            case DefendAction:
+                SetupSelection(false, false, true);
+                break;
+        }
+    }
+
+    private bool MeetCriteria(Character receptor, ReceptorCriteria receptorCriteria)
+    {
+        switch(receptorCriteria)
+        {
+            case ReceptorCriteria.Enemy:
+                return receptor.DataContainer.IsEnemy;
+            case ReceptorCriteria.Ally:
+                return !receptor.DataContainer.IsEnemy;
+            default:
+                return false;
+        }
+    }
+
+    private void ItemUI_OnConfirmItem(object sender, ItemUI.OnConfirmItemEventArgs e)
+    {
+        SetupSelection(e.item.ReceptorCriteriaList, e.item.ForAllReceptors);
     }
 }

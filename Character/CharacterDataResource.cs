@@ -99,7 +99,6 @@ public partial class CharacterDataResource : Resource
     // [Export] It's seems to be some kind of error when trying to export a list. Let's us wait.
     public List<BaseAction> ActionList {get {return _actionList; } set {_actionList = value; }}
     public List<SkillResource> SkillList {get {return _skillList; } set {_skillList = value; }}
-    [Export]
     public BaseAction SelectedAction {get {return _selectedAction;} set {_selectedAction = value;}}
     [Export]
     public SkillResource SelectedSkill {get {return _selectedSkill;} set {_selectedSkill = value;}}

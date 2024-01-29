@@ -1,13 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://bxswhqw6n3hrm"]
+[gd_scene load_steps=10 format=3 uid="uid://bxswhqw6n3hrm"]
 
 [ext_resource type="Script" path="res://Character/Character.cs" id="1_6vy4c"]
 [ext_resource type="Resource" uid="uid://defsabp1lju2w" path="res://Character/CharacterData.tres" id="2_xeqon"]
 [ext_resource type="PackedScene" uid="uid://f7mok8e0f216" path="res://Character/xbot.tscn" id="3_dbojm"]
 [ext_resource type="PackedScene" uid="uid://bnspedmfihk28" path="res://Battle/Action/attack_action.tscn" id="3_w5da2"]
-[ext_resource type="PackedScene" uid="uid://cjnl1b6fr1q0" path="res://Battle/Action/defend_action.tscn" id="4_qnvke"]
-[ext_resource type="PackedScene" uid="uid://bhh125x13531l" path="res://Battle/Action/skill_action.tscn" id="5_5dh2b"]
+[ext_resource type="PackedScene" uid="uid://cjnl1b6fr1q0" path="res://Battle/Action/DefendAction.tscn" id="4_qnvke"]
+[ext_resource type="PackedScene" uid="uid://bhh125x13531l" path="res://Battle/Action/SkillAction.tscn" id="5_5dh2b"]
 [ext_resource type="Texture2D" uid="uid://b80efljl4m58l" path="res://icon.svg" id="6_n20yk"]
 [ext_resource type="Script" path="res://Character/CharacterSelectedVisual.cs" id="7_56rjq"]
+[ext_resource type="PackedScene" uid="uid://bh1tekhr3pm00" path="res://Battle/Action/ItemAction.tscn" id="7_w82om"]
 
 [node name="Character" type="Node3D"]
 script = ExtResource("1_6vy4c")
@@ -21,9 +22,11 @@ _dataContainer = ExtResource("2_xeqon")
 
 [node name="AttackAction" parent="ActionContainer" instance=ExtResource("3_w5da2")]
 
-[node name="defend_action" parent="ActionContainer" instance=ExtResource("4_qnvke")]
+[node name="DefendAction" parent="ActionContainer" instance=ExtResource("4_qnvke")]
 
-[node name="skill_action" parent="ActionContainer" instance=ExtResource("5_5dh2b")]
+[node name="SkillAction" parent="ActionContainer" instance=ExtResource("5_5dh2b")]
+
+[node name="ItemAction" parent="ActionContainer" instance=ExtResource("7_w82om")]
 
 [node name="SelectedVisual" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.55164, 0)

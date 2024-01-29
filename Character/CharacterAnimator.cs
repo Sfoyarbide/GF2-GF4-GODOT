@@ -31,6 +31,7 @@ public partial class CharacterAnimator : Node3D
         SkillAction.OnSkillEnd += SkillAction_OnSkillEnd;
         DefendAction.OnDefend += DefendAction_OnDefend;
         DefendAction.OnCancelDefend += DefendAction_OnCancelDefend;
+        ItemAction.OnUsedItemStarted += ItemAction_OnUsedItemStarted;
         CharacterDataResource.OnHpChanged += CharacterDataResource_OnHpChanged;
     }
 
@@ -47,7 +48,6 @@ public partial class CharacterAnimator : Node3D
     public void SetTrigger(ref bool animationCondition)
     {
         animationCondition = true;
-        
     }
 
     private void AttackAction_OnAttackStarted(object sender, AttackAction.OnAttackEventArgs e)
@@ -72,6 +72,14 @@ public partial class CharacterAnimator : Node3D
         {
             SetBool(ref _attackMelee, false);
             SetBool(ref _isMoving, false);
+        }
+    }
+
+    private void ItemAction_OnUsedItemStarted(object sender, ItemAction.OnUsedItemEventArgs e)
+    {
+        if(e.character == _character)
+        {
+            SetBool(ref _healSkill, true);
         }
     }
 
@@ -130,6 +138,9 @@ public partial class CharacterAnimator : Node3D
         {
             case "Hit":
                 SetBool(ref _isHit, false);
+                break;
+            case "Heal_Spell":
+                SetBool(ref _healSkill, false);
                 break;
         }
     }

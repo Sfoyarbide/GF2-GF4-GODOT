@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cjnl1b6fr1q0"]
-
-[ext_resource type="Script" path="res://Battle/Action/DefendAction.cs" id="1_7trmx"]
-
-[node name="defend_action" type="Node3D"]
-script = ExtResource("1_7trmx")
-
-[node name="Timer" type="Timer" parent="."]

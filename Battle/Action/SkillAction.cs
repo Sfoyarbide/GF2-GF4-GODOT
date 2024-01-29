@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public partial class SkillAction : BaseAction
 {
-    private List<Character> characterReceptorList = new List<Character>();
+    private List<Character> _characterReceptorList = new List<Character>();
     public static event EventHandler<OnSkillEventArgs> OnSkillCast;
     public static event EventHandler<OnSkillEventArgs> OnSkillEnd;
     public class OnSkillEventArgs : EventArgs
@@ -140,11 +140,11 @@ public partial class SkillAction : BaseAction
     {
         if(skill.SkillType != SkillType.Heal) 
         {
-            InvokeSkillToCharacterReceptorList(characterReceptorList, skill);
+            InvokeSkillToCharacterReceptorList(_characterReceptorList, skill);
         }
         else // If the skill type is healing, you cannot fail the cast, therefore you use HealSkill function.
         {
-            InvokeHealSkillToCharacterReceptorList(characterReceptorList, skill);
+            InvokeHealSkillToCharacterReceptorList(_characterReceptorList, skill);
         }
 
         OnSkillCast?.Invoke(this, new OnSkillEventArgs{
@@ -175,7 +175,7 @@ public partial class SkillAction : BaseAction
     public override void TakeAction(Character characterReceptor, Action onActionComplete)
     {
         SkillResource skill = GetCurrentSkill();
-        characterReceptorList.Add(characterReceptor);
+        _characterReceptorList.Add(characterReceptor);
         OnActionComplete = onActionComplete;
         ExecuteSkill(skill);
     }
@@ -183,7 +183,7 @@ public partial class SkillAction : BaseAction
     public override void TakeAction(List<Character> characterReceptorList, Action onActionComplete)
     {
         SkillResource skill = GetCurrentSkill();
-        this.characterReceptorList = characterReceptorList;
+        _characterReceptorList = characterReceptorList;
         OnActionComplete = onActionComplete;
         ExecuteSkill(skill);
     }

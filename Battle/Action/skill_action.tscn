@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhh125x13531l"]
-
-[ext_resource type="Script" path="res://Battle/Action/SkillAction.cs" id="1_ibllu"]
-
-[node name="skill_action" type="Node3D"]
-script = ExtResource("1_ibllu")
-
-[node name="Timer" type="Timer" parent="."]
-wait_time = 2.0

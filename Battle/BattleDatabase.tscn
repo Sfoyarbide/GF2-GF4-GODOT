@@ -1,6 +1,55 @@
-[gd_scene load_steps=2 format=3 uid="uid://cwp8yp0vkt7hr"]
+[gd_scene load_steps=6 format=3 uid="uid://cwp8yp0vkt7hr"]
 
 [ext_resource type="Script" path="res://Battle/BattleDatabase.cs" id="1_p1jym"]
+[ext_resource type="Script" path="res://Battle/Inventory/Inventory.cs" id="2_feauj"]
+[ext_resource type="Script" path="res://Battle/Inventory/Items/Apple/AppleItem.cs" id="2_usa7a"]
+[ext_resource type="Texture2D" uid="uid://dmhre602fkf8e" path="res://Battle/Inventory/Items/Apple/Apple.png" id="3_tgd16"]
+[ext_resource type="Script" path="res://Battle/Inventory/Items/ItemTest.cs" id="4_avcat"]
 
 [node name="BattleDatabase" type="Node3D"]
 script = ExtResource("1_p1jym")
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("2_feauj")
+
+[node name="Apple" type="Node" parent="Inventory"]
+script = ExtResource("2_usa7a")
+_itemImage = ExtResource("3_tgd16")
+_itemQuantity = 2
+
+[node name="TEST1" type="Node" parent="Inventory"]
+script = ExtResource("4_avcat")
+_itemName = "TEST1"
+_itemImage = ExtResource("3_tgd16")
+_itemQuantity = 1
+_forAllReceptors = true
+
+[node name="TEST2" type="Node" parent="Inventory"]
+script = ExtResource("4_avcat")
+_itemName = "TEST2"
+_itemImage = ExtResource("3_tgd16")
+_itemQuantity = 1
+
+[node name="TEST3" type="Node" parent="Inventory"]
+script = ExtResource("4_avcat")
+_itemName = "TEST3"
+_itemImage = ExtResource("3_tgd16")
+_itemQuantity = 1
+
+[node name="TEST4" type="Node" parent="Inventory"]
+script = ExtResource("4_avcat")
+_itemName = "TEST4"
+_itemImage = ExtResource("3_tgd16")
+_itemQuantity = 1
+
+[node name="TEST5" type="Node" parent="Inventory"]
+script = ExtResource("4_avcat")
+_itemName = "TEST5"
+_itemImage = ExtResource("3_tgd16")
+_itemQuantity = 1
+
+[node name="TEST6" type="Node" parent="Inventory"]
+script = ExtResource("4_avcat")
+_itemName = "TEST6"
+_itemImage = ExtResource("3_tgd16")
+_itemQuantity = 1
