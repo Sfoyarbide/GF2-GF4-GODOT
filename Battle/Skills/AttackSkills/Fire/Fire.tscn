@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://khfrcrk04ldo"]
+
+[ext_resource type="Script" path="res://Battle/Skills/AttackSkills/Fire/Fire.cs" id="1_qel6g"]
+
+[node name="Fire" type="Node"]
+script = ExtResource("1_qel6g")
+_skillName = "Fire"
+_damage = 5
+_spCost = 2

@@ -56,7 +56,7 @@ public partial class AttackAction : BaseAction
     {
         int hp = characterReceptor.DataContainer.Hp; // Getting receptor's hp. 
         int weaponDamage = characterReceptor.DataContainer.WeaponDamage; // Getting character's weapon damage. 
-        int armorDefense = characterReceptor.DataContainer.ArmorDefense; // Getting receptor's armor defense.
+        int armorDefense = characterReceptor.DataContainer.ArmorDefense + characterReceptor.DataContainer.Co; // Getting receptor's armor defense.
         int bonusDamage = Character.DataContainer.St; 
 		int damage = 0; 
 

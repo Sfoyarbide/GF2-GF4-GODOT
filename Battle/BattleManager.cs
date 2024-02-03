@@ -6,7 +6,7 @@ public partial class BattleManager : Node3D
 {
     // TEMP
     [Export]
-    private SkillResource skillResource; 
+    private Skill skillResource; 
     private bool temp;
 
     // Variables declatation.
@@ -18,12 +18,18 @@ public partial class BattleManager : Node3D
     private bool _inCombat;
     private bool _inAction;
 
-    public event EventHandler OnBattleStart;
-    public event EventHandler OnTurnEnd;
+    public static event EventHandler<OnBattleStartEventArgs> OnBattleStart;
+    public static event EventHandler OnTurnEnd;
     public static event EventHandler<OnCurrentCharacterChangedEventArgs> OnCurrentCharacterChanged;
     public event EventHandler<OnActionExecuteEventArgs> OnActionExecute;
     public event EventHandler<OnSelectionStartedEventArgs> OnSelectionStarted;
     public event EventHandler OnItemSelectionStarted;
+    public event EventHandler<OnSkillSelectionStartedEventArgs> OnSkillSelectionStarted;
+    public class OnBattleStartEventArgs : EventArgs
+    {
+        public List<Character> partyList;
+        public List<Character> enemyList;
+    }
     public class OnCurrentCharacterChangedEventArgs : EventArgs
     {
         public Character currentCharacter;
@@ -36,6 +42,10 @@ public partial class BattleManager : Node3D
     {
         public BaseAction action;
         public bool allReceiveDamage;
+    }
+    public class OnSkillSelectionStartedEventArgs : EventArgs
+    {
+        public Character character;
     }
 
     public List<Character> CharacterTurnList
@@ -95,7 +105,7 @@ public partial class BattleManager : Node3D
                     ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptor());
                     break;
                 case SkillAction skillAction:
-                    SkillResource skill = GetCurrentCharacter().DataContainer.SelectedSkill;
+                    Skill skill = skillAction.CurrentSkill;
                     if(skill.IsAllReceiveDamage)
                     {
                         ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptorList());
@@ -136,10 +146,15 @@ public partial class BattleManager : Node3D
                 case ItemAction:
                     OnItemSelectionStarted?.Invoke(this, EventArgs.Empty);
                     break;
+                case SkillAction:
+                    OnSkillSelectionStarted?.Invoke(this, new OnSkillSelectionStartedEventArgs
+                    {
+                        character = GetCurrentCharacter()
+                    });
+                    break;
                 default:
                     OnSelectionStarted?.Invoke(this, new OnSelectionStartedEventArgs{
                         action = selectedAction,
-                        allReceiveDamage = skillResource.IsAllReceiveDamage // check!!!
                     });
                     break;
             }
@@ -174,7 +189,6 @@ public partial class BattleManager : Node3D
         OnActionExecute?.Invoke(this, new OnActionExecuteEventArgs{
             action = GetCurrentCharacter().DataContainer.SelectedAction
         });
-
     }
 
     public void NextTurn()
@@ -200,6 +214,11 @@ public partial class BattleManager : Node3D
         UpdateAllyList();
         UpdateEnemyList();
         _inCombat = true;
+
+        OnBattleStart?.Invoke(this, new OnBattleStartEventArgs{
+            partyList = AllyList,
+            enemyList = EnemyList
+        });
 
         OnCurrentCharacterChanged?.Invoke(this, new OnCurrentCharacterChangedEventArgs{
             currentCharacter = GetCurrentCharacter()

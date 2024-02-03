@@ -11,13 +11,6 @@ public partial class Character : Node3D
     private CharacterAnimator _characterAnimation;
     public CharacterDataResource DataContainer {get {return _dataContainer;} set {_dataContainer = value;}}
 
-    // TEMP
-    [Export]
-    private SkillResource _skillResource;
-    [Export]
-    private int INDEX;
-
-
     public override void _Ready()
     {
         _actionContainer = GetNode("ActionContainer");
@@ -31,10 +24,11 @@ public partial class Character : Node3D
         UpdateActionList();
 
 
-
         // TEMP
-        DataContainer.SelectedSkill = _skillResource;
-        _dataContainer.SelectedAction = _dataContainer.ActionList[INDEX];
+        DataContainer.Hp = DataContainer.HpMax;
+        BattleDatabase battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
+        List<Skill> skills = battleDatabase.SkillDatabase.SkillList;
+        DataContainer.SkillList.AddRange(skills);
     }
 
     public void UpdateActionList()

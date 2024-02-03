@@ -26,7 +26,7 @@ public partial class BattleCameraManager : Node
 
         _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
         GD.Print(_battleDatabase);
-        _battleDatabase.BattleManager.OnTurnEnd += BattleManager_OnTurnEnd;
+        BattleManager.OnTurnEnd += BattleManager_OnTurnEnd;
         BattleManager.OnCurrentCharacterChanged += BattleManager_OnCurrentCharacterChanged;
         CharacterReceptorSelector.OnCharacterSelectorStarted += CharacterReceptorSelector_OnCharacterSelectorStarted;
         CharacterReceptorSelector.OnCharacterSelectorCanceled += CharacterReceptorSelector_OnCharacterSelectorCanceled;

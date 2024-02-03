@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bxswhqw6n3hrm"]
+[gd_scene load_steps=11 format=3 uid="uid://bxswhqw6n3hrm"]
 
 [ext_resource type="Script" path="res://Character/Character.cs" id="1_6vy4c"]
 [ext_resource type="Resource" uid="uid://defsabp1lju2w" path="res://Character/CharacterData.tres" id="2_xeqon"]
@@ -9,10 +9,12 @@
 [ext_resource type="Texture2D" uid="uid://b80efljl4m58l" path="res://icon.svg" id="6_n20yk"]
 [ext_resource type="Script" path="res://Character/CharacterSelectedVisual.cs" id="7_56rjq"]
 [ext_resource type="PackedScene" uid="uid://bh1tekhr3pm00" path="res://Battle/Action/ItemAction.tscn" id="7_w82om"]
+[ext_resource type="PackedScene" uid="uid://khfrcrk04ldo" path="res://Battle/Skills/AttackSkills/Fire/Fire.tscn" id="10_k0gsi"]
 
-[node name="Character" type="Node3D"]
+[node name="Character" type="Node3D" node_paths=PackedStringArray("_skill")]
 script = ExtResource("1_6vy4c")
 _dataContainer = ExtResource("2_xeqon")
+_skill = NodePath("SKILLTEMP/Fire")
 
 [node name="Pivot" type="Node3D" parent="."]
 
@@ -43,3 +45,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 1,
 
 [node name="DamagePointTransform" type="Marker3D" parent="MarkerContainer"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 1)
+
+[node name="SKILLTEMP" type="Node" parent="."]
+
+[node name="Fire" parent="SKILLTEMP" instance=ExtResource("10_k0gsi")]

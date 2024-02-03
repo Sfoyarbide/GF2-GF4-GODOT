@@ -19,12 +19,15 @@ public partial class CharacterDataResource : Resource
     private int _co;
     private int _lu;
     private List<BaseAction> _actionList = new List<BaseAction>();
-    private List<SkillResource> _skillList = new List<SkillResource>();
+    private List<Skill> _skillList = new List<Skill>();
     private BaseAction _selectedAction;
-    private SkillResource _selectedSkill;
     private bool _isDefending;
     private int _weaponDamage; // Temp!!!
     private int _armorDefense; // Temp!!!
+    private List<ModifierStatsInflict> _modifierStatsInflictList = new List<ModifierStatsInflict>();
+    private InflictState _inflictState;
+    private Dictionary<int, string> _skillGrantByLevel = new Dictionary<int, string>();
+
     public static event EventHandler<OnHpChangedEventArgs> OnHpChanged;
     public class OnHpChangedEventArgs : EventArgs
     {
@@ -98,10 +101,11 @@ public partial class CharacterDataResource : Resource
     public int ArmorDefense {get {return _armorDefense;} set {_armorDefense = value;}}
     // [Export] It's seems to be some kind of error when trying to export a list. Let's us wait.
     public List<BaseAction> ActionList {get {return _actionList; } set {_actionList = value; }}
-    public List<SkillResource> SkillList {get {return _skillList; } set {_skillList = value; }}
+    public List<Skill> SkillList {get {return _skillList; } set {_skillList = value; }}
+    public Dictionary<int, string> SkillGrantByLevel { get {return _skillGrantByLevel; } }
+    public List<ModifierStatsInflict> ModifierStatsInflictList {get {return _modifierStatsInflictList;}}
+    public InflictState InflictState {get { return _inflictState; } set { _inflictState = value; }} 
     public BaseAction SelectedAction {get {return _selectedAction;} set {_selectedAction = value;}}
-    [Export]
-    public SkillResource SelectedSkill {get {return _selectedSkill;} set {_selectedSkill = value;}}
     [Export]
     public bool IsDefending {get {return _isDefending;} set {_isDefending = value;}}
 

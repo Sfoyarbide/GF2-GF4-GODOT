@@ -35,6 +35,7 @@ public partial class CharacterReceptorSelector : Node3D
         _battleDatabase.BattleManager.OnSelectionStarted += BattleManager_OnSelectionStarted;
         _characterReceptorList = new List<Character>();
         ItemUI.OnConfirmItem += ItemUI_OnConfirmItem;
+        SkillUI.OnConfirmSkill += SkillUI_OnConfirmSkill;
     }
 
     public override void _Process(double delta)
@@ -105,6 +106,8 @@ public partial class CharacterReceptorSelector : Node3D
         {
             return;
         }
+
+        _receptorIndex = 0;
 
         _characterReceptorList.Clear();
 
@@ -183,7 +186,7 @@ public partial class CharacterReceptorSelector : Node3D
         }
         else
         {
-            return _characterReceptorList[0];
+            return null;
         }
     }
 
@@ -218,9 +221,6 @@ public partial class CharacterReceptorSelector : Node3D
             case AttackAction:
                 SetupSelection(false, false);
                 break;
-            case SkillAction:
-                SetupSelection(e.allReceiveDamage, false);
-                break;
             case DefendAction:
                 SetupSelection(false, false, true);
                 break;
@@ -243,5 +243,10 @@ public partial class CharacterReceptorSelector : Node3D
     private void ItemUI_OnConfirmItem(object sender, ItemUI.OnConfirmItemEventArgs e)
     {
         SetupSelection(e.item.ReceptorCriteriaList, e.item.ForAllReceptors);
+    }
+
+    private void SkillUI_OnConfirmSkill(object sender, SkillUI.OnConfirmSkillEventArgs e)
+    {
+        SetupSelection(e.skill.ReceptorCriteriaList, e.skill.IsAllReceiveDamage);
     }
 }

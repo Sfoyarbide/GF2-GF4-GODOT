@@ -4,26 +4,44 @@ using System.Collections.Generic;
 
 public partial class SkillAction : BaseAction
 {
+    private Skill _currentSkill;
+
     private List<Character> _characterReceptorList = new List<Character>();
     public static event EventHandler<OnSkillEventArgs> OnSkillCast;
     public static event EventHandler<OnSkillEventArgs> OnSkillEnd;
     public class OnSkillEventArgs : EventArgs
     {
         public Character character;
-        public SkillResource skill;
+        public Skill skill;
     }
+
+    public Skill CurrentSkill { get {return _currentSkill; }}
 
     public override void _Ready()
     {
-        base._Ready();  
+        base._Ready();
+        SkillUI.OnConfirmSkill += SkillUI_OnConfirmSkill;
     }
 
-    private bool IsSkill(Character characterReceptor, SkillResource skill, out int outDamage)
+    private bool IsSkill(Character characterReceptor, Skill skill)
     {  
         if(Character.DataContainer.Sp < skill.SpCost)
         {
-            outDamage = 0;
             return false;
+        }
+
+        Character.DataContainer.Sp -= skill.SpCost;
+
+        switch(skill)
+        {
+            case HealSkill healSkill:
+                skill.UseSkill(characterReceptor);
+                return true;
+            case ModifierSkill modifierSkill:
+                skill.UseSkill(characterReceptor);
+                return true;
+            default:
+                break;
         }
 
         int maCharacter = Character.DataContainer.Ma;
@@ -33,119 +51,37 @@ public partial class SkillAction : BaseAction
         int agCharacterReceptor = characterReceptor.DataContainer.Ag;
 
         int dice = GD.RandRange(0,10);
-        
-        int newSp = Character.DataContainer.Sp - skill.SpCost;
-        Character.DataContainer.Sp = newSp;
 
         if(CombatCalculations.CheckIsHit(characterChance, agCharacterReceptor, dice))
         {
-            Skill(characterReceptor, skill, out outDamage);
-            GD.Print("Action: SkillAction, Skill: " + skill + ", Damage: " + outDamage + ", Receptor Hp: " + characterReceptor.DataContainer.Hp + ", Receptor ID: " + characterReceptor);
+            skill.UseSkill(characterReceptor);
             return true;
         }
         else
         {
-            outDamage = 0;
             GD.Print("Action: SkillAction, Skill: " + skill + ", Damage: " + "Not hit" + ", Receptor Hp: " + characterReceptor.DataContainer.Hp  + ", Receptor ID: " + characterReceptor);
             return false;
         }
     }
 
-    private void Skill(Character characterReceptor, SkillResource skill, out int outDamage)
-    {
-        int hp = characterReceptor.DataContainer.Hp; // Getting receptor's hp. 
-        int armorDefense = characterReceptor.DataContainer.ArmorDefense;
-        int damage;
-
-        damage = CombatCalculations.CalculateDamage(skill.Damage, armorDefense);
-        outDamage = damage;
-
-        if(damage <= 0)
-        {
-            // Logic code to do.
-            return;
-        }
-        
-        int newHp = hp - damage;
-        characterReceptor.DataContainer.Hp = newHp;
-    }
-
-    private void HealSkill(Character characterReceptor, SkillResource skill)
-    {
-        int hp = characterReceptor.DataContainer.Hp; // Getting receptor's hp. 
-        int healAmount = skill.Damage; // baseDamage is refering to the healAmount in this case.
-        int newHp = hp + healAmount;
-        characterReceptor.DataContainer.Hp = newHp;
-    }
-
-    private void InvokeSkillToCharacterReceptorList(List<Character> characterReceptorList, SkillResource skill)
+    private void InvokeSkillToCharacterReceptorList(List<Character> characterReceptorList, Skill skill)
     {
         if(skill.IsAllReceiveDamage)
         {
             foreach(Character characterReceptor in characterReceptorList)
             {
-                bool isSkill = IsSkill(characterReceptor, skill, out int outDamage); 
-                /*
-                OnAttackStatus?.Invoke(this, new OnAttackStateEventArgs{
-                    characterReceptor = characterReceptor,
-                    attackStatus = isSkill,
-                    damage = outDamage
-                });
-                */
+                bool isSkill = IsSkill(characterReceptor, skill); 
             }
         }
         else
         {
-            bool isSkill = IsSkill(characterReceptorList[0], skill, out int outDamage); 
-            /*
-            OnAttackStatus?.Invoke(this, new OnAttackStateEventArgs{
-                characterReceptor = characterReceptorList[0],
-                attackStatus = isSkill,
-                damage = outDamage
-            });
-            */
+            bool isSkill = IsSkill(characterReceptorList[0], skill); 
         }
     }
 
-    private void InvokeHealSkillToCharacterReceptorList(List<Character> characterReceptorList, SkillResource skill)
+    private void ExecuteSkill(Skill skill)
     {
-        if(skill.IsAllReceiveDamage)
-        {
-            foreach(Character characterReceptor in characterReceptorList)
-            {
-                HealSkill(characterReceptor, skill);
-                /*
-                OnAttackStatus?.Invoke(this, new OnAttackStateEventArgs{
-                    characterReceptor = characterReceptor,
-                    attackStatus = true,
-                    damage = skill.baseDamage
-                });
-                */
-            }
-        }
-        else
-        {
-            HealSkill(characterReceptorList[0], skill);
-            /*
-            OnAttackStatus?.Invoke(this, new OnAttackStateEventArgs{
-                    characterReceptor = characterReceptorList[0],
-                    attackStatus = true,
-                    damage = skill.baseDamage
-            });
-            */
-        }
-    }
-
-    private void ExecuteSkill(SkillResource skill)
-    {
-        if(skill.SkillType != SkillType.Heal) 
-        {
-            InvokeSkillToCharacterReceptorList(_characterReceptorList, skill);
-        }
-        else // If the skill type is healing, you cannot fail the cast, therefore you use HealSkill function.
-        {
-            InvokeHealSkillToCharacterReceptorList(_characterReceptorList, skill);
-        }
+        InvokeSkillToCharacterReceptorList(_characterReceptorList, skill);
 
         OnSkillCast?.Invoke(this, new OnSkillEventArgs{
             character = Character,
@@ -167,25 +103,23 @@ public partial class SkillAction : BaseAction
         OnActionComplete();
     }
 
-    private SkillResource GetCurrentSkill()
-    {
-        return Character.DataContainer.SelectedSkill;
-    }
-
     public override void TakeAction(Character characterReceptor, Action onActionComplete)
     {
-        SkillResource skill = GetCurrentSkill();
         _characterReceptorList.Add(characterReceptor);
         OnActionComplete = onActionComplete;
-        ExecuteSkill(skill);
+        ExecuteSkill(_currentSkill);
     }
 
     public override void TakeAction(List<Character> characterReceptorList, Action onActionComplete)
     {
-        SkillResource skill = GetCurrentSkill();
         _characterReceptorList = characterReceptorList;
         OnActionComplete = onActionComplete;
-        ExecuteSkill(skill);
+        ExecuteSkill(_currentSkill);
+    }
+
+    private void SkillUI_OnConfirmSkill(object sender, SkillUI.OnConfirmSkillEventArgs e)
+    {
+        _currentSkill = e.skill;
     }
 
     public override string GetActionName()

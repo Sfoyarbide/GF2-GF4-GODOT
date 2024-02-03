@@ -1,14 +1,12 @@
-[gd_scene load_steps=13 format=3 uid="uid://srcvtkfedf56"]
+[gd_scene load_steps=11 format=3 uid="uid://srcvtkfedf56"]
 
 [ext_resource type="PackedScene" uid="uid://r4qrwcjt7ph0" path="res://Battle/BattleManager.tscn" id="1_gteq7"]
-[ext_resource type="Resource" uid="uid://qpvk5kirxtam" path="res://Battle/Skills/Heal.tres" id="2_73vbs"]
 [ext_resource type="PackedScene" uid="uid://bxswhqw6n3hrm" path="res://Character/character.tscn" id="2_fidtg"]
-[ext_resource type="Resource" uid="uid://db13k1hh1mlrh" path="res://Battle/Skills/Fire.tres" id="2_sxlui"]
 [ext_resource type="Script" path="res://Character/CharacterDataResource.cs" id="3_ayw42"]
 [ext_resource type="PackedScene" uid="uid://0dp5kn1r6sid" path="res://Battle/CharacterReceptorSelector.tscn" id="4_ickuk"]
 [ext_resource type="PackedScene" uid="uid://s6l63avtc468" path="res://Levels/brain_camera.tscn" id="7_jdvbv"]
 [ext_resource type="Script" path="res://Battle/BattleCameraManager.cs" id="8_q6j7v"]
-[ext_resource type="PackedScene" uid="uid://knol63we4wn7" path="res://Battle/UI/battle_ui.tscn" id="9_m5fxk"]
+[ext_resource type="PackedScene" uid="uid://knol63we4wn7" path="res://Battle/UI/BattleUI.tscn" id="9_m5fxk"]
 
 [sub_resource type="Resource" id="Resource_2ta1x"]
 resource_local_to_scene = true
@@ -73,24 +71,20 @@ IsDefending = false
 [node name="Level1" type="Node3D"]
 
 [node name="Battle" parent="." instance=ExtResource("1_gteq7")]
-skillResource = ExtResource("2_73vbs")
 
 [node name="CharacterContainer" type="Node3D" parent="Battle"]
 
 [node name="Character0" parent="Battle/CharacterContainer" instance=ExtResource("2_fidtg")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 4)
 _dataContainer = SubResource("Resource_2ta1x")
-_skillResource = ExtResource("2_sxlui")
 
 [node name="Character1" parent="Battle/CharacterContainer" instance=ExtResource("2_fidtg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 _dataContainer = SubResource("Resource_sskod")
-_skillResource = ExtResource("2_sxlui")
 
 [node name="Character2" parent="Battle/CharacterContainer" instance=ExtResource("2_fidtg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -4)
 _dataContainer = SubResource("Resource_2i74r")
-_skillResource = ExtResource("2_sxlui")
 
 [node name="Stage" type="Node3D" parent="Battle"]
 

@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://b3k0u20f8d2od"]
+
+[ext_resource type="PackedScene" uid="uid://k5pivkrmxafk" path="res://Battle/UI/PartyStatus/PartyMemberUI.tscn" id="1_dmw68"]
+[ext_resource type="Script" path="res://Battle/UI/PartyStatus/PartyBattleStatusUI.cs" id="1_iegv1"]
+
+[node name="PartyBattleStatusUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_iegv1")
+_partyMemberUIScene = ExtResource("1_dmw68")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(475, 100)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.448
+anchor_right = 0.983
+anchor_bottom = 0.159
+offset_left = -0.0960083
+offset_right = -0.416016
+offset_bottom = -0.0320053
+grow_horizontal = 0
+
+[node name="PartyMembersContainerUI" type="HBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

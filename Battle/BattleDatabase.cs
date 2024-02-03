@@ -6,6 +6,7 @@ public partial class BattleDatabase : Node
 	private BattleManager _battleManager;
 	private CharacterReceptorSelector _characterReceptorSelector;
 	private Inventory _inventory;
+	private SkillDatabase _skillDatabase;
 
 	public BattleManager BattleManager 
 	{ 
@@ -22,6 +23,10 @@ public partial class BattleDatabase : Node
 		get { return _inventory; }
 		set { _inventory = value; }
 	}
+	public SkillDatabase SkillDatabase 
+	{
+		get { return _skillDatabase; }
+	}
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -29,10 +34,8 @@ public partial class BattleDatabase : Node
     	_battleManager = GetTree().Root.GetNode<BattleManager>("Level1/Battle");	
 		_characterReceptorSelector = GetTree().Root.GetNode<CharacterReceptorSelector>("Level1/Battle/ManagerContainer/CharacterReceptorSelector");	
 		_inventory = GetNode<Inventory>("Inventory");
+		_skillDatabase = GetNode<SkillDatabase>("SkillDatabase");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
 }

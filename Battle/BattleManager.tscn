@@ -1,8 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://r4qrwcjt7ph0"]
+[gd_scene load_steps=2 format=3 uid="uid://r4qrwcjt7ph0"]
 
 [ext_resource type="Script" path="res://Battle/BattleManager.cs" id="1_3abnu"]
-[ext_resource type="Resource" uid="uid://d1g3ubisv8y8c" path="res://Battle/Skills/AllFire.tres" id="2_5a1hh"]
 
 [node name="BattleManager" type="Node3D"]
 script = ExtResource("1_3abnu")
-skillResource = ExtResource("2_5a1hh")

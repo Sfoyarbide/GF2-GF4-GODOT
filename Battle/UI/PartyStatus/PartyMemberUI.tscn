@@ -1,0 +1,192 @@
+[gd_scene load_steps=7 format=3 uid="uid://k5pivkrmxafk"]
+
+[ext_resource type="Script" path="res://Battle/UI/PartyStatus/PartyMemberUI.cs" id="1_a4wsf"]
+[ext_resource type="Texture2D" uid="uid://dmhre602fkf8e" path="res://Battle/Inventory/Items/Apple/Apple.png" id="1_ikgtf"]
+[ext_resource type="Script" path="res://Battle/UI/PartyStatus/InflictStates/ModifierStatsInflictStatusUI.cs" id="3_0oyyv"]
+[ext_resource type="Script" path="res://Battle/UI/PartyStatus/InflictStates/InflictStatusContainerUI.cs" id="3_3g851"]
+[ext_resource type="Texture2D" uid="uid://d204nnmco5y58" path="res://Battle/UI/PartyStatus/InflictStates/Arrow.png" id="3_3w6f5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b8tcm"]
+bg_color = Color(0.564706, 0.607843, 0.631373, 1)
+border_width_left = 1
+border_width_top = 1
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="PartyMemberUI" type="Panel"]
+custom_minimum_size = Vector2(150, 30)
+anchors_preset = -1
+anchor_right = 0.13
+anchor_bottom = 0.253
+offset_right = 0.23999
+offset_bottom = 0.0559845
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_b8tcm")
+script = ExtResource("1_a4wsf")
+
+[node name="MemberIconUI" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(85, 85)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -42.0
+offset_right = 85.0
+offset_bottom = 43.0
+grow_vertical = 2
+texture = ExtResource("1_ikgtf")
+
+[node name="MemberHpUI" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.582
+anchor_top = 0.451
+anchor_right = 0.582
+anchor_bottom = 0.451
+offset_left = 13.34
+offset_top = -16.964
+offset_right = 66.34
+offset_bottom = 6.036
+text = "0"
+
+[node name="MemberSpUI" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.673
+anchor_top = 0.564
+anchor_right = 0.673
+anchor_bottom = 0.564
+offset_left = 0.0499954
+offset_top = -11.496
+offset_right = 64.05
+offset_bottom = 11.504
+text = "0"
+
+[node name="InflictStatusContainerUI" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+script = ExtResource("3_3g851")
+
+[node name="Poison" type="TextureRect" parent="InflictStatusContainerUI"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_3w6f5")
+
+[node name="ModifierStatsInflictStatusContainers" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.013
+anchor_top = 0.756
+anchor_right = 0.967
+anchor_bottom = 1.0
+offset_left = 0.05
+offset_top = 0.0160065
+offset_right = -0.0500031
+offset_bottom = 1.52588e-05
+grow_vertical = 0
+
+[node name="AtModifier" type="Panel" parent="ModifierStatsInflictStatusContainers"]
+visible = false
+custom_minimum_size = Vector2(45, 5)
+layout_mode = 2
+script = ExtResource("3_0oyyv")
+
+[node name="ModifierStatusUI" type="TextureRect" parent="ModifierStatsInflictStatusContainers/AtModifier"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.67
+anchor_top = 0.537
+anchor_right = 0.67
+anchor_bottom = 0.537
+offset_left = -15.5
+offset_top = -15.48
+offset_right = 15.5
+offset_bottom = 15.52
+texture = ExtResource("3_3w6f5")
+
+[node name="ModifierType" type="Label" parent="ModifierStatsInflictStatusContainers/AtModifier"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.512
+anchor_bottom = 0.512
+offset_left = 1.00001
+offset_top = -11.48
+offset_right = 41.0
+offset_bottom = 11.52
+text = "At"
+
+[node name="DeModifier" type="Panel" parent="ModifierStatsInflictStatusContainers"]
+visible = false
+custom_minimum_size = Vector2(45, 5)
+layout_mode = 2
+script = ExtResource("3_0oyyv")
+type = 1
+
+[node name="ModifierStatusUI" type="TextureRect" parent="ModifierStatsInflictStatusContainers/DeModifier"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.67
+anchor_top = 0.537
+anchor_right = 0.67
+anchor_bottom = 0.537
+offset_left = -15.5
+offset_top = -15.48
+offset_right = 15.5
+offset_bottom = 15.52
+texture = ExtResource("3_3w6f5")
+
+[node name="ModifierType" type="Label" parent="ModifierStatsInflictStatusContainers/DeModifier"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.512
+anchor_bottom = 0.512
+offset_left = 1.00001
+offset_top = -11.48
+offset_right = 41.0
+offset_bottom = 11.52
+text = "De"
+
+[node name="AgModifier" type="Panel" parent="ModifierStatsInflictStatusContainers"]
+visible = false
+custom_minimum_size = Vector2(45, 5)
+layout_mode = 2
+script = ExtResource("3_0oyyv")
+type = 2
+
+[node name="ModifierStatusUI" type="TextureRect" parent="ModifierStatsInflictStatusContainers/AgModifier"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.67
+anchor_top = 0.537
+anchor_right = 0.67
+anchor_bottom = 0.537
+offset_left = -15.5
+offset_top = -15.48
+offset_right = 15.5
+offset_bottom = 15.52
+texture = ExtResource("3_3w6f5")
+
+[node name="ModifierType" type="Label" parent="ModifierStatsInflictStatusContainers/AgModifier"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.512
+anchor_bottom = 0.512
+offset_left = 1.00001
+offset_top = -11.48
+offset_right = 41.0
+offset_bottom = 11.52
+text = "Ag"
