@@ -11,10 +11,9 @@
 [ext_resource type="PackedScene" uid="uid://bh1tekhr3pm00" path="res://Battle/Action/ItemAction.tscn" id="7_w82om"]
 [ext_resource type="PackedScene" uid="uid://khfrcrk04ldo" path="res://Battle/Skills/AttackSkills/Fire/Fire.tscn" id="10_k0gsi"]
 
-[node name="Character" type="Node3D" node_paths=PackedStringArray("_skill")]
+[node name="Character" type="Node3D"]
 script = ExtResource("1_6vy4c")
 _dataContainer = ExtResource("2_xeqon")
-_skill = NodePath("SKILLTEMP/Fire")
 
 [node name="Pivot" type="Node3D" parent="."]
 
@@ -45,6 +44,9 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 1,
 
 [node name="DamagePointTransform" type="Marker3D" parent="MarkerContainer"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 1)
+
+[node name="DamageUITransform" type="Marker3D" parent="MarkerContainer"]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 2, 1)
 
 [node name="SKILLTEMP" type="Node" parent="."]
 

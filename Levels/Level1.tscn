@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://srcvtkfedf56"]
+[gd_scene load_steps=12 format=3 uid="uid://srcvtkfedf56"]
 
 [ext_resource type="PackedScene" uid="uid://r4qrwcjt7ph0" path="res://Battle/BattleManager.tscn" id="1_gteq7"]
 [ext_resource type="PackedScene" uid="uid://bxswhqw6n3hrm" path="res://Character/character.tscn" id="2_fidtg"]
 [ext_resource type="Script" path="res://Character/CharacterDataResource.cs" id="3_ayw42"]
 [ext_resource type="PackedScene" uid="uid://0dp5kn1r6sid" path="res://Battle/CharacterReceptorSelector.tscn" id="4_ickuk"]
+[ext_resource type="PackedScene" uid="uid://0xve1xol8ety" path="res://Battle/UI/HpChanged/HpChangedUIManager.tscn" id="7_1eth0"]
 [ext_resource type="PackedScene" uid="uid://s6l63avtc468" path="res://Levels/brain_camera.tscn" id="7_jdvbv"]
 [ext_resource type="Script" path="res://Battle/BattleCameraManager.cs" id="8_q6j7v"]
 [ext_resource type="PackedScene" uid="uid://knol63we4wn7" path="res://Battle/UI/BattleUI.tscn" id="9_m5fxk"]
@@ -111,6 +112,8 @@ light_bake_mode = 1
 [node name="ManagerContainer" type="Node" parent="Battle"]
 
 [node name="CharacterReceptorSelector" parent="Battle/ManagerContainer" instance=ExtResource("4_ickuk")]
+
+[node name="HpChangedUIManager" parent="Battle/ManagerContainer" instance=ExtResource("7_1eth0")]
 
 [node name="BattleUI" parent="Battle" instance=ExtResource("9_m5fxk")]
 _canSelect = true

@@ -33,6 +33,7 @@ public partial class CharacterDataResource : Resource
     {
         public Character character;
         public bool isLessThanBefore;
+        public int difference;
     }
 
     public Character Character
@@ -62,13 +63,11 @@ public partial class CharacterDataResource : Resource
                 // Die.
             }
 
-            if(_hp < previousHp)
-            {
-                OnHpChanged?.Invoke(this, new OnHpChangedEventArgs{
-                    character = _character,
-                    isLessThanBefore = true
-                });
-            }  
+            OnHpChanged?.Invoke(this, new OnHpChangedEventArgs{
+                character = _character,
+                isLessThanBefore = _hp < previousHp,
+                difference = previousHp - _hp
+            }); 
         }
     } 
 	[Export]

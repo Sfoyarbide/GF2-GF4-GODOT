@@ -52,7 +52,7 @@ public partial class CharacterReceptorSelector : Node3D
         }
 
         int previousReceptorIndex = _receptorIndex;
-        _receptorIndex = CombatCalculations.MoveTheIndex(0, _characterReceptorList.Count - 1, _receptorIndex);//PlayerInputCombat.Instance.MoveTheIndex(0, selectableCharacterList.Count - 1, index);
+        _receptorIndex = CombatCalculations.MoveTheIndex(0, _characterReceptorList.Count - 1, _receptorIndex);
         if(previousReceptorIndex != _receptorIndex)
         {
             OnCharacterReceptorSelected?.Invoke(this, new OnCharacterReceptorSelectedEventArgs{
@@ -135,10 +135,6 @@ public partial class CharacterReceptorSelector : Node3D
 
         if(_characterReceptorList.Count > 0)
         {
-            OnCharacterSelectorStarted?.Invoke(this, new OnCharacterReceptorSelectedEventArgs{
-                characterRecepetor = _characterReceptorList[_receptorIndex]
-            });
-
             if(selectsAll)
             {
                 OnSelectsAll?.Invoke(this, new OnSelectsAllEventArgs
@@ -146,8 +142,20 @@ public partial class CharacterReceptorSelector : Node3D
                     characterReceptorList = _characterReceptorList
                 });
             }
+            else
+            {
+                OnCharacterSelectorStarted?.Invoke(this, new OnCharacterReceptorSelectedEventArgs{
+                    characterRecepetor = _characterReceptorList[_receptorIndex]
+                });
+
+                GD.Print("Character Receptor Selected: " + _characterReceptorList[_receptorIndex] + ", Current Character: " + _battleDatabase.BattleManager.GetCurrentCharacter());
+            }
 
             _canSelect = true;
+        }
+        else
+        {
+            GD.Print("No receptors possible.");
         }
     }
 

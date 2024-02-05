@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://cncb7vj3r0i5f"]
+
+[ext_resource type="Script" path="res://Battle/UI/HpChanged/HpChangedUI.cs" id="1_15as8"]
+[ext_resource type="Texture2D" uid="uid://db2jhokhmehgt" path="res://Battle/UI/HpChanged/DamageUI.png" id="2_l1obm"]
+[ext_resource type="Texture2D" uid="uid://5p61pccs827t" path="res://Battle/UI/HpChanged/HealUI.png" id="3_vm825"]
+
+[node name="HpChangedUI" type="Node3D"]
+script = ExtResource("1_15as8")
+
+[node name="Lifetime" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="Pivot" type="Node3D" parent="."]
+
+[node name="HpTextUI" type="Label3D" parent="Pivot"]
+text = "0
+"
+font_size = 150
+
+[node name="DamageUI" type="Sprite3D" parent="Pivot"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, -0.05)
+visible = false
+texture = ExtResource("2_l1obm")
+
+[node name="HealUI" type="Sprite3D" parent="Pivot"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, -0.05)
+visible = false
+texture = ExtResource("3_vm825")
+
+[connection signal="timeout" from="Lifetime" to="." method="OnLifetimeTimeout"]

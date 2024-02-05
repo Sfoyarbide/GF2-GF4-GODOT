@@ -105,6 +105,7 @@ public partial class SkillAction : BaseAction
 
     public override void TakeAction(Character characterReceptor, Action onActionComplete)
     {
+        _characterReceptorList.Clear();
         _characterReceptorList.Add(characterReceptor);
         OnActionComplete = onActionComplete;
         ExecuteSkill(_currentSkill);
@@ -112,6 +113,7 @@ public partial class SkillAction : BaseAction
 
     public override void TakeAction(List<Character> characterReceptorList, Action onActionComplete)
     {
+        _characterReceptorList.Clear();
         _characterReceptorList = characterReceptorList;
         OnActionComplete = onActionComplete;
         ExecuteSkill(_currentSkill);
