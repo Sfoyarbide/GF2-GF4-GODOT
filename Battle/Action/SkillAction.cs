@@ -23,45 +23,40 @@ public partial class SkillAction : BaseAction
         SkillUI.OnConfirmSkill += SkillUI_OnConfirmSkill;
     }
 
-    private bool IsSkill(Character characterReceptor, Skill skill)
+    private void Skill(Character characterReceptor, Skill skill)
     {  
-        if(Character.DataContainer.Sp < skill.SpCost)
+        if(Character.DataContainer.Sp < skill.Cost)
         {
-            return false;
+            return;
         }
 
-        Character.DataContainer.Sp -= skill.SpCost;
-
+        Character.DataContainer.Sp -= skill.Cost;
+        
+        int damage = 0;
         switch(skill)
         {
             case HealSkill healSkill:
-                skill.UseSkill(characterReceptor);
-                return true;
+                skill.UseSkill(Character, characterReceptor, out damage);
+                return;
             case ModifierSkill modifierSkill:
-                skill.UseSkill(characterReceptor);
-                return true;
+                skill.UseSkill(Character, characterReceptor, out damage);
+                return;
             default:
                 break;
         }
 
-        int maCharacter = Character.DataContainer.Ma;
-        int agCharacter = Character.DataContainer.Ag;
-        int characterChance = maCharacter + agCharacter;
-
-        int agCharacterReceptor = characterReceptor.DataContainer.Ag;
-
-        int dice = GD.RandRange(0,10);
-
-        if(CombatCalculations.CheckIsHit(characterChance, agCharacterReceptor, dice))
+        bool isHit = CombatCalculations.IsHitCalculation(Character, characterReceptor);
+        if(isHit)
         {
-            skill.UseSkill(characterReceptor);
-            return true;
+            skill.UseSkill(Character, characterReceptor, out damage); 
         }
-        else
-        {
-            GD.Print("Action: SkillAction, Skill: " + skill + ", Damage: " + "Not hit" + ", Receptor Hp: " + characterReceptor.DataContainer.Hp  + ", Receptor ID: " + characterReceptor);
-            return false;
-        }
+
+        OnAttackState(new AttackStateEventArgs{
+            receptor = characterReceptor,
+            isHit = isHit,
+            damage = damage,
+            attack = skill
+        });
     }
 
     private void InvokeSkillToCharacterReceptorList(List<Character> characterReceptorList, Skill skill)
@@ -70,12 +65,12 @@ public partial class SkillAction : BaseAction
         {
             foreach(Character characterReceptor in characterReceptorList)
             {
-                bool isSkill = IsSkill(characterReceptor, skill); 
+                Skill(characterReceptor, skill); 
             }
         }
         else
         {
-            bool isSkill = IsSkill(characterReceptorList[0], skill); 
+            Skill(characterReceptorList[0], skill); 
         }
     }
 

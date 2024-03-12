@@ -1,0 +1,114 @@
+[gd_scene load_steps=9 format=3 uid="uid://srcvtkfedf56"]
+
+[ext_resource type="PackedScene" uid="uid://r4qrwcjt7ph0" path="res://Battle/BattleManager.tscn" id="1_gteq7"]
+[ext_resource type="PackedScene" uid="uid://bxswhqw6n3hrm" path="res://Character/Ally/character.tscn" id="2_fidtg"]
+[ext_resource type="Script" path="res://Character/CharacterData.cs" id="3_bxs0c"]
+[ext_resource type="PackedScene" uid="uid://0dp5kn1r6sid" path="res://Battle/CharacterReceptorSelector.tscn" id="4_ickuk"]
+[ext_resource type="PackedScene" uid="uid://0xve1xol8ety" path="res://Battle/UI/HpChanged/HpChangedUIManager.tscn" id="7_1eth0"]
+[ext_resource type="PackedScene" uid="uid://s6l63avtc468" path="res://Levels/brain_camera.tscn" id="7_jdvbv"]
+[ext_resource type="Script" path="res://Battle/BattleCameraManager.cs" id="8_q6j7v"]
+[ext_resource type="PackedScene" uid="uid://knol63we4wn7" path="res://Battle/UI/BattleUI.tscn" id="9_m5fxk"]
+
+[node name="Level1" type="Node3D"]
+
+[node name="Battle" parent="." instance=ExtResource("1_gteq7")]
+
+[node name="CharacterContainer" type="Node3D" parent="Battle"]
+
+[node name="Character00" parent="Battle/CharacterContainer" instance=ExtResource("2_fidtg")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 2)
+
+[node name="Data" type="Node" parent="Battle/CharacterContainer/Character00"]
+script = ExtResource("3_bxs0c")
+Hp = 15
+HpMax = 15
+Sp = 20
+SpMax = 20
+St = 2
+Ma = 5
+Ag = 4
+Co = 5
+Lu = 2
+WeaponDamage = 3
+ArmorDefense = 4
+
+[node name="Character04_enemy" parent="Battle/CharacterContainer" instance=ExtResource("2_fidtg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Data" type="Node" parent="Battle/CharacterContainer/Character04_enemy"]
+script = ExtResource("3_bxs0c")
+Hp = 20
+HpMax = 20
+Sp = 40
+SpMax = 40
+IsEnemy = true
+St = 5
+Ma = 4
+Ag = 2
+Co = 3
+Lu = 4
+WeaponDamage = 10
+ArmorDefense = 2
+
+[node name="Character05_enemy" parent="Battle/CharacterContainer" instance=ExtResource("2_fidtg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -2)
+
+[node name="Data" type="Node" parent="Battle/CharacterContainer/Character05_enemy"]
+script = ExtResource("3_bxs0c")
+Hp = 20
+HpMax = 20
+Sp = 50
+SpMax = 50
+IsEnemy = true
+St = 2
+Ma = 3
+Ag = 3
+Co = 2
+Lu = 3
+WeaponDamage = 4
+ArmorDefense = 5
+
+[node name="Stage" type="Node3D" parent="Battle"]
+
+[node name="CameraManager" type="Node3D" parent="Battle/Stage"]
+script = ExtResource("8_q6j7v")
+
+[node name="CurrentCharacter" type="Camera3D" parent="Battle/Stage/CameraManager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 6)
+current = true
+fov = 100.0
+
+[node name="CharacterSelector" type="Camera3D" parent="Battle/Stage/CameraManager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, 5)
+
+[node name="Skill" type="Camera3D" parent="Battle/Stage/CameraManager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 6)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Battle/Stage"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+light_bake_mode = 1
+
+[node name="BrainCamera" parent="Battle" instance=ExtResource("7_jdvbv")]
+
+[node name="ManagerContainer" type="Node" parent="Battle"]
+
+[node name="CharacterReceptorSelector" parent="Battle/ManagerContainer" instance=ExtResource("4_ickuk")]
+
+[node name="HpChangedUIManager" parent="Battle/ManagerContainer" instance=ExtResource("7_1eth0")]
+
+[node name="BattleUI" parent="Battle" instance=ExtResource("9_m5fxk")]
+_canSelect = true
+
+[node name="HIDDEN" type="Node" parent="."]
+
+[node name="Character01" parent="HIDDEN" instance=ExtResource("2_fidtg")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 2.67415, 0, 4)
+visible = false
+
+[node name="Character02" parent="HIDDEN" instance=ExtResource("2_fidtg")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 5.30855, 0, 4)
+visible = false
+
+[node name="Character03" parent="HIDDEN" instance=ExtResource("2_fidtg")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -2.7026, 0, 4)
+visible = false

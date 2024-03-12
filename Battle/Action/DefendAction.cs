@@ -33,7 +33,7 @@ public partial class DefendAction : BaseAction
         GD.Print("Action: " + GetActionName() + ", Defend Status: true, ArmorDefense: " + armorDefense);
     }
 
-    public static void CancelDefend(Character characterReceptor)
+    public static void TryCancelDefend(Character characterReceptor)
     {
         if(characterReceptor.DataContainer.IsDefending)
         {
@@ -78,7 +78,7 @@ public partial class DefendAction : BaseAction
     {
         if(Character == e.currentCharacter)
         {
-            CancelDefend(Character);
+            TryCancelDefend(Character);
         }
     }
 }

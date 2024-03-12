@@ -4,30 +4,29 @@
 [ext_resource type="Script" path="res://Battle/UI/PartyStatus/PartyBattleStatusUI.cs" id="1_iegv1"]
 
 [node name="PartyBattleStatusUI" type="Control"]
+custom_minimum_size = Vector2(650, 105)
 layout_mode = 3
-anchors_preset = 15
+anchors_preset = 1
+anchor_left = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = -650.0
+offset_bottom = 105.0
+grow_horizontal = 0
 script = ExtResource("1_iegv1")
 _partyMemberUIScene = ExtResource("1_dmw68")
 
 [node name="Panel" type="Panel" parent="."]
 custom_minimum_size = Vector2(475, 100)
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.448
-anchor_right = 0.983
-anchor_bottom = 0.159
-offset_left = -0.0960083
-offset_right = -0.416016
-offset_bottom = -0.0320053
-grow_horizontal = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="PartyMembersContainerUI" type="HBoxContainer" parent="Panel"]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2

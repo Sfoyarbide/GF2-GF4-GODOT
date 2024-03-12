@@ -2,17 +2,27 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
+public enum ElementStatus
+{
+    Normal,
+    Weakness,
+    Resistance,
+    Null,
+    Absorb, 
+    Reflect
+}
+
 public partial class Character : Node3D
 {
     private Node _actionContainer; 
     private Node3D _markerContainer;
-    [Export]
-    private CharacterDataResource _dataContainer;
+    private CharacterData _dataContainer;
     private CharacterAnimator _characterAnimation;
-    public CharacterDataResource DataContainer {get {return _dataContainer;} set {_dataContainer = value;}}
+    public CharacterData DataContainer {get {return _dataContainer;} set {_dataContainer = value;}}
 
     public override void _Ready()
     {
+        _dataContainer = GetNode<CharacterData>("Data");
         _actionContainer = GetNode("ActionContainer");
         _markerContainer = GetNode<Node3D>("MarkerContainer");
         _characterAnimation = GetNode<CharacterAnimator>("Pivot/Model");
@@ -23,8 +33,6 @@ public partial class Character : Node3D
 
         UpdateActionList();
 
-
-        // TEMP
         DataContainer.Hp = DataContainer.HpMax;
         BattleDatabase battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
         List<Skill> skills = battleDatabase.SkillDatabase.SkillList;

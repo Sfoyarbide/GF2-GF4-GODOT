@@ -4,6 +4,117 @@ using System.Collections.Generic;
 
 public partial class CombatCalculations
 {
+    public static bool IsHitCalculation(Character character, Character receptor)
+    {
+        int agCharacter = character.DataContainer.Ag;
+        int agReceptor = receptor.DataContainer.Ag;
+        int luCharacter = character.DataContainer.Lu;
+        int luReceptor = receptor.DataContainer.Lu;
+        int randomHitChanceModifier = GD.RandRange(0, Mathf.Max(0, luReceptor - luCharacter));
+        // The formula to get the chance to hit.
+        int hitChance = Mathf.Max(1, agReceptor - agCharacter + randomHitChanceModifier);
+
+        // The formula to get the result of the chance.
+        int randomHitModifier = GD.RandRange(0, Mathf.Max(1, agReceptor - agCharacter));
+        int randomValue = GD.RandRange(0 + randomHitModifier, hitChance);
+        return randomValue >= hitChance;
+    }
+
+    public static bool IsCriticHitCalculation(Character character, Character receptor)
+    {
+        int agCharacter = character.DataContainer.Ag;
+        int agReceptor = receptor.DataContainer.Ag;
+        int luCharacter = character.DataContainer.Lu;
+        int luReceptor = receptor.DataContainer.Lu;
+        // Formula for the critic change.
+        int criticChance = Mathf.Max(1, ((luReceptor - luCharacter) / agCharacter) + agReceptor);
+        int randomCriticModifier  = Mathf.Max(0, luReceptor - luCharacter);
+        // Formula for the making the critic.
+        int randomValue = GD.RandRange(0 + randomCriticModifier, criticChance);
+        return randomValue == criticChance;
+    }
+
+    public static int DamageCalculation(Character character, Character receptor, Attack attack)
+    {
+        int statBonus = 0;
+        switch(attack)
+        {
+            case Skill:
+                statBonus = character.DataContainer.Ma;
+                break;
+            case MeleeAttack:
+                statBonus = character.DataContainer.St;
+                break;
+        }
+
+        float baseDamage = BaseDamageCalculation(character, attack, statBonus);
+        //GD.Print("Base Damage: " + baseDamage);
+        float elementMultipler = ElementMultipler(attack.AttackType, receptor);
+        //GD.Print("Element Multipler: " + elementMultipler);
+        float defenseMultipler = DefenseMultipler(receptor, attack, statBonus);
+        //GD.Print("Defense Multipler: " + defenseMultipler);
+        float randomizeMultipler = RandomizeMultipler();
+        //GD.Print("Randomize Multipler: " + randomizeMultipler);
+        
+        float damage = baseDamage * elementMultipler * defenseMultipler * randomizeMultipler;
+        return Mathf.RoundToInt(damage);
+    }
+
+    private static float BaseDamageCalculation(Character character, Attack attack, int statBonus)
+    {
+        float damage = attack.Damage;
+        return damage + statBonus;
+    }
+
+    private static float ElementMultipler(AttackTypes attackType, Character receptor)
+    {
+        float elementMultipler = 0;
+
+        ElementStatus elementStatus;
+        if(!receptor.DataContainer.AttackElementStatusDictionary.ContainsKey(attackType))
+        {
+            elementStatus = ElementStatus.Normal; 
+        }
+        else
+        {
+            elementStatus = receptor.DataContainer.AttackElementStatusDictionary[attackType];
+        }
+
+        switch(elementStatus)
+        {
+            case ElementStatus.Normal:
+                elementMultipler = 1f;
+                break;
+            case ElementStatus.Weakness:
+                elementMultipler = 1.25f;
+                break;
+            case ElementStatus.Resistance:
+                elementMultipler = 0.75f;
+                break;
+            case ElementStatus.Null:
+                elementMultipler = 0;
+                break;
+            case ElementStatus.Absorb:
+                elementMultipler = -1f;
+                break;
+        }
+
+        return elementMultipler;
+    }
+
+    private static float DefenseMultipler(Character receptor, Attack attack, int statBonus)
+    {
+        float attackDamage = attack.Damage;
+        float defense = attackDamage / (attackDamage + receptor.DataContainer.ArmorDefense + receptor.DataContainer.Ma);
+        return defense;
+    }
+
+    private static float RandomizeMultipler()
+    {
+        return (float)GD.RandRange(0.9, 1f);
+    }
+
+    //Legacy Calculations
 	public static int CalculateDamage(int baseDamage, int defense) // Calculation for damage.
     {
         int damage;
@@ -17,7 +128,6 @@ public partial class CombatCalculations
         }
         return damage;
     }
-
     public static bool CheckIsHit(int StatCharacter, int StatCharacterReceptor, int dice) // Calculation to check if it's hit.
     {
         if((StatCharacter * dice) - StatCharacterReceptor > StatCharacterReceptor * 2) // The formula to check if you hit.
@@ -43,12 +153,12 @@ public partial class CombatCalculations
         return characterListByIsEnemy;
     }
 
-	public static void SetXpForNextLevel(CharacterDataResource data)
+	public static void SetXpForNextLevel(CharacterData data)
     {
         data.XpForNextLevel = GetXpForNextLevel(data.Lv);
     }
 
-    public static void AddXpGainInBattle(int xpGainForBattle, List<CharacterDataResource> dataList)
+    public static void AddXpGainInBattle(int xpGainForBattle, List<CharacterData> dataList)
     {
         for(int x = 0; x < dataList.Count; x++)
         {
@@ -58,12 +168,12 @@ public partial class CombatCalculations
         }
     }
 
-    public static int XpGainForBattle(List<CharacterDataResource> dataAIList)
+    public static int XpGainForBattle(List<CharacterData> dataAIList)
     {
         float xpSumUp = 0;
         float exponent = 1.5f;
 
-        foreach(CharacterDataResource dataAI in dataAIList)
+        foreach(CharacterData dataAI in dataAIList)
         {
             xpSumUp += Mathf.Pow(dataAI.Xp, exponent); 
         }
@@ -79,7 +189,7 @@ public partial class CombatCalculations
         return Mathf.RoundToInt(baseExp * (Mathf.Pow(level, exponent))); // The formula for next xp.
     }
 
-    public static bool IsLevelUp(CharacterDataResource data)
+    public static bool IsLevelUp(CharacterData data)
     {
         if(data.Xp >= GetXpForNextLevel(data.Lv)) // Check if the necessary xp is reach.
         {
@@ -89,7 +199,7 @@ public partial class CombatCalculations
         return false;
     }
 
-    public static void LevelUp(CharacterDataResource data)
+    public static void LevelUp(CharacterData data)
     {
         data.Lv += 1; // Level Up
         data.IncreaseHpMax();

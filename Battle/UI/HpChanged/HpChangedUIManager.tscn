@@ -1,8 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://0xve1xol8ety"]
-
-[ext_resource type="Script" path="res://Battle/UI/HpChanged/HpChangedUIManager.cs" id="1_7hn2e"]
-[ext_resource type="PackedScene" uid="uid://cncb7vj3r0i5f" path="res://Battle/UI/HpChanged/HpChangedUI.tscn" id="2_g8j2h"]
-
-[node name="HpChangedUIManager" type="Node"]
-script = ExtResource("1_7hn2e")
-_HpChangedUIScene = ExtResource("2_g8j2h")

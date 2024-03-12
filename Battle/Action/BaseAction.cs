@@ -8,9 +8,22 @@ public abstract partial class BaseAction : Node3D
     private Action _onActionComplete;
     private bool _inAction;
     private Timer _timer;
+    public static event EventHandler<AttackStateEventArgs> AttackState;
+    public class AttackStateEventArgs : EventArgs
+    {
+        public Character receptor;
+        public bool isHit;
+        public int damage;
+        public Attack attack;
+    }
+
     public abstract void TakeAction(Character characterReceptor, Action onActionComplete);
     public virtual void TakeAction(List<Character> characterReceptorList, Action onActionComplete){}
     public abstract void EndingAction();
+    public void OnAttackState(AttackStateEventArgs attackStateEventArgs)
+    {
+        AttackState?.Invoke(this, attackStateEventArgs);
+    }
 
     public override void _Ready()
     {

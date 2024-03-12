@@ -5,12 +5,14 @@ using System.Collections.Generic;
 public enum ReceptorCriteria
 {
     Enemy,
-    Ally
+    Ally,
+    Self
 }
 
 public partial class CharacterReceptorSelector : Node3D
 {
     private BattleDatabase _battleDatabase;
+    private Character _currentCharacter;
     private List<Character> _characterReceptorList;
     private int _receptorIndex;
     private bool _canSelect;
@@ -20,6 +22,7 @@ public partial class CharacterReceptorSelector : Node3D
     public static event EventHandler OnCharacterSelectorCompleted;
     public static event EventHandler<OnCharacterReceptorSelectedEventArgs> OnCharacterReceptorSelected;
     public static event EventHandler<OnSelectsAllEventArgs> OnSelectsAll;
+    public static event EventHandler<OnAISearchingReceptorListReadyEventArgs> OnAISearchingReceptorListReady;
     public class OnCharacterReceptorSelectedEventArgs : EventArgs
     {
         public Character characterRecepetor;
@@ -28,12 +31,18 @@ public partial class CharacterReceptorSelector : Node3D
     {
         public List<Character> characterReceptorList;
     }
+    public class OnAISearchingReceptorListReadyEventArgs : EventArgs
+    {
+        public List<Character> EnemyReceptorList;
+    }
 
     public override void _Ready()
     {
         _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
         _battleDatabase.BattleManager.OnSelectionStarted += BattleManager_OnSelectionStarted;
         _characterReceptorList = new List<Character>();
+        BattleManager.OnCurrentCharacterChanged += BattleManager_OnCurrentCharacterChanged;
+        CharacterEnemy.EnemySearchingReceptorList += CharacterEnemy_EnemySearchingReceptorList;
         ItemUI.OnConfirmItem += ItemUI_OnConfirmItem;
         SkillUI.OnConfirmSkill += SkillUI_OnConfirmSkill;
     }
@@ -59,48 +68,12 @@ public partial class CharacterReceptorSelector : Node3D
                 characterRecepetor = GetCharacterReceptor()
             });
 
-            GD.Print("Character Receptor Selected: " + _characterReceptorList[_receptorIndex] + ", Current Character: " + _battleDatabase.BattleManager.GetCurrentCharacter());
+            // Debug
+            //GD.Print("Character Receptor Selected: " + _characterReceptorList[_receptorIndex] + ", Current Character: " + _battleDatabase.BattleManager.GetCurrentCharacter());
         }
     }
 
-    public void SetupSelection(bool selectsAll, bool invertCollection, bool onlySelectOnlyCharacter=false)
-    {
-        if(_canSelect)
-        {
-            return;
-        }
-
-        _selectsAll = selectsAll;
-
-        if(!onlySelectOnlyCharacter) 
-        {
-            UpdateCharacterReceptorList(_selectsAll, invertCollection);
-        }
-        else // Selects only the character that is doing the action.
-        {
-            _characterReceptorList.Add(_battleDatabase.BattleManager.GetCurrentCharacter());
-        }
-
-        if(!_selectsAll) // If not selects all enemys, then it means that is an indivual selection.
-        {
-            OnCharacterReceptorSelected?.Invoke(this, new OnCharacterReceptorSelectedEventArgs{
-                characterRecepetor = GetCharacterReceptor()
-            });
-        }
-        else // If selects all enemys, then it means is a grupal selection.
-        {
-            OnSelectsAll?.Invoke(this, new OnSelectsAllEventArgs
-            {
-                characterReceptorList = _characterReceptorList
-            });
-        }
-        OnCharacterSelectorStarted?.Invoke(this, new OnCharacterReceptorSelectedEventArgs{
-            characterRecepetor = _characterReceptorList[_receptorIndex]
-        });
-        _canSelect = true;
-    }
-
-    public void SetupSelection(List<ReceptorCriteria> receptorCriteriaList, bool selectsAll=false)
+    public void SetupSelection(Character sender, List<ReceptorCriteria> receptorCriteriaList, bool selectsAll=false)
     {
         if(_canSelect)
         {
@@ -116,7 +89,7 @@ public partial class CharacterReceptorSelector : Node3D
             bool hasMeetCriterias = false;
             foreach(ReceptorCriteria receptorCriteria in receptorCriteriaList)
             {
-                if(MeetCriteria(character, receptorCriteria))
+                if(MeetCriteria(sender, character, receptorCriteria))
                 {
                     hasMeetCriterias = true;
                 }
@@ -132,7 +105,11 @@ public partial class CharacterReceptorSelector : Node3D
                 _characterReceptorList.Add(character);
             }
         }
+    }
 
+    public void SetupSelectionPlayer(Character sender, List<ReceptorCriteria> receptorCriteriaList, bool selectsAll=false)
+    {
+        SetupSelection(sender, receptorCriteriaList, selectsAll);
         if(_characterReceptorList.Count > 0)
         {
             if(selectsAll)
@@ -159,31 +136,9 @@ public partial class CharacterReceptorSelector : Node3D
         }
     }
 
-    private void UpdateCharacterReceptorList(bool _selectsAll, bool invertCollection) // Recheck logic.
+    public void SetupSelectionAI(Character sender, List<ReceptorCriteria> receptorCriteriaList, bool selectsAll=false)
     {
-        if(_selectsAll) // If is a selection, that selects all, then it will be all the enemys selected.
-        {
-            if(!invertCollection)
-            {
-                _characterReceptorList.AddRange(_battleDatabase.BattleManager.EnemyList); // First the enemys in the collection.
-            }
-            else
-            {
-                _characterReceptorList.AddRange(_battleDatabase.BattleManager.AllyList); //  First the allys in the collection.
-            }
-            return;
-        }
-
-        if(!invertCollection)
-        {
-            _characterReceptorList.AddRange(_battleDatabase.BattleManager.EnemyList); // First the enemys in the collection.
-            _characterReceptorList.AddRange(_battleDatabase.BattleManager.AllyList); // And then the allys
-        }
-        else
-        {
-            _characterReceptorList.AddRange(_battleDatabase.BattleManager.AllyList); //  First the allys in the collection.
-            _characterReceptorList.AddRange(_battleDatabase.BattleManager.EnemyList); // an then the enemys.
-        }
+        SetupSelection(sender, receptorCriteriaList, selectsAll);
     }
 
     public Character GetCharacterReceptor()
@@ -224,25 +179,30 @@ public partial class CharacterReceptorSelector : Node3D
 
     private void BattleManager_OnSelectionStarted(object sender, BattleManager.OnSelectionStartedEventArgs e)
     {
+        List<ReceptorCriteria> receptorCritiriaList = new List<ReceptorCriteria>();
         switch (e.action)
         {
-            case AttackAction:
-                SetupSelection(false, false);
+            case MeleeAction:
+                receptorCritiriaList.Add(ReceptorCriteria.Enemy);
+                SetupSelectionPlayer(_currentCharacter, receptorCritiriaList);
                 break;
             case DefendAction:
-                SetupSelection(false, false, true);
+                receptorCritiriaList.Add(ReceptorCriteria.Self);
+                SetupSelectionPlayer(_currentCharacter, receptorCritiriaList);
                 break;
         }
     }
 
-    private bool MeetCriteria(Character receptor, ReceptorCriteria receptorCriteria)
+    private bool MeetCriteria(Character sender, Character receptor, ReceptorCriteria receptorCriteria)
     {
         switch(receptorCriteria)
         {
             case ReceptorCriteria.Enemy:
-                return receptor.DataContainer.IsEnemy;
+                return sender.DataContainer.IsEnemy != receptor.DataContainer.IsEnemy;
             case ReceptorCriteria.Ally:
-                return !receptor.DataContainer.IsEnemy;
+                return sender.DataContainer.IsEnemy == sender.DataContainer.IsEnemy;
+            case ReceptorCriteria.Self:
+                return sender == receptor;
             default:
                 return false;
         }
@@ -250,11 +210,21 @@ public partial class CharacterReceptorSelector : Node3D
 
     private void ItemUI_OnConfirmItem(object sender, ItemUI.OnConfirmItemEventArgs e)
     {
-        SetupSelection(e.item.ReceptorCriteriaList, e.item.ForAllReceptors);
+        SetupSelectionPlayer(_currentCharacter, e.item.ReceptorCriteriaList, e.item.ForAllReceptors);
     }
 
     private void SkillUI_OnConfirmSkill(object sender, SkillUI.OnConfirmSkillEventArgs e)
     {
-        SetupSelection(e.skill.ReceptorCriteriaList, e.skill.IsAllReceiveDamage);
+        SetupSelectionPlayer(_currentCharacter, e.skill.ReceptorCriteriaList, e.skill.IsAllReceiveDamage);
+    }
+
+    private void CharacterEnemy_EnemySearchingReceptorList(object sender, CharacterEnemy.OnEnemySearchingReceptorEventArgs e)
+    {
+        SetupSelectionAI(_currentCharacter, e.receptorCriteriaList);
+    }
+
+    private void BattleManager_OnCurrentCharacterChanged(object sender, BattleManager.OnCurrentCharacterChangedEventArgs e)
+    {
+        _currentCharacter = e.currentCharacter; 
     }
 }

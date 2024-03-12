@@ -138,7 +138,7 @@ public partial class BattleCameraManager : Node
         BaseAction baseAction = _battleDatabase.BattleManager.GetCurrentCharacter().DataContainer.SelectedAction;
         switch(baseAction)
         {
-            case AttackAction attackAction:
+            case MeleeAction attackAction:
                 ChangeCamera(_currentCharacterCamera, false);
                 UpdateCurrentCharacterCamera();
                 break;

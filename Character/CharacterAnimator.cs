@@ -24,15 +24,15 @@ public partial class CharacterAnimator : Node3D
     public override void _Ready()
     {
         _animationTree = GetNode<AnimationTree>("AnimationTree");
-        AttackAction.OnAttackStarted += AttackAction_OnAttackStarted;
-        AttackAction.OnAttack += AttackAction_OnAttack;
-        AttackAction.OnAttackEnd += AttackAction_OnAttackEnd;
+        MeleeAction.OnMeleeStarted += AttackAction_OnAttackStarted;
+        MeleeAction.OnMelee += AttackAction_OnAttack;
+        MeleeAction.OnMeleeEnd += AttackAction_OnAttackEnd;
         SkillAction.OnSkillCast += SkillAction_OnSkillCast;
         SkillAction.OnSkillEnd += SkillAction_OnSkillEnd;
         DefendAction.OnDefend += DefendAction_OnDefend;
         DefendAction.OnCancelDefend += DefendAction_OnCancelDefend;
         ItemAction.OnUsedItemStarted += ItemAction_OnUsedItemStarted;
-        CharacterDataResource.OnHpChanged += CharacterDataResource_OnHpChanged;
+        CharacterData.OnHpChanged += CharacterDataResource_OnHpChanged;
     }
 
     public void Setup(Character character)
@@ -50,7 +50,7 @@ public partial class CharacterAnimator : Node3D
         animationCondition = true;
     }
 
-    private void AttackAction_OnAttackStarted(object sender, AttackAction.OnAttackEventArgs e)
+    private void AttackAction_OnAttackStarted(object sender, MeleeAction.OnMeleeEventArgs e)
     {
         if(e.character == _character)
         {
@@ -58,7 +58,7 @@ public partial class CharacterAnimator : Node3D
         }
     }
 
-    private void AttackAction_OnAttack(object sender, AttackAction.OnAttackEventArgs e)
+    private void AttackAction_OnAttack(object sender, MeleeAction.OnMeleeEventArgs e)
     {
         if(e.character == _character)
         {
@@ -66,7 +66,7 @@ public partial class CharacterAnimator : Node3D
         }
     }
 
-    private void AttackAction_OnAttackEnd(object sender, AttackAction.OnAttackEventArgs e)
+    private void AttackAction_OnAttackEnd(object sender, MeleeAction.OnMeleeEventArgs e)
     {
         if(e.character == _character)
         {
@@ -124,7 +124,7 @@ public partial class CharacterAnimator : Node3D
         }
     }
 
-    private void CharacterDataResource_OnHpChanged(object sender, CharacterDataResource.OnHpChangedEventArgs e)
+    private void CharacterDataResource_OnHpChanged(object sender, CharacterData.OnHpChangedEventArgs e)
     {
         if(e.character == _character)
         {

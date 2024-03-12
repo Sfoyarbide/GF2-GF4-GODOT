@@ -1,0 +1,71 @@
+[gd_scene load_steps=3 format=3 uid="uid://co8caemxykmk6"]
+
+[ext_resource type="Texture2D" uid="uid://dmhre602fkf8e" path="res://Battle/Inventory/Items/Apple/Apple.png" id="1_7eb7r"]
+[ext_resource type="Script" path="res://Battle/Attack/Skills/SkillUI.cs" id="1_8axac"]
+
+[node name="SkillUI" type="Panel"]
+custom_minimum_size = Vector2(170, 35)
+anchors_preset = -1
+anchor_right = 0.265
+anchor_bottom = 0.066
+offset_right = -0.280029
+offset_bottom = 0.231998
+script = ExtResource("1_8axac")
+
+[node name="SkillIconUI" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.041
+anchor_top = 0.488
+anchor_right = 0.041
+anchor_bottom = 0.488
+offset_left = 0.0299997
+offset_top = -15.984
+offset_right = 32.03
+offset_bottom = 16.016
+texture = ExtResource("1_7eb7r")
+
+[node name="SkillNameUI" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.259
+anchor_top = 0.43
+anchor_right = 0.259
+anchor_bottom = 0.43
+offset_left = -0.0299988
+offset_top = -11.5
+offset_right = 39.97
+offset_bottom = 11.5
+text = "null
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SkillCostUI" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.688
+anchor_top = 0.43
+anchor_right = 0.688
+anchor_bottom = 0.43
+offset_left = 0.0399933
+offset_top = -11.5
+offset_right = 15.04
+offset_bottom = 11.5
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ConfirmSkillUI" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.79
+anchor_top = 0.523
+anchor_right = 0.79
+anchor_bottom = 0.523
+offset_left = 0.0499878
+offset_top = -15.489
+offset_right = 55.05
+offset_bottom = 10.511
+text = "
+"

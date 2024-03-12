@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Battle/UI/BattleUI.cs" id="1_30bul"]
 [ext_resource type="PackedScene" uid="uid://cjq682eil87xx" path="res://Battle/UI/action_button.tscn" id="2_ua6ep"]
 [ext_resource type="PackedScene" uid="uid://fpl65x32dhec" path="res://Battle/Inventory/InventoryUI.tscn" id="3_jh8f7"]
-[ext_resource type="PackedScene" uid="uid://cdxih7a6qvhhh" path="res://Battle/Skills/SkillContainerUI.tscn" id="4_rnnvl"]
+[ext_resource type="PackedScene" uid="uid://cdxih7a6qvhhh" path="res://Battle/Attack/Skills/SkillContainerUI.tscn" id="4_rnnvl"]
 [ext_resource type="PackedScene" uid="uid://b3k0u20f8d2od" path="res://Battle/UI/PartyStatus/PartyBattleStatusUI.tscn" id="5_n7kq4"]
 
 [node name="BattleUI" type="Control"]
@@ -26,18 +26,13 @@ offset_top = -226.0
 offset_right = 300.0
 grow_vertical = 0
 
-[node name="PartyBattleStatusUI" parent="." instance=ExtResource("5_n7kq4")]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.573
-anchor_bottom = 0.16
-offset_left = -0.0960083
-offset_bottom = 0.319992
-
 [node name="InventoryUI" parent="." instance=ExtResource("3_jh8f7")]
 visible = false
 layout_mode = 1
 
 [node name="SkillContainerUI" parent="." instance=ExtResource("4_rnnvl")]
 visible = false
+layout_mode = 1
+
+[node name="PartyBattleStatusUI" parent="." instance=ExtResource("5_n7kq4")]
 layout_mode = 1

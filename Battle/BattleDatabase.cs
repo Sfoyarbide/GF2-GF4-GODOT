@@ -37,5 +37,9 @@ public partial class BattleDatabase : Node
 		_skillDatabase = GetNode<SkillDatabase>("SkillDatabase");
 	}
 
+	public Character GetCurrentCharacter()
+	{
+		return _battleManager.GetCurrentCharacter();
+	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 }

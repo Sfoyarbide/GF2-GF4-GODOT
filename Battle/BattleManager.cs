@@ -66,7 +66,8 @@ public partial class BattleManager : Node3D
     public override void _Ready()
     {
         BattleUI.OnActionSelectedChanged += BattleUI_OnActionSelectedChanged;
-        //OnBattleStart?.Invoke(this, EventArgs.Empty);
+
+        KnockDown.CurrentCharacterKnockdown += KnockDown_CurrentCharacterKnockdown;
 
         // TEMP
         List<Character> newCharacterTurnList = new List<Character>();
@@ -81,6 +82,9 @@ public partial class BattleManager : Node3D
         _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
 
         SetupBattle(newCharacterTurnList);
+
+        // Debug
+        GD.Print("Character Turn List count: " + _characterTurnList.Count);
     }
 
     public override void _Process(double delta)
@@ -101,7 +105,7 @@ public partial class BattleManager : Node3D
         {
             switch(selectedAction)
             {
-                case AttackAction attackAction:
+                case MeleeAction attackAction:
                     ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptor());
                     break;
                 case SkillAction skillAction:
@@ -201,6 +205,9 @@ public partial class BattleManager : Node3D
         DequeueCurrentCharacter();
         _inAction = false; 
 
+        // Debug
+        //GD.Print("Character Turn List count: " + _characterTurnList.Count);
+
         OnTurnEnd?.Invoke(this, EventArgs.Empty);
 
         OnCurrentCharacterChanged?.Invoke(this, new OnCurrentCharacterChangedEventArgs{
@@ -265,5 +272,10 @@ public partial class BattleManager : Node3D
     private void BattleUI_OnActionSelectedChanged(object sender, BattleUI.OnActionSelectedChangedEventArgs e)
     {
         GetCurrentCharacter().DataContainer.SelectedAction = GetCurrentCharacter().DataContainer.ActionList[e.actionIndex];
+    }
+
+    private void KnockDown_CurrentCharacterKnockdown(object sender, EventArgs e)
+    {
+        NextTurn();
     }
 }
