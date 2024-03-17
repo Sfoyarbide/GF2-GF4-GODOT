@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public partial class SkillAction : BaseAction
 {
@@ -49,13 +50,18 @@ public partial class SkillAction : BaseAction
         if(isHit)
         {
             skill.UseSkill(Character, characterReceptor, out damage); 
+            if(characterReceptor.DataContainer.IsElementStatusToAttackType(skill.AttackType, ElementStatus.Weakness) && !characterReceptor.DataContainer.IsDefending)
+            {
+                characterReceptor.DataContainer.AlreadyHitWeakness = true;
+            }
         }
 
         OnAttackState(new AttackStateEventArgs{
             receptor = characterReceptor,
             isHit = isHit,
             damage = damage,
-            attack = skill
+            attack = skill,
+            baseAction = this
         });
     }
 

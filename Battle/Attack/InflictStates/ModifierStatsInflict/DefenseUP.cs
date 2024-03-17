@@ -13,7 +13,7 @@ public partial class DefenseUP : ModifierStatsInflict
     public override void UseInflictEffect(Character character)
     {
         CharacterWithEffect = character;
-        character.DataContainer.Co *= 2;
+        character.DataContainer.DefenseModifier += 0.5f;
         ModifierStatsEventArgs modifierStatsEventArgs = new ModifierStatsEventArgs{
             characterWithEffect = character,
             modifierStatsInflict = this
@@ -23,7 +23,7 @@ public partial class DefenseUP : ModifierStatsInflict
 
     protected override void ReturnNormalValues(Character character)
     {
-        CharacterWithEffect.DataContainer.Co /= 2;
+        character.DataContainer.DefenseModifier = 1f;
     }
 
     private void BattleManager_OnCurrentCharacterChanged(object sender, BattleManager.OnCurrentCharacterChangedEventArgs e)

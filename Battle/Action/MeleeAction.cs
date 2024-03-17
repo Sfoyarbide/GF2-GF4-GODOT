@@ -28,28 +28,39 @@ public partial class MeleeAction : BaseAction
 	public void Attack(Character characterReceptor) // Checks if you hit, and execute the attack.
     {
         bool isHit = CombatCalculations.IsHitCalculation(Character, characterReceptor);
+
         int damage = 0;
+        InflictState inflictState = null; // We define it in order to save if we inflict a state.
+
         if(isHit)
         {
-            damage = CombatCalculations.DamageCalculation(Character, characterReceptor, Character.DataContainer.MeleeAttack);
-            
-            if(CombatCalculations.IsCriticHitCalculation(Character, characterReceptor))
+            Attack meleeAttack = Character.DataContainer.MeleeAttack; 
+            damage = CombatCalculations.DamageCalculation(Character, characterReceptor, meleeAttack);
+
+            if(CombatCalculations.IsCriticHitCalculation(Character, characterReceptor) && !characterReceptor.DataContainer.IsDefending)
             {
                 damage *= 2;
-                KnockDown knockDown = new KnockDown();
-                knockDown.InflictCharacter(characterReceptor);
+                //inflictState = new KnockDown();
+                //inflictState.InflictCharacter(characterReceptor);
+            }
+            else if(characterReceptor.DataContainer.IsElementStatusToAttackType(meleeAttack.AttackType, ElementStatus.Weakness) && !characterReceptor.DataContainer.IsDefending)
+            {
+                characterReceptor.DataContainer.AlreadyHitWeakness = true;
             }
 
             // Checks if the receptor was defending, and cancels it.
             DefendAction.TryCancelDefend(characterReceptor);
             characterReceptor.DataContainer.Hp -= damage; 
         }
+
+        GD.Print(inflictState);
         
         OnAttackState(new AttackStateEventArgs{
             receptor = _characterReceptor,
             isHit = isHit,
             damage = damage,
-            attack = Character.DataContainer.MeleeAttack
+            attack = Character.DataContainer.MeleeAttack,
+            inflictState = inflictState
         });
     }
 

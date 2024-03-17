@@ -13,8 +13,7 @@ public partial class AttackDOWN : ModifierStatsInflict
     public override void UseInflictEffect(Character character)
     {
         CharacterWithEffect = character;
-        character.DataContainer.St /= 2;
-        character.DataContainer.Ma /= 2;
+        character.DataContainer.AttackModifier -= 0.5f;
         ModifierStatsEventArgs modifierStatsEventArgs = new ModifierStatsEventArgs{
             characterWithEffect = character,
             modifierStatsInflict = this
@@ -24,8 +23,7 @@ public partial class AttackDOWN : ModifierStatsInflict
 
     protected override void ReturnNormalValues(Character character)
     {
-        CharacterWithEffect.DataContainer.St *= 2;
-        CharacterWithEffect.DataContainer.Ma *= 2;
+        CharacterWithEffect.DataContainer.AttackModifier = 1;
     }
 
     private void BattleManager_OnCurrentCharacterChanged(object sender, BattleManager.OnCurrentCharacterChangedEventArgs e)

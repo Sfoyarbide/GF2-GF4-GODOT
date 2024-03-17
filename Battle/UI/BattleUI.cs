@@ -11,6 +11,8 @@ public partial class BattleUI : Control
     [Export]
     private PackedScene _actionButtonScene;
     private BattleDatabase _battleDatabase;
+    private Label _oneMoreUI;
+    private Timer _oneMoreTimerUI;
     public static event EventHandler<OnActionSelectedChangedEventArgs> OnActionSelectedChanged;
     public class OnActionSelectedChangedEventArgs : EventArgs
     {
@@ -21,10 +23,13 @@ public partial class BattleUI : Control
     {
         _actionGridContainer = GetNode<GridContainer>("ActionGridContainer");
         BattleManager.OnCurrentCharacterChanged += BattleManager_OnCurrentCharacterChanged;
+        BattleManager.OnOneMore += BattleManager_OneMore;
         CharacterReceptorSelector.OnCharacterSelectorCanceled += CharacterReceptorSelector_OnCharacterSelectorCanceled;
         CharacterReceptorSelector.OnCharacterSelectorStarted += CharacterReceptorSelector_OnCharacterSelectorStarted;
         ActionButton.OnActionButtonDown += ActionButton_OnActionButtonDown;
         _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
+        _oneMoreUI = GetNode<Label>("OneMoreUI");
+        _oneMoreTimerUI = _oneMoreUI.GetNode<Timer>("OneMoreTimerUI");
     }
 
     public override void _Process(double delta)
@@ -98,5 +103,16 @@ public partial class BattleUI : Control
     private void CharacterReceptorSelector_OnCharacterSelectorStarted(object sender, EventArgs e)
     {
         _canSelect = false;
+    }
+
+    private void BattleManager_OneMore(object sender, BattleManager.OnCurrentCharacterChangedEventArgs e)
+    {
+        _oneMoreUI.Show();
+        _oneMoreTimerUI.Start();
+    }
+
+    private void OnOneMoreTimeUITimeout()
+    {
+        _oneMoreUI.Hide();
     }
 }

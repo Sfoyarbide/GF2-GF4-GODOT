@@ -1,11 +1,11 @@
+Timer
+Label
 Node
 Sprite3D
 Node3D
 TextureRect
-Timer
 Label3D
 Panel
-Label
 HBoxContainer
 Button
 GridContainer

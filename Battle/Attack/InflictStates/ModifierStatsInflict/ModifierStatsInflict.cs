@@ -15,6 +15,11 @@ public abstract partial class ModifierStatsInflict : InflictState
 
     public InflictStates OpposedModifierStatsInflictType {get { return _opposedModifierStatsInflictType; } set { _opposedModifierStatsInflictType = value;}}
 
+    public ModifierStatsInflict()
+    {
+        TurnRemaining = 3;
+    }
+
     public override void EndInflictState(Character character)
 	{
 	 	ModifierStatsInflict modifierStatsInflict = character.DataContainer.ModifierStatsInflictList.Find(x => x.InflictStateType == InflictStateType);

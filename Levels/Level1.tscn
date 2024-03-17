@@ -1,14 +1,16 @@
-[gd_scene load_steps=10 format=3 uid="uid://srcvtkfedf56"]
+[gd_scene load_steps=12 format=3 uid="uid://srcvtkfedf56"]
 
 [ext_resource type="PackedScene" uid="uid://r4qrwcjt7ph0" path="res://Battle/BattleManager.tscn" id="1_gteq7"]
 [ext_resource type="PackedScene" uid="uid://bd80y56s7uw3v" path="res://Character/Character.tscn" id="2_d5rbv"]
 [ext_resource type="Script" path="res://Character/CharacterData.cs" id="3_bxs0c"]
 [ext_resource type="Script" path="res://Battle/Attack/Melee/MeleeAttack.cs" id="4_3g63v"]
 [ext_resource type="PackedScene" uid="uid://0dp5kn1r6sid" path="res://Battle/CharacterReceptorSelector.tscn" id="4_ickuk"]
+[ext_resource type="Script" path="res://Character/Enemy/Slime/SlimeData.cs" id="5_6dwid"]
 [ext_resource type="PackedScene" uid="uid://0xve1xol8ety" path="res://Battle/UI/AttackStatus/AttackStatusUIManager.tscn" id="7_1eth0"]
 [ext_resource type="PackedScene" uid="uid://s6l63avtc468" path="res://Levels/brain_camera.tscn" id="7_jdvbv"]
 [ext_resource type="Script" path="res://Battle/BattleCameraManager.cs" id="8_q6j7v"]
 [ext_resource type="PackedScene" uid="uid://knol63we4wn7" path="res://Battle/UI/BattleUI.tscn" id="9_m5fxk"]
+[ext_resource type="Script" path="res://Battle/OneMoreManager.cs" id="9_okxvm"]
 
 [node name="Level1" type="Node3D"]
 
@@ -27,12 +29,52 @@ Sp = 20
 SpMax = 20
 St = 2
 Ma = 5
-Ag = 8
+Ag = 74
 Co = 5
-Lu = 2
+Lu = 80
 ArmorDefense = 4
 
 [node name="MeleeAttack" type="Node" parent="Battle/CharacterContainer/Character00/Data"]
+script = ExtResource("4_3g63v")
+_damage = 15
+
+[node name="Character01" parent="Battle/CharacterContainer" instance=ExtResource("2_d5rbv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
+
+[node name="Data" type="Node" parent="Battle/CharacterContainer/Character01"]
+script = ExtResource("3_bxs0c")
+Hp = 15
+HpMax = 15
+Sp = 20
+SpMax = 20
+St = 2
+Ma = 5
+Ag = 74
+Co = 5
+Lu = 80
+ArmorDefense = 4
+
+[node name="MeleeAttack" type="Node" parent="Battle/CharacterContainer/Character01/Data"]
+script = ExtResource("4_3g63v")
+_damage = 15
+
+[node name="Character02" parent="Battle/CharacterContainer" instance=ExtResource("2_d5rbv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -2)
+
+[node name="Data" type="Node" parent="Battle/CharacterContainer/Character02"]
+script = ExtResource("3_bxs0c")
+Hp = 15
+HpMax = 15
+Sp = 20
+SpMax = 20
+St = 2
+Ma = 5
+Ag = 74
+Co = 5
+Lu = 80
+ArmorDefense = 4
+
+[node name="MeleeAttack" type="Node" parent="Battle/CharacterContainer/Character02/Data"]
 script = ExtResource("4_3g63v")
 _damage = 15
 
@@ -40,7 +82,7 @@ _damage = 15
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 2, 0, 2)
 
 [node name="Data" type="Node" parent="Battle/CharacterContainer/CharacterEnemy_00"]
-script = ExtResource("3_bxs0c")
+script = ExtResource("5_6dwid")
 Hp = 20
 HpMax = 20
 Sp = 40
@@ -48,9 +90,9 @@ SpMax = 40
 IsEnemy = true
 St = 5
 Ma = 4
-Ag = 2
+Ag = 70
 Co = 3
-Lu = 4
+Lu = 53
 ArmorDefense = 2
 
 [node name="MeleeAttack" type="Node" parent="Battle/CharacterContainer/CharacterEnemy_00/Data"]
@@ -61,7 +103,7 @@ _damage = 10
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 1.99205)
 
 [node name="Data" type="Node" parent="Battle/CharacterContainer/CharacterEnemy_01"]
-script = ExtResource("3_bxs0c")
+script = ExtResource("5_6dwid")
 Hp = 20
 HpMax = 20
 Sp = 50
@@ -69,9 +111,9 @@ SpMax = 50
 IsEnemy = true
 St = 2
 Ma = 3
-Ag = 2
+Ag = 80
 Co = 2
-Lu = 1
+Lu = 67
 ArmorDefense = 5
 
 [node name="MeleeAttack" type="Node" parent="Battle/CharacterContainer/CharacterEnemy_01/Data"]
@@ -105,6 +147,9 @@ light_bake_mode = 1
 [node name="CharacterReceptorSelector" parent="Battle/ManagerContainer" instance=ExtResource("4_ickuk")]
 
 [node name="HpChangedUIManager" parent="Battle/ManagerContainer" instance=ExtResource("7_1eth0")]
+
+[node name="OneMoreManager" type="Node" parent="Battle/ManagerContainer"]
+script = ExtResource("9_okxvm")
 
 [node name="BattleUI" parent="Battle" instance=ExtResource("9_m5fxk")]
 _canSelect = true

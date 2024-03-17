@@ -36,3 +36,18 @@ layout_mode = 1
 
 [node name="PartyBattleStatusUI" parent="." instance=ExtResource("5_n7kq4")]
 layout_mode = 1
+
+[node name="OneMoreUI" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 50
+text = "One More!
+"
+
+[node name="OneMoreTimerUI" type="Timer" parent="OneMoreUI"]
+wait_time = 0.8
+one_shot = true
+
+[connection signal="timeout" from="OneMoreUI/OneMoreTimerUI" to="." method="OnOneMoreTimeUITimeout"]

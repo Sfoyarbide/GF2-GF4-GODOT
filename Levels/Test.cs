@@ -1,19 +1,33 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class Test : Node
 {
-    [Export]
-    Character character;
-    [Export]
-    Character character2;
+    public List<Character> allyList = new List<Character>();
+    public List<Character> enemyList = new List<Character>();
+
+    public override void _Ready()
+    {
+        for(int x = 0; x < GetChildCount(); x++)
+        {
+            Character character = (Character)GetChild(x);
+            if(character.DataContainer.IsEnemy)
+            {
+                enemyList.Add(character);
+            }
+            else
+            {
+                allyList.Add(character);
+            }
+        }
+    }
+
     public override void _Process(double delta)
     {
         if(Input.IsActionJustPressed("confirm"))
         {
-            GD.Print("Is Hit calculation:" + CombatCalculations.IsHitCalculation(character, character2));
-            GD.Print("Is Critic Hit calculation:" + CombatCalculations.IsCriticHitCalculation(character, character2));
-            //GD.Print(CombatCalculations.DamageCalculation(character, character2, character.DataContainer.MeleeAttack));
+            GD.Print(CombatCalculations.AllOutAttackDamageCalculation(allyList, enemyList));
         }
     }
 }

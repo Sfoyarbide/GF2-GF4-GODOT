@@ -10,13 +10,15 @@ public partial class CombatCalculations
         int agReceptor = receptor.DataContainer.Ag;
         int luCharacter = character.DataContainer.Lu;
         int luReceptor = receptor.DataContainer.Lu;
-        int randomHitChanceModifier = GD.RandRange(0, Mathf.Max(0, luReceptor - luCharacter));
+        float accurracyModifierCharacter = character.DataContainer.AccuracyModifier;
+        int randomHitChanceModifier = GD.RandRange(0, Mathf.Max(0, (luReceptor / 2) - luCharacter));
         // The formula to get the chance to hit.
         int hitChance = Mathf.Max(1, agReceptor - agCharacter + randomHitChanceModifier);
 
         // The formula to get the result of the chance.
-        int randomHitModifier = GD.RandRange(0, Mathf.Max(1, agReceptor - agCharacter));
-        int randomValue = GD.RandRange(0 + randomHitModifier, hitChance);
+        int randomHitModifier = GD.RandRange(0, Mathf.Max(1, agCharacter - agReceptor));
+        int baseNumber = Mathf.RoundToInt(randomHitModifier * accurracyModifierCharacter);
+        int randomValue = GD.RandRange(baseNumber, hitChance);
         return randomValue >= hitChance;
     }
 
@@ -26,12 +28,14 @@ public partial class CombatCalculations
         int agReceptor = receptor.DataContainer.Ag;
         int luCharacter = character.DataContainer.Lu;
         int luReceptor = receptor.DataContainer.Lu;
+        float accurracyModifierCharacter = character.DataContainer.AccuracyModifier;
         // Formula for the critic change.
-        int criticChance = Mathf.Max(1, ((luReceptor - luCharacter) / agCharacter) + agReceptor);
-        int randomCriticModifier  = Mathf.Max(0, luReceptor - luCharacter);
+        int criticChance = Mathf.Max(1, (luReceptor - luCharacter) + (agReceptor - agCharacter));
         // Formula for the making the critic.
-        int randomValue = GD.RandRange(0 + randomCriticModifier, criticChance);
-        return randomValue == criticChance;
+        int randomCriticModifier  = Mathf.Max(0, luCharacter - luReceptor);
+        int baseNumber = Mathf.RoundToInt(randomCriticModifier * accurracyModifierCharacter);
+        int randomValue = GD.RandRange(baseNumber, criticChance);
+        return randomValue >= criticChance;
     }
 
     public static int DamageCalculation(Character character, Character receptor, Attack attack)
@@ -51,12 +55,13 @@ public partial class CombatCalculations
         //GD.Print("Base Damage: " + baseDamage);
         float elementMultipler = ElementMultipler(attack.AttackType, receptor);
         //GD.Print("Element Multipler: " + elementMultipler);
-        float defenseMultipler = DefenseMultipler(receptor, attack, statBonus);
+        float defenseMultipler = DefenseMultipler(receptor, attack.Damage, statBonus);
         //GD.Print("Defense Multipler: " + defenseMultipler);
         float randomizeMultipler = RandomizeMultipler();
         //GD.Print("Randomize Multipler: " + randomizeMultipler);
+        float attackModifier = character.DataContainer.AttackModifier;
         
-        float damage = baseDamage * elementMultipler * defenseMultipler * randomizeMultipler;
+        float damage = baseDamage * elementMultipler * defenseMultipler * randomizeMultipler * attackModifier;
         return Mathf.RoundToInt(damage);
     }
 
@@ -102,42 +107,17 @@ public partial class CombatCalculations
         return elementMultipler;
     }
 
-    private static float DefenseMultipler(Character receptor, Attack attack, int statBonus)
+    private static float DefenseMultipler(Character receptor, int attackBaseDamage, int statBonus)
     {
-        float attackDamage = attack.Damage;
-        float defense = attackDamage / (attackDamage + receptor.DataContainer.ArmorDefense + receptor.DataContainer.Ma);
+        float attackDamage = attackBaseDamage;
+        float defenseModifier =  receptor.DataContainer.DefenseModifier;
+        float defense = attackDamage / ((attackDamage + receptor.DataContainer.ArmorDefense + receptor.DataContainer.Co) * defenseModifier);
         return defense;
     }
 
     private static float RandomizeMultipler()
     {
         return (float)GD.RandRange(0.9, 1f);
-    }
-
-    //Legacy Calculations
-	public static int CalculateDamage(int baseDamage, int defense) // Calculation for damage.
-    {
-        int damage;
-        if(baseDamage >= defense) // Check if the damage is more or equal to the defense
-        {
-            damage = baseDamage * 2 - defense; 
-        }
-        else
-        {
-            damage = baseDamage * baseDamage / defense;
-        }
-        return damage;
-    }
-    public static bool CheckIsHit(int StatCharacter, int StatCharacterReceptor, int dice) // Calculation to check if it's hit.
-    {
-        if((StatCharacter * dice) - StatCharacterReceptor > StatCharacterReceptor * 2) // The formula to check if you hit.
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     public static List<Character> ObtainCharacterListByIsEnemy(List<Character> characterTurnList, bool isEnemy)
@@ -151,6 +131,25 @@ public partial class CombatCalculations
             }
         }
         return characterListByIsEnemy;
+    }
+
+    public static int AllOutAttackDamageCalculation(List<Character> characterList, List<Character> receptorList)
+    {
+        float baseDamage = 0;
+        float defenseCumulativeModifier = 0;
+        foreach(Character character in characterList)
+        {
+            baseDamage += (BaseDamageCalculation(character, character.DataContainer.MeleeAttack, character.DataContainer.St) * character.DataContainer.AttackModifier * RandomizeMultipler());
+        }
+
+        foreach(Character character in receptorList)
+        {
+            defenseCumulativeModifier = DefenseMultipler(character, (int)baseDamage, character.DataContainer.Co);
+        }
+
+        baseDamage *= defenseCumulativeModifier;
+        float damage = Mathf.Max(1, baseDamage);
+        return Mathf.RoundToInt(damage);
     }
 
 	public static void SetXpForNextLevel(CharacterData data)

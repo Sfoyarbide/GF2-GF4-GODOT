@@ -27,6 +27,13 @@ public partial class CharacterData : Node
     private List<Skill> _skillList = new List<Skill>();
     private BaseAction _selectedAction;
     private bool _isDefending;
+    [Export]
+    private bool _alreadyHitWeakness;
+
+    // Modifiers
+    private float _accuracyModifier = 1; 
+    private float _defenseModifier = 1;
+    private float _attackModifier = 1;
 
     private Dictionary<AttackTypes, ElementStatus> _attackElementStatusDictionary = new Dictionary<AttackTypes, ElementStatus>();
 
@@ -105,6 +112,12 @@ public partial class CharacterData : Node
     public Attack MeleeAttack {get {return _meleeAttack;} set {_meleeAttack = value;}}
     [Export]
     public int ArmorDefense {get {return _armorDefense;} set {_armorDefense = value;}}
+    [Export]
+    public float AccuracyModifier { get { return _accuracyModifier; } set {_accuracyModifier = value;}}
+    [Export]
+    public float DefenseModifier { get { return _defenseModifier; } set {_defenseModifier = value;}}
+    [Export]
+    public float AttackModifier { get { return _attackModifier; } set {_attackModifier = value;}}
     public Dictionary<AttackTypes, ElementStatus> AttackElementStatusDictionary  {get {return _attackElementStatusDictionary;} set {_attackElementStatusDictionary = value;}}
     public List<BaseAction> ActionList {get {return _actionList; } set {_actionList = value; }}
     public List<Skill> SkillList {get {return _skillList; } set {_skillList = value; }}
@@ -115,6 +128,20 @@ public partial class CharacterData : Node
 
     [Export]
     public bool IsDefending {get {return _isDefending;} set {_isDefending = value;}}
+
+    public bool AlreadyHitWeakness {get {return _alreadyHitWeakness;} set {_alreadyHitWeakness = value;}}
+
+    public bool IsElementStatusToAttackType(AttackTypes attackType, ElementStatus elementStatus)
+    {
+        if(AttackElementStatusDictionary.TryGetValue(attackType, out ElementStatus value))
+        {
+            return elementStatus == value;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     public void IncreaseHpMax()
     {
@@ -133,6 +160,12 @@ public partial class CharacterData : Node
 
     public override void _Ready()
     {
+        BattleManager.OnTurnEnd += BattleManager_OnTurnEnd;
         _meleeAttack = GetNode<Attack>("MeleeAttack");
+    }
+
+    private void BattleManager_OnTurnEnd(object sender, EventArgs e)
+    {
+        AlreadyHitWeakness = false;
     }
 }

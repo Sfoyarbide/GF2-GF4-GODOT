@@ -15,6 +15,8 @@ public abstract partial class BaseAction : Node3D
         public bool isHit;
         public int damage;
         public Attack attack;
+        public InflictState inflictState;
+        public BaseAction baseAction;
     }
 
     public abstract void TakeAction(Character characterReceptor, Action onActionComplete);

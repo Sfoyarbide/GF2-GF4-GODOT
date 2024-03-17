@@ -4,11 +4,6 @@ using System.Collections.Generic;
 
 public partial class BattleManager : Node3D
 {
-    // TEMP
-    [Export]
-    private Skill skillResource; 
-    private bool temp;
-
     // Variables declatation.
     private BattleDatabase _battleDatabase;
     private List<Character> _characterTurnList;
@@ -18,9 +13,12 @@ public partial class BattleManager : Node3D
     private bool _inCombat;
     private bool _inAction;
 
+    private OneMoreManager _oneMoreManager;
+
     public static event EventHandler<OnBattleStartEventArgs> OnBattleStart;
     public static event EventHandler OnTurnEnd;
     public static event EventHandler<OnCurrentCharacterChangedEventArgs> OnCurrentCharacterChanged;
+    public static event EventHandler<OnCurrentCharacterChangedEventArgs> OnOneMore;
     public event EventHandler<OnActionExecuteEventArgs> OnActionExecute;
     public event EventHandler<OnSelectionStartedEventArgs> OnSelectionStarted;
     public event EventHandler OnItemSelectionStarted;
@@ -66,7 +64,6 @@ public partial class BattleManager : Node3D
     public override void _Ready()
     {
         BattleUI.OnActionSelectedChanged += BattleUI_OnActionSelectedChanged;
-
         KnockDown.CurrentCharacterKnockdown += KnockDown_CurrentCharacterKnockdown;
 
         // TEMP
@@ -79,6 +76,7 @@ public partial class BattleManager : Node3D
             newCharacterTurnList.Add(GetChild(0).GetChild(x) as Character);
         }
 
+        _oneMoreManager = GetNode<OneMoreManager>("ManagerContainer/OneMoreManager");
         _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
 
         SetupBattle(newCharacterTurnList);
@@ -174,7 +172,7 @@ public partial class BattleManager : Node3D
         }
 
         _inAction = true; 
-        GetCurrentCharacter().DataContainer.SelectedAction.TakeAction(characterReceptor, NextTurn);
+        GetCurrentCharacter().DataContainer.SelectedAction.TakeAction(characterReceptor, CheckOneMore);
         _battleDatabase.CharacterReceptorSelector.CompleteSelection();
         //EmitSignal(SignalName.ActionExecuted);
     }
@@ -187,12 +185,36 @@ public partial class BattleManager : Node3D
         }
 
         _inAction = true;
-        GetCurrentCharacter().DataContainer.SelectedAction.TakeAction(characterReceptorList, NextTurn);
+        GetCurrentCharacter().DataContainer.SelectedAction.TakeAction(characterReceptorList, CheckOneMore);
         _battleDatabase.CharacterReceptorSelector.CompleteSelection();
     
         OnActionExecute?.Invoke(this, new OnActionExecuteEventArgs{
             action = GetCurrentCharacter().DataContainer.SelectedAction
         });
+    }
+
+    public void CheckOneMore()
+    {
+        // One More System.
+        if(_oneMoreManager.HaveOneMore())
+        {
+            UpdateAllyList();
+            UpdateEnemyList();
+
+            _inAction = false;
+
+            OnOneMore?.Invoke(this, new OnCurrentCharacterChangedEventArgs{
+                currentCharacter = GetCurrentCharacter()
+            });
+
+            OnCurrentCharacterChanged?.Invoke(this, new OnCurrentCharacterChangedEventArgs{
+                currentCharacter = GetCurrentCharacter()
+            });
+        }
+        else
+        {
+            NextTurn();
+        }
     }
 
     public void NextTurn()
@@ -204,9 +226,6 @@ public partial class BattleManager : Node3D
 
         DequeueCurrentCharacter();
         _inAction = false; 
-
-        // Debug
-        //GD.Print("Character Turn List count: " + _characterTurnList.Count);
 
         OnTurnEnd?.Invoke(this, EventArgs.Empty);
 

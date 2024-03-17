@@ -15,6 +15,7 @@ public enum InflictStates
 
 public abstract partial class InflictState
 {
+	private string _name;
 	public static event EventHandler<InflictStateEventArgs> InflictedCharacter;
 	public static event EventHandler<InflictStateEventArgs> EndInflictedCharacter;
 	public class InflictStateEventArgs : EventArgs
@@ -23,6 +24,7 @@ public abstract partial class InflictState
 		public InflictState inflict;
 	}
 
+	public string Name {get { return _name; } protected set {_name = value; }}
 	private Character _characterWithEffect;
 
     public Character CharacterWithEffect {get { return _characterWithEffect; } set {_characterWithEffect = value;}}

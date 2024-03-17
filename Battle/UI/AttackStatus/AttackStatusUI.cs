@@ -5,6 +5,7 @@ using System.Diagnostics;
 public partial class AttackStatusUI : Node3D
 {
     private Label3D _damageTextUI;
+    private Label3D _inflictTextUI;
     private Node3D _pivot;
     private Sprite3D _damageUI;
     private Sprite3D _healUI;
@@ -15,6 +16,7 @@ public partial class AttackStatusUI : Node3D
     public override void _Ready()
     {
         _damageTextUI = GetNode<Label3D>("Pivot/DamageTextUI");
+        _inflictTextUI = GetNode<Label3D>("Pivot/InflictTextUI");
         _damageUI = GetNode<Sprite3D>("Pivot/DamageUI");
         _healUI = GetNode<Sprite3D>("Pivot/HealUI");
         _pivot = GetNode<Node3D>("Pivot");
@@ -31,27 +33,38 @@ public partial class AttackStatusUI : Node3D
         LookAt(GlobalPosition + _dirToCamera * -1);
     }
 
-    public void Setup(int damage, bool isHit, Attack attack, Transform3D transform)
+    public void Setup(int damage, bool isHit, Attack attack, InflictState inflictState, string elementStatus, Transform3D transform)
     {
         Transform = transform;
         _camera = GetTree().Root.GetCamera3D();
         _dirToCamera = (_camera.GlobalPosition - GlobalPosition).Normalized();
         LookAt(GlobalPosition + _dirToCamera * -1);
-        
-        switch(attack)
-        {
-            case ModifierSkill:
-                return;
-            case InflictSkill:
-                return;
-            case HealSkill healSkill:
-                _damageTextUI.Text = healSkill.Damage.ToString();
-                _healUI.Show();
-                return;
-        }
 
         if(isHit)
         {
+            switch(attack)
+            {
+                case ModifierSkill modifierSkill:
+                    _inflictTextUI.Text = modifierSkill.ModifierStatsInflict.Name;
+                    return;
+                case InflictSkill inflictSkill:
+                    _inflictTextUI.Text = inflictSkill.InflictState.Name;
+                    return;
+                case HealSkill healSkill:
+                    _damageTextUI.Text = healSkill.Damage.ToString();
+                    _healUI.Show();
+                    return;
+            }
+
+            if(elementStatus != "")
+            {
+                _inflictTextUI.Text = elementStatus;
+            }
+            else if(inflictState != null)
+            {
+                _inflictTextUI.Text = inflictState.Name;
+            }
+
             _damageTextUI.Text = damage.ToString();
             _damageUI.Show();
         }

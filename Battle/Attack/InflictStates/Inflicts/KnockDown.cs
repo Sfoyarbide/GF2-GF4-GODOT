@@ -8,6 +8,7 @@ public partial class KnockDown : InflictState
 
     public KnockDown()
     {
+        Name = "Knock Down";
         InflictStateType = InflictStates.KnockDown;
         BattleManager.OnCurrentCharacterChanged += BattleManager_OnCurrentCharacterChanged;
     }

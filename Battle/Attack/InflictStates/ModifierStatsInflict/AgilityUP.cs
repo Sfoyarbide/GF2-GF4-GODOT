@@ -14,8 +14,7 @@ public partial class AgilityUP : ModifierStatsInflict
     public override void UseInflictEffect(Character character)
     {
         CharacterWithEffect = character;
-        character.DataContainer.Ag *= 2;
-        character.DataContainer.Lu *= 2;
+        character.DataContainer.AccuracyModifier += 0.5f;
         ModifierStatsEventArgs modifierStatsEventArgs = new ModifierStatsEventArgs{
             characterWithEffect = character,
             modifierStatsInflict = this
@@ -25,8 +24,7 @@ public partial class AgilityUP : ModifierStatsInflict
 
     protected override void ReturnNormalValues(Character character)
     {
-        CharacterWithEffect.DataContainer.Ag /= 2;
-        CharacterWithEffect.DataContainer.Lu /= 2;
+        character.DataContainer.AccuracyModifier = 1;
     }
 
 
