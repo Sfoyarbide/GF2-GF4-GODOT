@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 public partial class CharacterData : Node
 {
@@ -26,22 +25,31 @@ public partial class CharacterData : Node
     private List<BaseAction> _actionList = new List<BaseAction>();
     private List<Skill> _skillList = new List<Skill>();
     private BaseAction _selectedAction;
+    [Export]
+    private PressionLevelModifier _pressionLevelModifier;
+
+    // Battle vars.
     private bool _isDefending;
     [Export]
     private bool _alreadyHitWeakness;
+    [Export]
+    private float _pressionLevel;
 
-    // Modifiers
+
+    // Modifiers vars.
     private float _accuracyModifier = 1; 
     private float _defenseModifier = 1;
     private float _attackModifier = 1;
 
+    // Constant vars.
     private Dictionary<AttackTypes, ElementStatus> _attackElementStatusDictionary = new Dictionary<AttackTypes, ElementStatus>();
+    private Dictionary<int, Skill> _skillGrantByLevel = new Dictionary<int, Skill>();
+    private InflictStates _individualPressionInflictStateType;
 
     private Attack _meleeAttack;
     private int _armorDefense; // Temp!!!
     private List<ModifierStatsInflict> _modifierStatsInflictList = new List<ModifierStatsInflict>();
     private InflictState _inflictState;
-    private Dictionary<int, string> _skillGrantByLevel = new Dictionary<int, string>();
 
     public static event EventHandler<OnHpChangedEventArgs> OnHpChanged;
     public class OnHpChangedEventArgs : EventArgs
@@ -118,18 +126,39 @@ public partial class CharacterData : Node
     public float DefenseModifier { get { return _defenseModifier; } set {_defenseModifier = value;}}
     [Export]
     public float AttackModifier { get { return _attackModifier; } set {_attackModifier = value;}}
-    public Dictionary<AttackTypes, ElementStatus> AttackElementStatusDictionary  {get {return _attackElementStatusDictionary;} set {_attackElementStatusDictionary = value;}}
+
+    
     public List<BaseAction> ActionList {get {return _actionList; } set {_actionList = value; }}
     public List<Skill> SkillList {get {return _skillList; } set {_skillList = value; }}
-    public Dictionary<int, string> SkillGrantByLevel { get {return _skillGrantByLevel; } }
+
+    public Dictionary<AttackTypes, ElementStatus> AttackElementStatusDictionary  {get {return _attackElementStatusDictionary;} set {_attackElementStatusDictionary = value;}}
+    public Dictionary<int, Skill> SkillGrantByLevel { get {return _skillGrantByLevel; } }
+
     public List<ModifierStatsInflict> ModifierStatsInflictList {get {return _modifierStatsInflictList;}}
+
     public InflictState InflictState {get { return _inflictState; } set { _inflictState = value; }} 
     public BaseAction SelectedAction {get {return _selectedAction;} set {_selectedAction = value;}}
+
+    public PressionLevelModifier PressionLevelModifier { get {return _pressionLevelModifier; } set { _pressionLevelModifier = value; }}
+    public InflictStates IndividualPressionInflictStateType { get {return _individualPressionInflictStateType; } set { _individualPressionInflictStateType = value; }}
 
     [Export]
     public bool IsDefending {get {return _isDefending;} set {_isDefending = value;}}
 
     public bool AlreadyHitWeakness {get {return _alreadyHitWeakness;} set {_alreadyHitWeakness = value;}}
+
+    public float PressionLevel 
+    {
+        get { return _pressionLevel; } 
+        set 
+        { 
+            _pressionLevel = value;
+            if(_pressionLevel > 1)
+            {
+                _pressionLevel = 1;
+            }
+        }
+    }
 
     public bool IsElementStatusToAttackType(AttackTypes attackType, ElementStatus elementStatus)
     {
@@ -168,4 +197,11 @@ public partial class CharacterData : Node
     {
         AlreadyHitWeakness = false;
     }
+}
+
+public enum PressionLevelModifier
+{
+    Healer,
+    Attack,
+    ReceiveDamage
 }

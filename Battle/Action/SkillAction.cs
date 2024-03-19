@@ -57,6 +57,7 @@ public partial class SkillAction : BaseAction
         }
 
         OnAttackState(new AttackStateEventArgs{
+            current = Character,
             receptor = characterReceptor,
             isHit = isHit,
             damage = damage,

@@ -30,6 +30,7 @@ public partial class OneMoreManager : Node
         _isOneMore.Clear();
     }
 
+    // Checks based on the game rules, if you have one more turn.
     private bool IsOneMore(BaseAction.AttackStateEventArgs attackState)
     {
         if(attackState.isHit == false)
@@ -38,6 +39,16 @@ public partial class OneMoreManager : Node
         }
 
         if(attackState.receptor.DataContainer.AlreadyHitWeakness == true)
+        {
+            return false;
+        }
+
+        if(attackState.receptor.DataContainer.InflictState is KnockDown)
+        {
+            return false;
+        }
+
+        if(attackState.isPressionAttack == true)
         {
             return false;
         }

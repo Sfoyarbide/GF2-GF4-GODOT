@@ -10,6 +10,7 @@ public partial class PartyMemberUI : Node
     private Label _memberHpUI;
     private Label _memberSpUI;
     private InflictStatusContainerUI _inflictStatusUI;
+    private HSlider _memberPressionLevelUI;
     private List<ModifierStatsInflictStatusUI> _modifierStatsInflictsUI = new List<ModifierStatsInflictStatusUI>(); 
 
     public override void _Ready()
@@ -18,6 +19,7 @@ public partial class PartyMemberUI : Node
         _memberIconUI = GetNode<TextureRect>("MemberIconUI");
         _memberHpUI = GetNode<Label>("MemberHpUI");
         _memberSpUI = GetNode<Label>("MemberSpUI");
+        _memberPressionLevelUI = GetNode<HSlider>("MemberPressionLevelUI");
     }
 
     public override void _Process(double delta)
@@ -29,12 +31,13 @@ public partial class PartyMemberUI : Node
 
         _memberHpUI.Text = _partyMember.DataContainer.Hp.ToString() + "/" + _partyMember.DataContainer.HpMax.ToString();
         _memberSpUI.Text = _partyMember.DataContainer.Sp.ToString() + "/" + _partyMember.DataContainer.SpMax.ToString();
+        _memberPressionLevelUI.Value = _partyMember.DataContainer.PressionLevel;
     }
 
     public void Setup(Character partyMember)
     {
         _partyMember = partyMember;
-        // _memberIconUI
+        _memberPressionLevelUI.Value = partyMember.DataContainer.PressionLevel;
         _memberHpUI.Text = partyMember.DataContainer.Hp.ToString() + "/" + partyMember.DataContainer.HpMax.ToString();
         _memberSpUI.Text = partyMember.DataContainer.Sp.ToString() + "/" + partyMember.DataContainer.SpMax.ToString();
        

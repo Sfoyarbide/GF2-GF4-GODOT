@@ -70,4 +70,23 @@ public abstract partial class InflictState
 	{
 		EndInflictedCharacter?.Invoke(this, e);
 	}
+
+	public static InflictState GetInflictStateBasedOnType(InflictStates inflictStateType)
+	{
+		switch(inflictStateType)
+		{
+			case InflictStates.KnockDown:
+				return new KnockDown();
+			case InflictStates.Poison:
+				return new Poison();
+			case InflictStates.AttackDOWN:
+				return new AttackDOWN();
+			case InflictStates.DefendDOWN:
+				return new DefenseDOWN();
+			case InflictStates.AgilityDOWN:
+				return new AgilityDOWN();
+			default:
+				return null;
+		}
+	}
 }

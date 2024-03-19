@@ -121,7 +121,6 @@ public partial class BattleManager : Node3D
                     ExecuteAction(GetCurrentCharacter());
                     break;
                 case ItemAction itemAction:
-                    
                     if(!itemAction.CurrentItem.ForAllReceptors)
                     {    
                         ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptor());
@@ -130,6 +129,9 @@ public partial class BattleManager : Node3D
                     {
                         ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptorList());
                     }
+                    break;
+                case IndividualPressionAction:
+                    ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptor());
                     break;
             }
             return;

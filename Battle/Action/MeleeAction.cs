@@ -56,6 +56,7 @@ public partial class MeleeAction : BaseAction
         GD.Print(inflictState);
         
         OnAttackState(new AttackStateEventArgs{
+            current = Character,
             receptor = _characterReceptor,
             isHit = isHit,
             damage = damage,
@@ -100,8 +101,8 @@ public partial class MeleeAction : BaseAction
             // Does all the Attack Action logic. 
             Attack(_characterReceptor);
 
-            InAction = false;
             EndingAction();
+            InAction = false;
         }
     }
 

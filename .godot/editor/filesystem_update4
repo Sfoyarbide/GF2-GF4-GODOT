@@ -1,6 +1,10 @@
+res://Character/Character.tscn
 res://Levels/Level1.tscn
+res://Battle/UI/BattleUI.tscn
+res://Battle/UI/PartyStatus/PartyMemberUI.tscn
 res://Battle/Action/BaseAction.cs
 res://Battle/Action/DefendAction.cs
+res://Battle/Action/IndividualPressionAction.cs
 res://Battle/Action/ItemAction.cs
 res://Battle/Action/MeleeAction.cs
 res://Battle/Action/SkillAction.cs
@@ -36,6 +40,7 @@ res://Battle/Inventory/Items/Item.cs
 res://Battle/Inventory/Items/ItemTest.cs
 res://Battle/Inventory/Items/ItemUI.cs
 res://Battle/OneMoreManager.cs
+res://Battle/PressionManager.cs
 res://Battle/UI/ActionButton.cs
 res://Battle/UI/AttackStatus/AttackStatusUI.cs
 res://Battle/UI/AttackStatus/AttackStatusUIManager.cs
@@ -53,4 +58,4 @@ res://Character/Enemy/Slime/Slime.cs
 res://Character/Enemy/Slime/SlimeData.cs
 res://Levels/BrainCamera.cs
 res://Levels/Test.cs
-res://Battle/UI/BattleUI.tscn
+res://Character/Ally/CharacterAlly.cs

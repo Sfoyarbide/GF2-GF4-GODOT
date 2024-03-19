@@ -51,7 +51,7 @@ public partial class CombatCalculations
                 break;
         }
 
-        float baseDamage = BaseDamageCalculation(character, attack, statBonus);
+        float baseDamage = BaseDamageCalculation(attack, statBonus);
         //GD.Print("Base Damage: " + baseDamage);
         float elementMultipler = ElementMultipler(attack.AttackType, receptor);
         //GD.Print("Element Multipler: " + elementMultipler);
@@ -65,7 +65,7 @@ public partial class CombatCalculations
         return Mathf.RoundToInt(damage);
     }
 
-    private static float BaseDamageCalculation(Character character, Attack attack, int statBonus)
+    private static float BaseDamageCalculation(Attack attack, int statBonus)
     {
         float damage = attack.Damage;
         return damage + statBonus;
@@ -139,13 +139,26 @@ public partial class CombatCalculations
         float defenseCumulativeModifier = 0;
         foreach(Character character in characterList)
         {
-            baseDamage += (BaseDamageCalculation(character, character.DataContainer.MeleeAttack, character.DataContainer.St) * character.DataContainer.AttackModifier * RandomizeMultipler());
+            baseDamage += (BaseDamageCalculation(character.DataContainer.MeleeAttack, character.DataContainer.St) * character.DataContainer.AttackModifier * RandomizeMultipler());
         }
 
         foreach(Character character in receptorList)
         {
             defenseCumulativeModifier = DefenseMultipler(character, (int)baseDamage, character.DataContainer.Co);
         }
+
+        baseDamage *= defenseCumulativeModifier;
+        float damage = Mathf.Max(1, baseDamage);
+        return Mathf.RoundToInt(damage);
+    }
+
+    public static int IndividualPressionDamageCalculation(Character character, Character receptor)
+    {
+        float baseDamage = 0;
+        float defenseCumulativeModifier = 0;
+
+        baseDamage = (character.DataContainer.MeleeAttack.Damage + character.DataContainer.St + character.DataContainer.Ma) * character.DataContainer.AttackModifier * RandomizeMultipler();
+        defenseCumulativeModifier = DefenseMultipler(character, (int)baseDamage, character.DataContainer.Co);
 
         baseDamage *= defenseCumulativeModifier;
         float damage = Mathf.Max(1, baseDamage);

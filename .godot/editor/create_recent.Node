@@ -1,6 +1,7 @@
 Timer
-Label
 Node
+HSlider
+Label
 Sprite3D
 Node3D
 TextureRect
@@ -11,4 +12,3 @@ Button
 GridContainer
 ScrollContainer
 VBoxContainer
-TextEdit

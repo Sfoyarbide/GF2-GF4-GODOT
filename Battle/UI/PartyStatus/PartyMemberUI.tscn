@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://k5pivkrmxafk"]
+[gd_scene load_steps=9 format=3 uid="uid://k5pivkrmxafk"]
 
 [ext_resource type="Script" path="res://Battle/UI/PartyStatus/PartyMemberUI.cs" id="1_a4wsf"]
 [ext_resource type="Texture2D" uid="uid://dmhre602fkf8e" path="res://Battle/Inventory/Items/Apple/Apple.png" id="1_ikgtf"]
@@ -14,6 +14,12 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8fgge"]
+bg_color = Color(0.623529, 0.611765, 0.427451, 1)
+
+[sub_resource type="Theme" id="Theme_popaj"]
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_8fgge")
 
 [node name="PartyMemberUI" type="Panel"]
 custom_minimum_size = Vector2(150, 30)
@@ -64,6 +70,16 @@ offset_top = -11.496
 offset_right = 64.05
 offset_bottom = 11.504
 text = "0"
+
+[node name="MemberPressionLevelUI" type="HSlider" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.171
+offset_bottom = -0.0439987
+theme = SubResource("Theme_popaj")
+max_value = 1.0
+step = 0.1
 
 [node name="InflictStatusContainerUI" type="Panel" parent="."]
 visible = false

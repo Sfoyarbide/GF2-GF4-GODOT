@@ -33,16 +33,23 @@ public partial class AttackStatusUI : Node3D
         LookAt(GlobalPosition + _dirToCamera * -1);
     }
 
-    public void Setup(int damage, bool isHit, Attack attack, InflictState inflictState, string elementStatus, Transform3D transform)
+    public void Setup(BaseAction.AttackStateEventArgs e, Transform3D transform)
     {
         Transform = transform;
         _camera = GetTree().Root.GetCamera3D();
         _dirToCamera = (_camera.GlobalPosition - GlobalPosition).Normalized();
         LookAt(GlobalPosition + _dirToCamera * -1);
 
-        if(isHit)
+        if(e.isHit)
         {
-            switch(attack)
+            if(e.isPressionAttack)
+            {
+                _damageTextUI.Text = e.damage.ToString();
+                _damageUI.Show();
+                return;
+            }
+
+            switch(e.attack)
             {
                 case ModifierSkill modifierSkill:
                     _inflictTextUI.Text = modifierSkill.ModifierStatsInflict.Name;
@@ -56,16 +63,27 @@ public partial class AttackStatusUI : Node3D
                     return;
             }
 
+            string elementStatus = "";
+            if(e.receptor.DataContainer.AttackElementStatusDictionary.TryGetValue(e.attack.AttackType, out ElementStatus value))
+            {
+                switch(value)
+                {
+                    case ElementStatus.Weakness:
+                        elementStatus = "Weak";
+                        break;
+                }
+            }
+
             if(elementStatus != "")
             {
                 _inflictTextUI.Text = elementStatus;
             }
-            else if(inflictState != null)
+            else if(e.inflictState != null)
             {
-                _inflictTextUI.Text = inflictState.Name;
+                _inflictTextUI.Text = e.inflictState.Name;
             }
 
-            _damageTextUI.Text = damage.ToString();
+            _damageTextUI.Text = e.damage.ToString();
             _damageUI.Show();
         }
         else

@@ -2,7 +2,7 @@ using Godot;
 using System.Collections.Generic;
 using System;
 
-public abstract partial class BaseAction : Node3D
+public abstract partial class BaseAction : Node
 {
     private Character _character;
     private Action _onActionComplete;
@@ -11,10 +11,12 @@ public abstract partial class BaseAction : Node3D
     public static event EventHandler<AttackStateEventArgs> AttackState;
     public class AttackStateEventArgs : EventArgs
     {
+        public Character current;
         public Character receptor;
         public bool isHit;
         public int damage;
         public Attack attack;
+        public bool isPressionAttack;
         public InflictState inflictState;
         public BaseAction baseAction;
     }
@@ -50,11 +52,11 @@ public abstract partial class BaseAction : Node3D
         set { _inAction = value; }
     }
 
-    public abstract string GetActionName();
-
     public Timer Timer
     {
         get { return _timer; }
         set { _timer = value; }
     }
+
+    public abstract string GetActionName();
 }

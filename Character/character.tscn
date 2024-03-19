@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bd80y56s7uw3v"]
+[gd_scene load_steps=10 format=3 uid="uid://bd80y56s7uw3v"]
 
 [ext_resource type="Script" path="res://Character/Character.cs" id="1_3xs18"]
 [ext_resource type="PackedScene" uid="uid://f7mok8e0f216" path="res://Character/xbot.tscn" id="2_bi4fv"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cjnl1b6fr1q0" path="res://Battle/Action/DefendAction.tscn" id="4_qj6na"]
 [ext_resource type="PackedScene" uid="uid://bhh125x13531l" path="res://Battle/Action/SkillAction.tscn" id="5_0ts47"]
 [ext_resource type="PackedScene" uid="uid://bh1tekhr3pm00" path="res://Battle/Action/ItemAction.tscn" id="6_4u5t4"]
+[ext_resource type="Script" path="res://Battle/Action/IndividualPressionAction.cs" id="7_4orce"]
 [ext_resource type="Texture2D" uid="uid://b80efljl4m58l" path="res://icon.svg" id="7_euxda"]
 [ext_resource type="Script" path="res://Character/CharacterSelectedVisual.cs" id="8_325vq"]
 
@@ -25,6 +26,11 @@ script = ExtResource("1_3xs18")
 [node name="SkillAction" parent="ActionContainer" instance=ExtResource("5_0ts47")]
 
 [node name="ItemAction" parent="ActionContainer" instance=ExtResource("6_4u5t4")]
+
+[node name="IndividualPression" type="Node" parent="ActionContainer"]
+script = ExtResource("7_4orce")
+
+[node name="Timer" type="Timer" parent="ActionContainer/IndividualPression"]
 
 [node name="SelectedVisual" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.55164, 0)

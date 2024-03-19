@@ -136,10 +136,12 @@ public partial class CharacterReceptorSelector : Node3D
         }
     }
 
+    /*
     public void SetupSelectionAI(Character sender, List<ReceptorCriteria> receptorCriteriaList, bool selectsAll=false)
     {
         SetupSelection(sender, receptorCriteriaList, selectsAll);
     }
+    */
 
     public Character GetCharacterReceptor()
     {
@@ -190,6 +192,10 @@ public partial class CharacterReceptorSelector : Node3D
                 receptorCritiriaList.Add(ReceptorCriteria.Self);
                 SetupSelectionPlayer(_currentCharacter, receptorCritiriaList);
                 break;
+            default: 
+                receptorCritiriaList.Add(ReceptorCriteria.Enemy);
+                SetupSelectionPlayer(_currentCharacter, receptorCritiriaList);
+                break;
         }
     }
 
@@ -220,7 +226,7 @@ public partial class CharacterReceptorSelector : Node3D
 
     private void CharacterEnemy_EnemySearchingReceptorList(object sender, CharacterEnemy.OnEnemySearchingReceptorEventArgs e)
     {
-        SetupSelectionAI(_currentCharacter, e.receptorCriteriaList);
+        //SetupSelectionAI(_currentCharacter, e.receptorCriteriaList);
     }
 
     private void BattleManager_OnCurrentCharacterChanged(object sender, BattleManager.OnCurrentCharacterChangedEventArgs e)

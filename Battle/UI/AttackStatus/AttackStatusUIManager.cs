@@ -22,19 +22,7 @@ public partial class AttackStatusUIManager : Node
     {
         AttackStatusUI attackStatusUI = (AttackStatusUI)_attackStatusUIScene.Instantiate();
         _battleNode.AddChild(attackStatusUI);
-    
-        string elementStatus = "";
-        if(e.receptor.DataContainer.AttackElementStatusDictionary.TryGetValue(e.attack.AttackType, out ElementStatus value))
-        {
-            switch(value)
-            {
-                case ElementStatus.Weakness:
-                    elementStatus = "Weak";
-                    break;
-            }
-        }
-
-        attackStatusUI.Setup(e.damage, e.isHit, e.attack, e.inflictState, elementStatus, e.receptor.GetMarkerChildTransform(3));
+        attackStatusUI.Setup(e, e.receptor.GetMarkerChildTransform(3));
     }
 
 }
