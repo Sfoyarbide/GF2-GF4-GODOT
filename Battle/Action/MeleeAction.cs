@@ -131,6 +131,8 @@ public partial class MeleeAction : BaseAction
         OnMeleeStarted?.Invoke(this, new OnMeleeEventArgs{
             character = Character
         });
+
+        OnActionTaken();
     }
 
     public override string GetActionName()

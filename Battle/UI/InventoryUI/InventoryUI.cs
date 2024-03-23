@@ -11,9 +11,10 @@ public partial class InventoryUI : Control
     public override void _Ready()
     {
         BattleDatabase battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
+        BattleManager.OnItemSelectionStarted += BattleManager_OnItemSelectionStarted;
+        BaseAction.ActionTaken += BaseAction_ActionTaken;
+
         _inventory = battleDatabase.Inventory;
-        battleDatabase.BattleManager.OnItemSelectionStarted += BattleManager_OnItemSelectionStarted;
-        ItemUI.OnConfirmItem += ItemUI_OnConfirmItem;
 
         if(_itemUIScene == null)
         {
@@ -45,14 +46,15 @@ public partial class InventoryUI : Control
         }
     }
 
+    private void BaseAction_ActionTaken(object sender, BaseAction.GenericBaseActionEventArgs e)
+    {
+        Hide();
+    }
+
+
     private void BattleManager_OnItemSelectionStarted(object sender, EventArgs e)
     {
         Show();
         ShowInventoryUI();
-    }
-
-    private void ItemUI_OnConfirmItem(object sender, ItemUI.OnConfirmItemEventArgs e)
-    {
-        Hide();
     }
 }

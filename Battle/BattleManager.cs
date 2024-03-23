@@ -19,10 +19,10 @@ public partial class BattleManager : Node3D
     public static event EventHandler OnTurnEnd;
     public static event EventHandler<OnCurrentCharacterChangedEventArgs> OnCurrentCharacterChanged;
     public static event EventHandler<OnCurrentCharacterChangedEventArgs> OnOneMore;
-    public event EventHandler<OnActionExecuteEventArgs> OnActionExecute;
-    public event EventHandler<OnSelectionStartedEventArgs> OnSelectionStarted;
-    public event EventHandler OnItemSelectionStarted;
-    public event EventHandler<OnSkillSelectionStartedEventArgs> OnSkillSelectionStarted;
+    //public event EventHandler<OnActionExecuteEventArgs> OnActionExecute;
+    public static event EventHandler<OnSelectionStartedEventArgs> OnSelectionStarted;
+    public static event EventHandler OnItemSelectionStarted;
+    public static event EventHandler<OnSkillSelectionStartedEventArgs> OnSkillSelectionStarted;
     public class OnBattleStartEventArgs : EventArgs
     {
         public List<Character> partyList;
@@ -31,10 +31,6 @@ public partial class BattleManager : Node3D
     public class OnCurrentCharacterChangedEventArgs : EventArgs
     {
         public Character currentCharacter;
-    }
-    public class OnActionExecuteEventArgs : EventArgs
-    {
-        public BaseAction action;
     }
     public class OnSelectionStartedEventArgs : EventArgs
     {
@@ -63,7 +59,8 @@ public partial class BattleManager : Node3D
 
     public override void _Ready()
     {
-        BattleUI.OnActionSelectedChanged += BattleUI_OnActionSelectedChanged;
+        BaseAction.CannotTakeAction += BaseAction_CannotTakeAction;
+        ActionButton.OnActionButtonDown += ActionButton_OnActionButtonDown;
         KnockDown.CurrentCharacterKnockdown += KnockDown_CurrentCharacterKnockdown;
 
         // TEMP
@@ -80,9 +77,6 @@ public partial class BattleManager : Node3D
         _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
 
         SetupBattle(newCharacterTurnList);
-
-        // Debug
-        GD.Print("Character Turn List count: " + _characterTurnList.Count);
     }
 
     public override void _Process(double delta)
@@ -133,6 +127,9 @@ public partial class BattleManager : Node3D
                 case IndividualPressionAction:
                     ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptor());
                     break;
+                case GrupalPressionAction:
+                    ExecuteAction(_allyList, _battleDatabase.CharacterReceptorSelector.GetCharacterReceptorList());
+                    break;
             }
             return;
         }
@@ -175,7 +172,6 @@ public partial class BattleManager : Node3D
 
         _inAction = true; 
         GetCurrentCharacter().DataContainer.SelectedAction.TakeAction(characterReceptor, CheckOneMore);
-        _battleDatabase.CharacterReceptorSelector.CompleteSelection();
         //EmitSignal(SignalName.ActionExecuted);
     }
 
@@ -188,11 +184,28 @@ public partial class BattleManager : Node3D
 
         _inAction = true;
         GetCurrentCharacter().DataContainer.SelectedAction.TakeAction(characterReceptorList, CheckOneMore);
-        _battleDatabase.CharacterReceptorSelector.CompleteSelection();
     
+        /*
         OnActionExecute?.Invoke(this, new OnActionExecuteEventArgs{
             action = GetCurrentCharacter().DataContainer.SelectedAction
-        });
+        });*/
+    }
+
+    public void ExecuteAction(List<Character> characterList, List<Character> characterReceptorList)
+    {
+        if(_inAction)
+        {
+            return;
+        }
+
+        _inAction = true;
+        GetCurrentCharacter().DataContainer.SelectedAction.TakeAction(characterList, characterReceptorList, CheckOneMore);
+        _battleDatabase.CharacterReceptorSelector.CompleteSelection();
+    
+        /*
+        OnActionExecute?.Invoke(this, new OnActionExecuteEventArgs{
+            action = GetCurrentCharacter().DataContainer.SelectedAction
+        });*/
     }
 
     public void CheckOneMore()
@@ -290,7 +303,12 @@ public partial class BattleManager : Node3D
         _allyList = CombatCalculations.ObtainCharacterListByIsEnemy(_characterTurnList, false);
     }
 
-    private void BattleUI_OnActionSelectedChanged(object sender, BattleUI.OnActionSelectedChangedEventArgs e)
+    private void BaseAction_CannotTakeAction(object sender, EventArgs e)
+    {
+        _inAction = false;
+    }
+
+    private void ActionButton_OnActionButtonDown(object sender, ActionButton.OnActionButtonDownEventArgs e)
     {
         GetCurrentCharacter().DataContainer.SelectedAction = GetCurrentCharacter().DataContainer.ActionList[e.actionIndex];
     }

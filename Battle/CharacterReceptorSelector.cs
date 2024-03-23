@@ -6,7 +6,8 @@ public enum ReceptorCriteria
 {
     Enemy,
     Ally,
-    Self
+    Self,
+    IsBelowMaxHp
 }
 
 public partial class CharacterReceptorSelector : Node3D
@@ -20,6 +21,8 @@ public partial class CharacterReceptorSelector : Node3D
     public static event EventHandler<OnCharacterReceptorSelectedEventArgs> OnCharacterSelectorStarted;
     public static event EventHandler OnCharacterSelectorCanceled;
     public static event EventHandler OnCharacterSelectorCompleted;
+    public static event EventHandler OnSelectionSuccess;
+    public static event EventHandler OnSelectionFailed;
     public static event EventHandler<OnCharacterReceptorSelectedEventArgs> OnCharacterReceptorSelected;
     public static event EventHandler<OnSelectsAllEventArgs> OnSelectsAll;
     public static event EventHandler<OnAISearchingReceptorListReadyEventArgs> OnAISearchingReceptorListReady;
@@ -39,12 +42,13 @@ public partial class CharacterReceptorSelector : Node3D
     public override void _Ready()
     {
         _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
-        _battleDatabase.BattleManager.OnSelectionStarted += BattleManager_OnSelectionStarted;
+        BattleManager.OnSelectionStarted += BattleManager_OnSelectionStarted;
         _characterReceptorList = new List<Character>();
         BattleManager.OnCurrentCharacterChanged += BattleManager_OnCurrentCharacterChanged;
         CharacterEnemy.EnemySearchingReceptorList += CharacterEnemy_EnemySearchingReceptorList;
         ItemUI.OnConfirmItem += ItemUI_OnConfirmItem;
         SkillUI.OnConfirmSkill += SkillUI_OnConfirmSkill;
+        BaseAction.ActionTaken += BaseAction_ActionTaken;
     }
 
     public override void _Process(double delta)
@@ -104,6 +108,17 @@ public partial class CharacterReceptorSelector : Node3D
             {
                 _characterReceptorList.Add(character);
             }
+        }
+        
+        if(_characterReceptorList.Count > 0)
+        {
+            OnSelectionSuccess?.Invoke(this, EventArgs.Empty);
+            // Send an event for knowing if you can select enemys.
+        }
+        else
+        {
+            OnSelectionFailed?.Invoke(this, EventArgs.Empty);
+            CancelSelection();
         }
     }
 
@@ -192,6 +207,10 @@ public partial class CharacterReceptorSelector : Node3D
                 receptorCritiriaList.Add(ReceptorCriteria.Self);
                 SetupSelectionPlayer(_currentCharacter, receptorCritiriaList);
                 break;
+            case GrupalPressionAction:
+                receptorCritiriaList.Add(ReceptorCriteria.Enemy);
+                SetupSelectionPlayer(_currentCharacter, receptorCritiriaList, true);
+                break;
             default: 
                 receptorCritiriaList.Add(ReceptorCriteria.Enemy);
                 SetupSelectionPlayer(_currentCharacter, receptorCritiriaList);
@@ -206,7 +225,9 @@ public partial class CharacterReceptorSelector : Node3D
             case ReceptorCriteria.Enemy:
                 return sender.DataContainer.IsEnemy != receptor.DataContainer.IsEnemy;
             case ReceptorCriteria.Ally:
-                return sender.DataContainer.IsEnemy == sender.DataContainer.IsEnemy;
+                return sender.DataContainer.IsEnemy == receptor.DataContainer.IsEnemy;
+            case ReceptorCriteria.IsBelowMaxHp:
+                return receptor.DataContainer.Hp < receptor.DataContainer.HpMax;
             case ReceptorCriteria.Self:
                 return sender == receptor;
             default:
@@ -216,6 +237,8 @@ public partial class CharacterReceptorSelector : Node3D
 
     private void ItemUI_OnConfirmItem(object sender, ItemUI.OnConfirmItemEventArgs e)
     {
+        CancelSelection();
+
         SetupSelectionPlayer(_currentCharacter, e.item.ReceptorCriteriaList, e.item.ForAllReceptors);
     }
 
@@ -232,5 +255,10 @@ public partial class CharacterReceptorSelector : Node3D
     private void BattleManager_OnCurrentCharacterChanged(object sender, BattleManager.OnCurrentCharacterChangedEventArgs e)
     {
         _currentCharacter = e.currentCharacter; 
+    }
+
+    private void BaseAction_ActionTaken(object sender, EventArgs e)
+    {
+        CompleteSelection();
     }
 }

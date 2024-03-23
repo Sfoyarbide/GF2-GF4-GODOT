@@ -132,6 +132,7 @@ public partial class BattleCameraManager : Node
         UpdateCurrentCharacterCamera();
     }
 
+    /*
     private void BattleManager_OnActionExecute(object sender, BattleManager.OnActionExecuteEventArgs e)
     {
         // Checks the selected action, and based on that we can set the proper camera.
@@ -146,15 +147,15 @@ public partial class BattleCameraManager : Node
                 ChangeCamera(_characterSelectorCamera, false);
                 UpdateCharacterSkillCamera();
 
-                /*
                 OnActionIsSkill?.Invoke(this, new OnActionIsSkillEventArgs{
                     skill = skillAction.GetCurrentSkill()
                 });
-                */
+
                 
                 break;
         }
     }
+    */
     
     private void BattleManager_OnTurnEnd(object sender, EventArgs e)
     {

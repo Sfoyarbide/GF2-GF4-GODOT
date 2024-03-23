@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class DefendAction : BaseAction
 {
@@ -67,6 +68,15 @@ public partial class DefendAction : BaseAction
         OnActionComplete = onActionComplete;
 		// Because the receptor is same as the character emisor, we don't use as a parameter.
 		Defend();
+        OnActionTaken();
+    }
+
+    public override void TakeAction(List<Character> characterReceptor, Action onActionComplete)
+    {
+        OnActionComplete = onActionComplete;
+		// Because the receptor is same as the character emisor, we don't use as a parameter.
+		Defend();
+        OnActionTaken();
     }
 
     public override string GetActionName()

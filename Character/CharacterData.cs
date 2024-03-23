@@ -190,12 +190,21 @@ public partial class CharacterData : Node
     public override void _Ready()
     {
         BattleManager.OnTurnEnd += BattleManager_OnTurnEnd;
+        GrupalPressionAction.OnGrupalPression += GrupalPressionAction_OnGrupalPression;
         _meleeAttack = GetNode<Attack>("MeleeAttack");
     }
 
     private void BattleManager_OnTurnEnd(object sender, EventArgs e)
     {
         AlreadyHitWeakness = false;
+    }
+
+    private void GrupalPressionAction_OnGrupalPression(object sender, GrupalPressionAction.OnGrupalPressionEventArgs e)
+    {
+        if(e.isEnemy == IsEnemy)
+        {
+            _pressionLevel = 0;
+        }
     }
 }
 

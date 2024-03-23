@@ -1,32 +1,32 @@
 using Godot;
 using System;
-using System.Threading;
 
 public partial class ActionButton : Button
 {
-    private int _actionIndex;
-    private Label _label;
+    // For knowing what to put in the action index, check the action container in the Character scene. 
+    [Export]
+    protected int _actionIndex;
+    protected BattleUI _battleUI;
     public static event EventHandler<OnActionButtonDownEventArgs> OnActionButtonDown;
     public class OnActionButtonDownEventArgs : EventArgs
     {
-        public int selectedActionIndex;
+        public int actionIndex;
     }
 
     public override void _Ready()
     {
-        _label = GetNode<Label>("Label");
+        Pressed += () => {
+            if(_battleUI.CanSelect)
+            {
+                OnActionButtonDown?.Invoke(this, new OnActionButtonDownEventArgs{
+                    actionIndex = _actionIndex
+                });
+            }
+        };
     }
 
-    public void SetupActionButton(int actionIndex, string actionName)
+    public void Setup(BattleUI battleUI)
     {
-        _actionIndex = actionIndex;
-        _label.Text = actionName;
-    }
-
-    private void OnPressed()
-    {
-        OnActionButtonDown?.Invoke(this, new OnActionButtonDownEventArgs{
-            selectedActionIndex = _actionIndex
-        });
+        _battleUI = battleUI;
     }
 }

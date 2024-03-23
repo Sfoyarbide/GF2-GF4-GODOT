@@ -78,7 +78,7 @@ script = ExtResource("8_j7wjd")
 _skillName = "Ice"
 _skillType = 1
 _damage = 20
-_cost = 10
+_cost = 21
 _attackType = 4
 
 [node name="Heal" type="Node" parent="SkillDatabase"]

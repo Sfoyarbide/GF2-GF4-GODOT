@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 public partial class SkillAction : BaseAction
 {
@@ -26,11 +25,6 @@ public partial class SkillAction : BaseAction
 
     private void Skill(Character characterReceptor, Skill skill)
     {  
-        if(Character.DataContainer.Sp < skill.Cost)
-        {
-            return;
-        }
-
         Character.DataContainer.Sp -= skill.Cost;
         
         int damage = 0;
@@ -66,24 +60,19 @@ public partial class SkillAction : BaseAction
         });
     }
 
-    private void InvokeSkillToCharacterReceptorList(List<Character> characterReceptorList, Skill skill)
+    private void ExecuteSkill(Skill skill)
     {
         if(skill.IsAllReceiveDamage)
         {
-            foreach(Character characterReceptor in characterReceptorList)
+            foreach(Character characterReceptor in _characterReceptorList)
             {
                 Skill(characterReceptor, skill); 
             }
         }
         else
         {
-            Skill(characterReceptorList[0], skill); 
+            Skill(_characterReceptorList[0], skill); 
         }
-    }
-
-    private void ExecuteSkill(Skill skill)
-    {
-        InvokeSkillToCharacterReceptorList(_characterReceptorList, skill);
 
         OnSkillCast?.Invoke(this, new OnSkillEventArgs{
             character = Character,
@@ -107,23 +96,44 @@ public partial class SkillAction : BaseAction
 
     public override void TakeAction(Character characterReceptor, Action onActionComplete)
     {
+        if(Character.DataContainer.Sp < _currentSkill.Cost)
+        {
+            OnCannotTakeAction();
+            return;
+        }
+
         _characterReceptorList.Clear();
         _characterReceptorList.Add(characterReceptor);
         OnActionComplete = onActionComplete;
         ExecuteSkill(_currentSkill);
+
+        OnActionTaken();
     }
 
     public override void TakeAction(List<Character> characterReceptorList, Action onActionComplete)
     {
+        if(Character.DataContainer.Sp < _currentSkill.Cost)
+        {
+            OnCannotTakeAction();
+            return;
+        }
+
         _characterReceptorList.Clear();
         _characterReceptorList = characterReceptorList;
         OnActionComplete = onActionComplete;
         ExecuteSkill(_currentSkill);
+
+        OnActionTaken();
     }
 
     private void SkillUI_OnConfirmSkill(object sender, SkillUI.OnConfirmSkillEventArgs e)
     {
         _currentSkill = e.skill;
+    }
+
+    public static bool CanUseSkill(Skill skill, Character character)
+    {
+        return character.DataContainer.Sp >= skill.Cost;
     }
 
     public override string GetActionName()

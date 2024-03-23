@@ -1,10 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://knol63we4wn7"]
+[gd_scene load_steps=8 format=3 uid="uid://knol63we4wn7"]
 
 [ext_resource type="Script" path="res://Battle/UI/BattleUI.cs" id="1_30bul"]
 [ext_resource type="PackedScene" uid="uid://cjq682eil87xx" path="res://Battle/UI/action_button.tscn" id="2_ua6ep"]
-[ext_resource type="PackedScene" uid="uid://fpl65x32dhec" path="res://Battle/Inventory/InventoryUI.tscn" id="3_jh8f7"]
-[ext_resource type="PackedScene" uid="uid://cdxih7a6qvhhh" path="res://Battle/Attack/Skills/SkillContainerUI.tscn" id="4_rnnvl"]
+[ext_resource type="Script" path="res://Battle/UI/ActionButton.cs" id="3_ispl4"]
+[ext_resource type="PackedScene" uid="uid://fpl65x32dhec" path="res://Battle/UI/InventoryUI/InventoryUI.tscn" id="3_jh8f7"]
+[ext_resource type="PackedScene" uid="uid://cdxih7a6qvhhh" path="res://Battle/UI/SkillUI/SkillContainerUI.tscn" id="4_rnnvl"]
 [ext_resource type="PackedScene" uid="uid://b3k0u20f8d2od" path="res://Battle/UI/PartyStatus/PartyBattleStatusUI.tscn" id="5_n7kq4"]
+
+[sub_resource type="Theme" id="Theme_lqrvs"]
+default_font_size = 0
 
 [node name="BattleUI" type="Control"]
 layout_mode = 3
@@ -16,15 +20,91 @@ grow_vertical = 2
 script = ExtResource("1_30bul")
 _actionButtonScene = ExtResource("2_ua6ep")
 
+[node name="PressionAttackMenuUI" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="IndividualPression" type="Button" parent="PressionAttackMenuUI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.736
+anchor_top = 0.598
+anchor_right = 0.736
+anchor_bottom = 0.598
+offset_left = -102.872
+offset_top = -68.504
+offset_right = 118.128
+offset_bottom = 41.496
+grow_horizontal = 0
+grow_vertical = 0
+rotation = 0.125664
+theme = SubResource("Theme_lqrvs")
+theme_override_font_sizes/font_size = 20
+text = "Individual Pression
+"
+script = ExtResource("3_ispl4")
+_actionIndex = 4
+
+[node name="GrupalPression" type="Button" parent="PressionAttackMenuUI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.837
+anchor_top = 0.811
+anchor_right = 0.837
+anchor_bottom = 0.811
+offset_left = -103.224
+offset_top = -68.528
+offset_right = 117.776
+offset_bottom = 41.472
+grow_horizontal = 0
+grow_vertical = 0
+rotation = 0.125664
+text = "Grupal Pression"
+script = ExtResource("3_ispl4")
+_actionIndex = 5
+
 [node name="ActionGridContainer" type="GridContainer" parent="."]
 layout_direction = 2
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -226.0
+offset_top = -266.0
 offset_right = 300.0
 grow_vertical = 0
+
+[node name="Attack" parent="ActionGridContainer" instance=ExtResource("2_ua6ep")]
+layout_mode = 2
+text = "Attack
+"
+
+[node name="Skill" parent="ActionGridContainer" instance=ExtResource("2_ua6ep")]
+layout_mode = 2
+text = "Skill
+"
+_actionIndex = 1
+
+[node name="Defend" parent="ActionGridContainer" instance=ExtResource("2_ua6ep")]
+layout_mode = 2
+text = "Defend
+"
+_actionIndex = 2
+
+[node name="Item" parent="ActionGridContainer" instance=ExtResource("2_ua6ep")]
+layout_mode = 2
+text = "Item
+"
+_actionIndex = 3
+
+[node name="PressionMenu" type="Button" parent="ActionGridContainer"]
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+text = "Pression"
 
 [node name="InventoryUI" parent="." instance=ExtResource("3_jh8f7")]
 visible = false

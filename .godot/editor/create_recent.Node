@@ -1,5 +1,10 @@
-Timer
+Button
+GraphEdit
+Polygon2D
+ColorRect
+Control
 Node
+Timer
 HSlider
 Label
 Sprite3D
@@ -7,8 +12,3 @@ Node3D
 TextureRect
 Label3D
 Panel
-HBoxContainer
-Button
-GridContainer
-ScrollContainer
-VBoxContainer

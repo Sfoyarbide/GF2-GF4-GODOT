@@ -55,6 +55,8 @@ public partial class ItemAction : BaseAction
         OnActionComplete = onActionComplete;
 
         UseItem();
+        OnActionComplete();
+        OnActionTaken();
     }
 
     public override void TakeAction(List<Character> characterReceptorList, Action onActionComplete)
@@ -63,6 +65,8 @@ public partial class ItemAction : BaseAction
         OnActionComplete = onActionComplete;
 
         UseItem();
+        OnActionComplete();
+        OnActionTaken();
     }
 
     private void ItemUI_OnConfirmItem(object sender, ItemUI.OnConfirmItemEventArgs e)

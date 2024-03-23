@@ -1,17 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://fpl65x32dhec"]
+[gd_scene load_steps=3 format=3 uid="uid://cdxih7a6qvhhh"]
 
-[ext_resource type="Script" path="res://Battle/Inventory/InventoryUI.cs" id="1_gkywh"]
-[ext_resource type="PackedScene" uid="uid://c4juqsh0aupxp" path="res://Battle/Inventory/Items/ItemUI.tscn" id="2_x3y13"]
+[ext_resource type="Script" path="res://Battle/UI/SkillUI/SkillContainerUI.cs" id="1_jkp0v"]
+[ext_resource type="PackedScene" uid="uid://co8caemxykmk6" path="res://Battle/UI/SkillUI/SkillUI.tscn" id="2_x3nr2"]
 
-[node name="InventoryUI" type="Control"]
+[node name="SkillContainerUI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_gkywh")
-_itemUIScene = ExtResource("2_x3y13")
+script = ExtResource("1_jkp0v")
+_skillUIScene = ExtResource("2_x3nr2")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1

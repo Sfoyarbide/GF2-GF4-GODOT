@@ -5,13 +5,3 @@
 [node name="Button" type="Button"]
 custom_minimum_size = Vector2(300, 50)
 script = ExtResource("1_diy4y")
-
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_right = 300.0
-offset_bottom = 50.0
-text = "Attack"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[connection signal="pressed" from="." to="." method="OnPressed"]

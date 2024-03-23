@@ -8,7 +8,13 @@ public abstract partial class BaseAction : Node
     private Action _onActionComplete;
     private bool _inAction;
     private Timer _timer;
+    public static event EventHandler<GenericBaseActionEventArgs> ActionTaken;
+    public static event EventHandler<GenericBaseActionEventArgs> CannotTakeAction;
     public static event EventHandler<AttackStateEventArgs> AttackState;
+    public class GenericBaseActionEventArgs : EventArgs
+    {
+        public BaseAction baseAction;
+    }
     public class AttackStateEventArgs : EventArgs
     {
         public Character current;
@@ -23,6 +29,7 @@ public abstract partial class BaseAction : Node
 
     public abstract void TakeAction(Character characterReceptor, Action onActionComplete);
     public virtual void TakeAction(List<Character> characterReceptorList, Action onActionComplete){}
+    public virtual void TakeAction(List<Character> characterList, List<Character> characterReceptorList, Action onActionComplete){}
     public abstract void EndingAction();
     public void OnAttackState(AttackStateEventArgs attackStateEventArgs)
     {
@@ -56,6 +63,20 @@ public abstract partial class BaseAction : Node
     {
         get { return _timer; }
         set { _timer = value; }
+    }
+
+    protected void OnActionTaken()
+    {
+        ActionTaken?.Invoke(this, new GenericBaseActionEventArgs{
+            baseAction = this
+        });
+    }
+
+    protected void OnCannotTakeAction()
+    {
+        CannotTakeAction?.Invoke(this, new GenericBaseActionEventArgs{
+            baseAction = this
+        });
     }
 
     public abstract string GetActionName();

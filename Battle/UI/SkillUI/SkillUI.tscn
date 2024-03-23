@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://co8caemxykmk6"]
 
 [ext_resource type="Texture2D" uid="uid://dmhre602fkf8e" path="res://Battle/Inventory/Items/Apple/Apple.png" id="1_7eb7r"]
-[ext_resource type="Script" path="res://Battle/Attack/Skills/SkillUI.cs" id="1_8axac"]
+[ext_resource type="Script" path="res://Battle/UI/SkillUI/SkillUI.cs" id="1_8axac"]
 
 [node name="SkillUI" type="Panel"]
 custom_minimum_size = Vector2(170, 35)

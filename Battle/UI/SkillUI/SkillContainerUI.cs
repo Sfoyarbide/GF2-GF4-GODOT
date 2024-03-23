@@ -9,9 +9,8 @@ public partial class SkillContainerUI : Control
 
     public override void _Ready()
     {
-        BattleDatabase battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
-        battleDatabase.BattleManager.OnSkillSelectionStarted += BattleManager_OnSkillSelectionStarted;
-        SkillUI.OnConfirmSkill += SkillUI_OnConfirmSkill;
+        BattleManager.OnSkillSelectionStarted += BattleManager_OnSkillSelectionStarted;
+        BaseAction.ActionTaken += BaseAction_ActionTaken;
 
         if(_skillUIScene == null)
         {
@@ -29,7 +28,7 @@ public partial class SkillContainerUI : Control
         {
             SkillUI skillUI = (SkillUI)_skillUIScene.Instantiate();
             _skillContainerUI.AddChild(skillUI);
-            skillUI.Setup(skill);
+            skillUI.Setup(character, skill);
         }
     }
 
@@ -47,7 +46,7 @@ public partial class SkillContainerUI : Control
         ShowSkillContainerUI(e.character);
     }
 
-    private void SkillUI_OnConfirmSkill(object sender, SkillUI.OnConfirmSkillEventArgs e)
+    private void BaseAction_ActionTaken(object sender, BaseAction.GenericBaseActionEventArgs e)
     {
         Hide();
     }

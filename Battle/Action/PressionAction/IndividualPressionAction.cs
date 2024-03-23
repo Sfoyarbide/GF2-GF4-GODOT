@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Security.AccessControl;
 
 public partial class IndividualPressionAction : BaseAction
 {
@@ -20,6 +19,7 @@ public partial class IndividualPressionAction : BaseAction
             inflictState.InflictCharacter(_characterReceptor);
 
             _characterReceptor.DataContainer.Hp -= damage;
+            Character.DataContainer.PressionLevel = 0;
 
             OnAttackState(new AttackStateEventArgs{
                 current = Character,
@@ -35,11 +35,18 @@ public partial class IndividualPressionAction : BaseAction
 
     public override void TakeAction(Character characterReceptor, Action onActionComplete)
     {
+        if(Character.DataContainer.PressionLevel != 1)
+        {
+            OnCannotTakeAction();
+            return;
+        }
+
         _characterReceptor = characterReceptor;  
         OnActionComplete = onActionComplete;
         InAction = true;
 
         IndividualPression();
+        OnActionTaken(); 
         EndingAction();
     }
 
