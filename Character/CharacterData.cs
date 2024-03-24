@@ -51,7 +51,14 @@ public partial class CharacterData : Node
     private List<ModifierStatsInflict> _modifierStatsInflictList = new List<ModifierStatsInflict>();
     private InflictState _inflictState;
 
+    public static event EventHandler<CharacterDataEventArgs> OnDie;
     public static event EventHandler<OnHpChangedEventArgs> OnHpChanged;
+
+    // Generic EventArgs for the class
+    public class CharacterDataEventArgs : EventArgs 
+    {
+        public Character character;
+    }
     public class OnHpChangedEventArgs : EventArgs
     {
         public Character character;
@@ -81,9 +88,12 @@ public partial class CharacterData : Node
                 _hp = HpMax;
             }
 
-            if(_hp < 0)
+            if(_hp <= 0)
             {
                 // Die.
+                OnDie?.Invoke(this, new CharacterDataEventArgs{
+                    character = Character
+                });
             }
 
             OnHpChanged?.Invoke(this, new OnHpChangedEventArgs{

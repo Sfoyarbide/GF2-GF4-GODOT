@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class MeleeAction : BaseAction
 {
@@ -123,6 +124,21 @@ public partial class MeleeAction : BaseAction
     public override void TakeAction(Character characterReceptor, Action onActionComplete)
     {
         _characterReceptor = characterReceptor;
+		OnActionComplete = onActionComplete;
+
+        InAction = true;
+        _previousTransform = Character.GlobalTransform;
+
+        OnMeleeStarted?.Invoke(this, new OnMeleeEventArgs{
+            character = Character
+        });
+
+        OnActionTaken();
+    }
+
+    public override void TakeAction(List<Character> characterReceptor, Action onActionComplete)
+    {
+        _characterReceptor = characterReceptor[0];
 		OnActionComplete = onActionComplete;
 
         InAction = true;

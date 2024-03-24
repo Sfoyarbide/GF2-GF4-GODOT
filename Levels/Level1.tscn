@@ -116,7 +116,7 @@ SpMax = 50
 IsEnemy = true
 St = 2
 Ma = 3
-Ag = 80
+Ag = 40
 Co = 2
 Lu = 67
 ArmorDefense = 5
@@ -161,3 +161,8 @@ script = ExtResource("11_co8qo")
 
 [node name="BattleUI" parent="Battle" instance=ExtResource("9_m5fxk")]
 _canSelect = true
+
+[node name="BattleStarter" type="Node" parent="Battle"]
+
+[node name="CharacterContainer" type="Node3D" parent="Battle/BattleStarter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)

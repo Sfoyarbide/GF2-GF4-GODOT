@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class BattleManager : Node3D
 {
@@ -16,6 +17,7 @@ public partial class BattleManager : Node3D
     private OneMoreManager _oneMoreManager;
 
     public static event EventHandler<OnBattleStartEventArgs> OnBattleStart;
+    public static event EventHandler<OnBattleEndEventArgs> OnBattleEnd;
     public static event EventHandler OnTurnEnd;
     public static event EventHandler<OnCurrentCharacterChangedEventArgs> OnCurrentCharacterChanged;
     public static event EventHandler<OnCurrentCharacterChangedEventArgs> OnOneMore;
@@ -27,6 +29,10 @@ public partial class BattleManager : Node3D
     {
         public List<Character> partyList;
         public List<Character> enemyList;
+    }
+    public class OnBattleEndEventArgs : EventArgs
+    {
+        public bool win;
     }
     public class OnCurrentCharacterChangedEventArgs : EventArgs
     {
@@ -59,6 +65,7 @@ public partial class BattleManager : Node3D
 
     public override void _Ready()
     {
+        CharacterData.OnDie += CharacterData_OnDie;
         BaseAction.CannotTakeAction += BaseAction_CannotTakeAction;
         ActionButton.OnActionButtonDown += ActionButton_OnActionButtonDown;
         KnockDown.CurrentCharacterKnockdown += KnockDown_CurrentCharacterKnockdown;
@@ -296,6 +303,12 @@ public partial class BattleManager : Node3D
     public void UpdateEnemyList()
     {
         _enemyList = CombatCalculations.ObtainCharacterListByIsEnemy(_characterTurnList, true);
+        if(_enemyList.Count < 1)
+        {
+            OnBattleEnd?.Invoke(this, new OnBattleEndEventArgs{
+                win = true
+            });
+        }
     }
 
     public void UpdateAllyList()
@@ -316,5 +329,10 @@ public partial class BattleManager : Node3D
     private void KnockDown_CurrentCharacterKnockdown(object sender, EventArgs e)
     {
         NextTurn();
+    }
+
+    private void CharacterData_OnDie(object sender, CharacterData.CharacterDataEventArgs e)
+    {
+        RemoveCharacterInTurns(_characterTurnList.FindIndex(c => c.DataContainer.Character == e.character));
     }
 }

@@ -130,4 +130,12 @@ text = "One More!
 wait_time = 0.8
 one_shot = true
 
+[node name="BattleEndUI" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 50
+text = "End!"
+
 [connection signal="timeout" from="OneMoreUI/OneMoreTimerUI" to="." method="OnOneMoreTimeUITimeout"]

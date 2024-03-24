@@ -12,6 +12,7 @@ public partial class BattleUI : Control
     private PackedScene _actionButtonScene;
     private BattleDatabase _battleDatabase;
     private Label _oneMoreUI;
+    private Label _battleEndUI;
     private Timer _oneMoreTimerUI;
     private Button _pressionAttackMenuButton;
     private Control _pressionAttackMenuUI;
@@ -22,6 +23,7 @@ public partial class BattleUI : Control
     {
         _actionGridContainer = GetNode<GridContainer>("ActionGridContainer");
         _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
+        _battleEndUI = GetNode<Label>("BattleEndUI");
         _oneMoreUI = GetNode<Label>("OneMoreUI");
         _oneMoreTimerUI = _oneMoreUI.GetNode<Timer>("OneMoreTimerUI");
         _pressionAttackMenuUI = GetNode<Control>("PressionAttackMenuUI");
@@ -43,6 +45,7 @@ public partial class BattleUI : Control
         }
 
         // Subscribing to events
+        BattleManager.OnBattleEnd += BattleManager_OnBattleEnd;
         BattleManager.OnCurrentCharacterChanged += BattleManager_OnCurrentCharacterChanged;
         BattleManager.OnOneMore += BattleManager_OneMore;
         CharacterReceptorSelector.OnCharacterSelectorCanceled += CharacterReceptorSelector_OnCharacterSelectorCanceled;
@@ -55,6 +58,16 @@ public partial class BattleUI : Control
             _pressionAttackMenuUI.Visible = !_pressionAttackMenuUI.Visible;
         };
     }
+
+    private void BattleManager_OnBattleEnd(object sender, BattleManager.OnBattleEndEventArgs e)
+    {
+        if(e.win)
+        {
+            _battleEndUI.Text = "Win";
+            _battleEndUI.Show();
+        }
+    }
+
 
     private void BattleManager_OnCurrentCharacterChanged(object sender, BattleManager.OnCurrentCharacterChangedEventArgs e)
     {
