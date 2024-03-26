@@ -49,21 +49,11 @@ public partial class ItemAction : BaseAction
         EndingAction();
     }
 
-    public override void TakeAction(Character characterReceptor, Action onActionComplete)
-    {
-        _characterReceptorList.Add(characterReceptor);
-        OnActionComplete = onActionComplete;
-
-        UseItem();
-        OnActionComplete();
-        OnActionTaken();
-    }
-
     public override void TakeAction(List<Character> characterReceptorList, Action onActionComplete)
     {
-        _characterReceptorList.AddRange(characterReceptorList);
-        OnActionComplete = onActionComplete;
+        _characterReceptorList = characterReceptorList;
 
+        OnActionComplete = onActionComplete;
         UseItem();
         OnActionComplete();
         OnActionTaken();

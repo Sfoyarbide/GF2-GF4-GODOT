@@ -68,6 +68,38 @@ text = "Grupal Pression"
 script = ExtResource("3_ispl4")
 _actionIndex = 5
 
+[node name="InventoryUI" parent="." instance=ExtResource("3_jh8f7")]
+visible = false
+layout_mode = 1
+
+[node name="SkillContainerUI" parent="." instance=ExtResource("4_rnnvl")]
+visible = false
+layout_mode = 1
+
+[node name="PartyBattleStatusUI" parent="." instance=ExtResource("5_n7kq4")]
+layout_mode = 1
+
+[node name="OneMoreUI" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 50
+text = "One More!
+"
+
+[node name="OneMoreTimerUI" type="Timer" parent="OneMoreUI"]
+wait_time = 0.8
+one_shot = true
+
+[node name="BattleEndUI" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 50
+text = "End!"
+
 [node name="ActionGridContainer" type="GridContainer" parent="."]
 layout_direction = 2
 layout_mode = 1
@@ -105,37 +137,5 @@ _actionIndex = 3
 custom_minimum_size = Vector2(300, 50)
 layout_mode = 2
 text = "Pression"
-
-[node name="InventoryUI" parent="." instance=ExtResource("3_jh8f7")]
-visible = false
-layout_mode = 1
-
-[node name="SkillContainerUI" parent="." instance=ExtResource("4_rnnvl")]
-visible = false
-layout_mode = 1
-
-[node name="PartyBattleStatusUI" parent="." instance=ExtResource("5_n7kq4")]
-layout_mode = 1
-
-[node name="OneMoreUI" type="Label" parent="."]
-visible = false
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-theme_override_font_sizes/font_size = 50
-text = "One More!
-"
-
-[node name="OneMoreTimerUI" type="Timer" parent="OneMoreUI"]
-wait_time = 0.8
-one_shot = true
-
-[node name="BattleEndUI" type="Label" parent="."]
-visible = false
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-theme_override_font_sizes/font_size = 50
-text = "End!"
 
 [connection signal="timeout" from="OneMoreUI/OneMoreTimerUI" to="." method="OnOneMoreTimeUITimeout"]

@@ -73,6 +73,12 @@ _damage = 10
 _cost = 2
 _attackType = 3
 
+[node name="AllFire" parent="SkillDatabase" instance=ExtResource("7_bcp4u")]
+_isAllReceiveDamage = true
+_damage = 10
+_cost = 5
+_attackType = 3
+
 [node name="Ice" type="Node" parent="SkillDatabase"]
 script = ExtResource("8_j7wjd")
 _skillName = "Ice"

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class IndividualPressionAction : BaseAction
 {
@@ -33,7 +34,7 @@ public partial class IndividualPressionAction : BaseAction
         }
     }
 
-    public override void TakeAction(Character characterReceptor, Action onActionComplete)
+    public override void TakeAction(List<Character> characterReceptorList, Action onActionComplete)
     {
         if(Character.DataContainer.PressionLevel != 1)
         {
@@ -41,7 +42,7 @@ public partial class IndividualPressionAction : BaseAction
             return;
         }
 
-        _characterReceptor = characterReceptor;  
+        _characterReceptor = characterReceptorList[0];  
         OnActionComplete = onActionComplete;
         InAction = true;
 

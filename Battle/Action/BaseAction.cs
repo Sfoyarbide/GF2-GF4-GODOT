@@ -27,9 +27,8 @@ public abstract partial class BaseAction : Node
         public BaseAction baseAction;
     }
 
-    public abstract void TakeAction(Character characterReceptor, Action onActionComplete);
-    public virtual void TakeAction(List<Character> characterReceptorList, Action onActionComplete){}
-    public virtual void TakeAction(List<Character> characterList, List<Character> characterReceptorList, Action onActionComplete){}
+    public abstract void TakeAction(List<Character> characterReceptorList, Action onActionComplete);
+
     public abstract void EndingAction();
     public void OnAttackState(AttackStateEventArgs attackStateEventArgs)
     {
@@ -38,6 +37,7 @@ public abstract partial class BaseAction : Node
 
     public override void _Ready()
     {
+        BattleManager.OnActionExecuted += BattleManager_OnActionExecuted;
         _timer = GetNode<Timer>("Timer");
     }
 
@@ -80,4 +80,12 @@ public abstract partial class BaseAction : Node
     }
 
     public abstract string GetActionName();
+
+    protected virtual void BattleManager_OnActionExecuted(object sender, BattleManager.OnActionExecutedEventArgs e)
+    {
+        if(e.character == Character && e.selectedAction == this)
+        {
+            TakeAction(e.receptorList, e.onActionCompleted);
+        }
+    }
 }

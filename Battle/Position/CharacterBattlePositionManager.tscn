@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://vsjgmbxbpayo"]
+
+[ext_resource type="Script" path="res://Battle/Position/CharacterBattlePositionManager.cs" id="1_lu02f"]
+
+[node name="CharacterBattlePositionManager" type="Node"]
+script = ExtResource("1_lu02f")
+
+[node name="Advantage" type="Node" parent="."]
+
+[node name="Enemy" type="Node" parent="Advantage"]
+
+[node name="StartPositions" type="Node" parent="Advantage/Enemy"]
+
+[node name="StartPos_00" type="Node3D" parent="Advantage/Enemy/StartPositions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
+
+[node name="EndPositions" type="Node" parent="Advantage/Enemy"]
+
+[node name="EndPos_00" type="Node3D" parent="Advantage/Enemy/EndPositions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 2)

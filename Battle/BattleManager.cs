@@ -21,7 +21,7 @@ public partial class BattleManager : Node3D
     public static event EventHandler OnTurnEnd;
     public static event EventHandler<OnCurrentCharacterChangedEventArgs> OnCurrentCharacterChanged;
     public static event EventHandler<OnCurrentCharacterChangedEventArgs> OnOneMore;
-    //public event EventHandler<OnActionExecuteEventArgs> OnActionExecute;
+    public static event EventHandler<OnActionExecutedEventArgs> OnActionExecuted;
     public static event EventHandler<OnSelectionStartedEventArgs> OnSelectionStarted;
     public static event EventHandler OnItemSelectionStarted;
     public static event EventHandler<OnSkillSelectionStartedEventArgs> OnSkillSelectionStarted;
@@ -33,6 +33,14 @@ public partial class BattleManager : Node3D
     public class OnBattleEndEventArgs : EventArgs
     {
         public bool win;
+    }
+    public class OnActionExecutedEventArgs : EventArgs
+    {
+        public Character character;
+        public BaseAction selectedAction;
+        public Action onActionCompleted;
+        public List<Character> receptorList;
+        public List<Character> allyList;
     }
     public class OnCurrentCharacterChangedEventArgs : EventArgs
     {
@@ -102,43 +110,7 @@ public partial class BattleManager : Node3D
 
         if(Input.IsActionJustPressed("confirm"))
         {
-            switch(selectedAction)
-            {
-                case MeleeAction attackAction:
-                    ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptor());
-                    break;
-                case SkillAction skillAction:
-                    Skill skill = skillAction.CurrentSkill;
-                    if(skill.IsAllReceiveDamage)
-                    {
-                        ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptorList());
-                    }
-                    else
-                    {
-                        ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptor());
-                    }
-                    break;
-                case DefendAction defendAction:
-                    ExecuteAction(GetCurrentCharacter());
-                    break;
-                case ItemAction itemAction:
-                    if(!itemAction.CurrentItem.ForAllReceptors)
-                    {    
-                        ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptor());
-                    }
-                    else
-                    {
-                        ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptorList());
-                    }
-                    break;
-                case IndividualPressionAction:
-                    ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptor());
-                    break;
-                case GrupalPressionAction:
-                    ExecuteAction(_allyList, _battleDatabase.CharacterReceptorSelector.GetCharacterReceptorList());
-                    break;
-            }
-            return;
+            ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptorList());
         }
 
         if(Input.IsActionJustPressed("cancel"))
@@ -170,18 +142,6 @@ public partial class BattleManager : Node3D
         }
     }
 
-    public void ExecuteAction(Character characterReceptor)
-    {
-        if(_inAction)
-        {
-            return;
-        }
-
-        _inAction = true; 
-        GetCurrentCharacter().DataContainer.SelectedAction.TakeAction(characterReceptor, CheckOneMore);
-        //EmitSignal(SignalName.ActionExecuted);
-    }
-
     public void ExecuteAction(List<Character> characterReceptorList)
     {
         if(_inAction)
@@ -190,29 +150,14 @@ public partial class BattleManager : Node3D
         }
 
         _inAction = true;
-        GetCurrentCharacter().DataContainer.SelectedAction.TakeAction(characterReceptorList, CheckOneMore);
     
-        /*
-        OnActionExecute?.Invoke(this, new OnActionExecuteEventArgs{
-            action = GetCurrentCharacter().DataContainer.SelectedAction
-        });*/
-    }
-
-    public void ExecuteAction(List<Character> characterList, List<Character> characterReceptorList)
-    {
-        if(_inAction)
-        {
-            return;
-        }
-
-        _inAction = true;
-        GetCurrentCharacter().DataContainer.SelectedAction.TakeAction(characterList, characterReceptorList, CheckOneMore);
-        _battleDatabase.CharacterReceptorSelector.CompleteSelection();
-    
-        /*
-        OnActionExecute?.Invoke(this, new OnActionExecuteEventArgs{
-            action = GetCurrentCharacter().DataContainer.SelectedAction
-        });*/
+        OnActionExecuted?.Invoke(this, new OnActionExecutedEventArgs{
+            character = GetCurrentCharacter(),
+            selectedAction = GetCurrentCharacter().DataContainer.SelectedAction,
+            onActionCompleted = CheckOneMore,
+            receptorList = characterReceptorList,
+            allyList = _allyList
+        });
     }
 
     public void CheckOneMore()

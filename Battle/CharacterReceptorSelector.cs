@@ -85,7 +85,7 @@ public partial class CharacterReceptorSelector : Node3D
         }
 
         _receptorIndex = 0;
-
+        _selectsAll = selectsAll;
         _characterReceptorList.Clear();
 
         foreach(Character character in _battleDatabase.BattleManager.CharacterTurnList)
@@ -151,13 +151,6 @@ public partial class CharacterReceptorSelector : Node3D
         }
     }
 
-    /*
-    public void SetupSelectionAI(Character sender, List<ReceptorCriteria> receptorCriteriaList, bool selectsAll=false)
-    {
-        SetupSelection(sender, receptorCriteriaList, selectsAll);
-    }
-    */
-
     public Character GetCharacterReceptor()
     {
         if(_characterReceptorList.Count > 0)
@@ -172,7 +165,15 @@ public partial class CharacterReceptorSelector : Node3D
 
     public List<Character> GetCharacterReceptorList()
     {
-        return _characterReceptorList;
+        if(_selectsAll)
+        {
+            return _characterReceptorList; 
+        }
+
+        // In this case, there is only one receptor, but we use the list, to make more dynamic the code. 
+        List<Character> characterReceptorList = new List<Character>();
+        characterReceptorList.Add(GetCharacterReceptor()); 
+        return characterReceptorList;
     }
 
     public void CancelSelection()

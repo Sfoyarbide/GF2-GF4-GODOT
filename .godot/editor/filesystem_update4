@@ -2,6 +2,7 @@ res://Battle/UI/BattleUI.tscn
 res://Character/Character.tscn
 res://Battle/BattleDatabase.tscn
 res://Levels/Level1.tscn
+res://Battle/Position/CharacterBattlePositionManager.tscn
 res://Battle/Action/BaseAction.cs
 res://Battle/Action/DefendAction.cs
 res://Battle/Action/ItemAction.cs
@@ -38,6 +39,7 @@ res://Battle/Inventory/Items/Item.cs
 res://Battle/Inventory/Items/ItemTest.cs
 res://Battle/Inventory/Items/ItemUI.cs
 res://Battle/OneMoreManager.cs
+res://Battle/Position/CharacterBattlePositionManager.cs
 res://Battle/PressionManager.cs
 res://Battle/UI/ActionButton.cs
 res://Battle/UI/AttackStatus/AttackStatusUI.cs

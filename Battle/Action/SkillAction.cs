@@ -94,22 +94,6 @@ public partial class SkillAction : BaseAction
         OnActionComplete();
     }
 
-    public override void TakeAction(Character characterReceptor, Action onActionComplete)
-    {
-        if(Character.DataContainer.Sp < _currentSkill.Cost)
-        {
-            OnCannotTakeAction();
-            return;
-        }
-
-        _characterReceptorList.Clear();
-        _characterReceptorList.Add(characterReceptor);
-        OnActionComplete = onActionComplete;
-        ExecuteSkill(_currentSkill);
-
-        OnActionTaken();
-    }
-
     public override void TakeAction(List<Character> characterReceptorList, Action onActionComplete)
     {
         if(Character.DataContainer.Sp < _currentSkill.Cost)

@@ -63,14 +63,6 @@ public partial class DefendAction : BaseAction
         OnActionComplete();
     }
 
-    public override void TakeAction(Character characterReceptor, Action onActionComplete)
-    {
-        OnActionComplete = onActionComplete;
-		// Because the receptor is same as the character emisor, we don't use as a parameter.
-		Defend();
-        OnActionTaken();
-    }
-
     public override void TakeAction(List<Character> characterReceptor, Action onActionComplete)
     {
         OnActionComplete = onActionComplete;

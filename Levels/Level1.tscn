@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://srcvtkfedf56"]
+[gd_scene load_steps=15 format=3 uid="uid://srcvtkfedf56"]
 
 [ext_resource type="PackedScene" uid="uid://r4qrwcjt7ph0" path="res://Battle/BattleManager.tscn" id="1_gteq7"]
 [ext_resource type="PackedScene" uid="uid://bd80y56s7uw3v" path="res://Character/Character.tscn" id="2_d5rbv"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://knol63we4wn7" path="res://Battle/UI/BattleUI.tscn" id="9_m5fxk"]
 [ext_resource type="Script" path="res://Battle/OneMoreManager.cs" id="9_okxvm"]
 [ext_resource type="Script" path="res://Battle/PressionManager.cs" id="11_co8qo"]
+[ext_resource type="PackedScene" uid="uid://vsjgmbxbpayo" path="res://Battle/Position/CharacterBattlePositionManager.tscn" id="13_ps524"]
 
 [node name="Level1" type="Node3D"]
 
@@ -159,6 +160,8 @@ script = ExtResource("9_okxvm")
 [node name="PressionManager" type="Node" parent="Battle/ManagerContainer"]
 script = ExtResource("11_co8qo")
 
+[node name="CharacterBattlePositionManager" parent="Battle/ManagerContainer" instance=ExtResource("13_ps524")]
+
 [node name="BattleUI" parent="Battle" instance=ExtResource("9_m5fxk")]
 _canSelect = true
 
@@ -166,3 +169,5 @@ _canSelect = true
 
 [node name="CharacterContainer" type="Node3D" parent="Battle/BattleStarter"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
+
+[editable path="Battle/ManagerContainer/CharacterBattlePositionManager"]

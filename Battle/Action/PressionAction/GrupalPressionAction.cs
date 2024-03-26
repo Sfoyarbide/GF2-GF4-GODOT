@@ -18,14 +18,9 @@ public partial class GrupalPressionAction : BaseAction
         return "Grupal Pression";
     }
 
-    public override void TakeAction(Character characterReceptor, Action onActionComplete)
+    public override void TakeAction(List<Character> characterReceptorList, Action onActionComplete)
     {
-        return;
-    }
-
-    public override void TakeAction(List<Character> characterList, List<Character> characterReceptorList, Action onActionComplete)
-    {
-        foreach(Character character in characterList)
+        foreach(Character character in _characterList)
         {
             if(character.DataContainer.PressionLevel != 1)
             {
@@ -35,7 +30,6 @@ public partial class GrupalPressionAction : BaseAction
         }
 
         InAction = true;
-        _characterList = characterList;
         _characterReceptorList = characterReceptorList;
         OnActionComplete = onActionComplete; 
 
@@ -76,4 +70,12 @@ public partial class GrupalPressionAction : BaseAction
         OnActionComplete();
     }
 
+    protected override void BattleManager_OnActionExecuted(object sender, BattleManager.OnActionExecutedEventArgs e)
+    {
+        if(e.character == Character && e.selectedAction == this)
+        {
+            _characterList = e.allyList;
+            TakeAction(e.receptorList, e.onActionCompleted);
+        }
+    }
 }
