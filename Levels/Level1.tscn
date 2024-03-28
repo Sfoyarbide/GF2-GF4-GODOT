@@ -106,7 +106,7 @@ script = ExtResource("4_3g63v")
 _damage = 10
 
 [node name="CharacterEnemy_01" parent="Battle/CharacterContainer" instance=ExtResource("2_d5rbv")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 1.99205)
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -1.43584, 0, 1.99205)
 
 [node name="Data" type="Node" parent="Battle/CharacterContainer/CharacterEnemy_01"]
 script = ExtResource("5_6dwid")
@@ -123,6 +123,27 @@ Lu = 67
 ArmorDefense = 5
 
 [node name="MeleeAttack" type="Node" parent="Battle/CharacterContainer/CharacterEnemy_01/Data"]
+script = ExtResource("4_3g63v")
+_damage = 12
+
+[node name="CharacterEnemy_02" parent="Battle/CharacterContainer" instance=ExtResource("2_d5rbv")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -7.97207, 0, 1.99205)
+
+[node name="Data" type="Node" parent="Battle/CharacterContainer/CharacterEnemy_02"]
+script = ExtResource("5_6dwid")
+Hp = 20
+HpMax = 20
+Sp = 50
+SpMax = 50
+IsEnemy = true
+St = 2
+Ma = 3
+Ag = 40
+Co = 2
+Lu = 67
+ArmorDefense = 5
+
+[node name="MeleeAttack" type="Node" parent="Battle/CharacterContainer/CharacterEnemy_02/Data"]
 script = ExtResource("4_3g63v")
 _damage = 12
 

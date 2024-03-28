@@ -91,6 +91,7 @@ public partial class CharacterData : Node
             if(_hp <= 0)
             {
                 // Die.
+                _hp = 0;
                 OnDie?.Invoke(this, new CharacterDataEventArgs{
                     character = Character
                 });

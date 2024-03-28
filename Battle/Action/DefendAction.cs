@@ -30,6 +30,12 @@ public partial class DefendAction : BaseAction
             character = Character
         });
         
+        OnAttackState(new AttackStateEventArgs{
+            damage = 0,
+            isHit = false,
+            baseAction = this
+        });
+
         EndingAction();
         GD.Print("Action: " + GetActionName() + ", Defend Status: true, ArmorDefense: " + armorDefense);
     }

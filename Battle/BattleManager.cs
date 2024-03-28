@@ -45,6 +45,8 @@ public partial class BattleManager : Node3D
     public class OnCurrentCharacterChangedEventArgs : EventArgs
     {
         public Character currentCharacter;
+        public List<Character> partyList;
+        public List<Character> enemyList;
     }
     public class OnSelectionStartedEventArgs : EventArgs
     {
@@ -73,6 +75,7 @@ public partial class BattleManager : Node3D
 
     public override void _Ready()
     {
+        // Subcribing to events.
         CharacterData.OnDie += CharacterData_OnDie;
         BaseAction.CannotTakeAction += BaseAction_CannotTakeAction;
         ActionButton.OnActionButtonDown += ActionButton_OnActionButtonDown;
@@ -175,7 +178,9 @@ public partial class BattleManager : Node3D
             });
 
             OnCurrentCharacterChanged?.Invoke(this, new OnCurrentCharacterChangedEventArgs{
-                currentCharacter = GetCurrentCharacter()
+                currentCharacter = GetCurrentCharacter(),
+                partyList = _allyList,
+                enemyList = _enemyList
             });
         }
         else
@@ -197,7 +202,9 @@ public partial class BattleManager : Node3D
         OnTurnEnd?.Invoke(this, EventArgs.Empty);
 
         OnCurrentCharacterChanged?.Invoke(this, new OnCurrentCharacterChangedEventArgs{
-            currentCharacter = GetCurrentCharacter()
+                currentCharacter = GetCurrentCharacter(),
+                partyList = AllyList,
+                enemyList = EnemyList
         });
     }
 
@@ -209,8 +216,8 @@ public partial class BattleManager : Node3D
         _inCombat = true;
 
         OnBattleStart?.Invoke(this, new OnBattleStartEventArgs{
-            partyList = AllyList,
-            enemyList = EnemyList
+            partyList = _allyList,
+            enemyList = _enemyList
         });
 
         OnCurrentCharacterChanged?.Invoke(this, new OnCurrentCharacterChangedEventArgs{

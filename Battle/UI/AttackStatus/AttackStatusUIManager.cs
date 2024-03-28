@@ -20,6 +20,11 @@ public partial class AttackStatusUIManager : Node
 
     public void ShowAttackStatusUI(BaseAction.AttackStateEventArgs e)
     {
+        if(e.baseAction is DefendAction)
+        {
+            return;
+        }
+
         AttackStatusUI attackStatusUI = (AttackStatusUI)_attackStatusUIScene.Instantiate();
         _battleNode.AddChild(attackStatusUI);
         attackStatusUI.Setup(e, e.receptor.GetMarkerChildTransform(3));

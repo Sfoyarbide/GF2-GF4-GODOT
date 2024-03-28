@@ -18,7 +18,11 @@ public partial class Character : Node3D
     private Node3D _markerContainer;
     private CharacterData _dataContainer;
     private CharacterAnimator _characterAnimation;
+    [Export	]
+    private float _combatPositionModifier;
+
     public CharacterData DataContainer {get {return _dataContainer;} set {_dataContainer = value;}}
+    public float CombatPositionModifier {get {return _combatPositionModifier;}}
 
     public override void _Ready()
     {

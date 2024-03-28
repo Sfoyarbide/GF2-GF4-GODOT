@@ -52,10 +52,10 @@ anchor_left = 0.582
 anchor_top = 0.451
 anchor_right = 0.582
 anchor_bottom = 0.451
-offset_left = 13.34
-offset_top = -16.964
-offset_right = 66.34
-offset_bottom = 6.036
+offset_left = -4.3
+offset_top = 2.036
+offset_right = 48.6999
+offset_bottom = 25.036
 text = "0"
 
 [node name="MemberSpUI" type="Label" parent="."]
@@ -65,30 +65,45 @@ anchor_left = 0.673
 anchor_top = 0.564
 anchor_right = 0.673
 anchor_bottom = 0.564
-offset_left = 0.0499954
-offset_top = -11.496
-offset_right = 64.05
-offset_bottom = 11.504
+offset_left = -17.59
+offset_top = 7.504
+offset_right = 46.41
+offset_bottom = 30.5041
 text = "0"
+
+[node name="DeadTextUI" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.582
+anchor_top = 0.451
+anchor_right = 0.582
+anchor_bottom = 0.451
+offset_left = -3.93999
+offset_top = -19.964
+offset_right = 49.06
+offset_bottom = 3.03605
+text = "DEAD"
 
 [node name="MemberPressionLevelUI" type="HSlider" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 1.0
+anchor_right = 0.733
 anchor_bottom = 0.171
+offset_right = 0.0499954
 offset_bottom = -0.0439987
 theme = SubResource("Theme_popaj")
 max_value = 1.0
 step = 0.1
 
 [node name="InflictStatusContainerUI" type="Panel" parent="."]
-visible = false
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
+anchors_preset = -1
+anchor_left = 0.747
 anchor_right = 1.0
-offset_left = -40.0
-offset_bottom = 40.0
+anchor_bottom = 0.213
+offset_left = -0.0500031
+offset_bottom = 0.0680008
 grow_horizontal = 0
 script = ExtResource("3_3g851")
 
