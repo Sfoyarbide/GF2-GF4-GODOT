@@ -1,15 +1,17 @@
-[gd_scene load_steps=17 format=3 uid="uid://cwp8yp0vkt7hr"]
+[gd_scene load_steps=19 format=3 uid="uid://cwp8yp0vkt7hr"]
 
 [ext_resource type="Script" path="res://Battle/BattleDatabase.cs" id="1_p1jym"]
 [ext_resource type="Script" path="res://Battle/Inventory/Inventory.cs" id="2_feauj"]
 [ext_resource type="Script" path="res://Battle/Inventory/Items/Apple/AppleItem.cs" id="2_usa7a"]
 [ext_resource type="Texture2D" uid="uid://dmhre602fkf8e" path="res://Battle/Inventory/Items/Apple/Apple.png" id="3_tgd16"]
 [ext_resource type="Script" path="res://Battle/Inventory/Items/ItemTest.cs" id="4_avcat"]
+[ext_resource type="Script" path="res://Battle/Inventory/Items/ReviveItem/ReviveItem.cs" id="5_mm10b"]
 [ext_resource type="Script" path="res://Battle/Attack/Skills/SkillDatabase.cs" id="6_e5h6b"]
 [ext_resource type="PackedScene" uid="uid://khfrcrk04ldo" path="res://Battle/Attack/Skills/AttackSkills/Fire/Fire.tscn" id="7_bcp4u"]
 [ext_resource type="Script" path="res://Battle/Attack/Skills/HealSkills/Heal.cs" id="8_aae14"]
 [ext_resource type="Script" path="res://Battle/Attack/Skills/AttackSkills/Ice/Ice.cs" id="8_j7wjd"]
 [ext_resource type="Script" path="res://Battle/Attack/Skills/ModifierSkills/AttackUPSkill.cs" id="10_6ts32"]
+[ext_resource type="Script" path="res://Battle/Attack/Skills/HealSkills/ReviveSkill/ReviveSkill.cs" id="10_lxib7"]
 [ext_resource type="Script" path="res://Battle/Attack/Skills/ModifierSkills/DefenseUPSkill.cs" id="10_wsbpb"]
 [ext_resource type="Script" path="res://Battle/Attack/Skills/ModifierSkills/DefenseDOWNSkill.cs" id="11_oee7a"]
 [ext_resource type="Script" path="res://Battle/Attack/Skills/ModifierSkills/AttackDOWNSkill.cs" id="12_44iai"]
@@ -28,8 +30,16 @@ script = ExtResource("2_usa7a")
 _itemImage = ExtResource("3_tgd16")
 _itemQuantity = 2
 
+[node name="Revive25" type="Node" parent="Inventory"]
+script = ExtResource("5_mm10b")
+_percentageHealed = 25
+_itemName = "Revive25"
+_itemImage = ExtResource("3_tgd16")
+_itemQuantity = 1
+
 [node name="TEST1" type="Node" parent="Inventory"]
 script = ExtResource("4_avcat")
+_itemName = "TEST1"
 _itemName = "TEST1"
 _itemImage = ExtResource("3_tgd16")
 _itemQuantity = 1
@@ -38,11 +48,13 @@ _forAllReceptors = true
 [node name="TEST2" type="Node" parent="Inventory"]
 script = ExtResource("4_avcat")
 _itemName = "TEST2"
+_itemName = "TEST2"
 _itemImage = ExtResource("3_tgd16")
 _itemQuantity = 1
 
 [node name="TEST3" type="Node" parent="Inventory"]
 script = ExtResource("4_avcat")
+_itemName = "TEST3"
 _itemName = "TEST3"
 _itemImage = ExtResource("3_tgd16")
 _itemQuantity = 1
@@ -50,17 +62,20 @@ _itemQuantity = 1
 [node name="TEST4" type="Node" parent="Inventory"]
 script = ExtResource("4_avcat")
 _itemName = "TEST4"
+_itemName = "TEST4"
 _itemImage = ExtResource("3_tgd16")
 _itemQuantity = 1
 
 [node name="TEST5" type="Node" parent="Inventory"]
 script = ExtResource("4_avcat")
 _itemName = "TEST5"
+_itemName = "TEST5"
 _itemImage = ExtResource("3_tgd16")
 _itemQuantity = 1
 
 [node name="TEST6" type="Node" parent="Inventory"]
 script = ExtResource("4_avcat")
+_itemName = "TEST6"
 _itemName = "TEST6"
 _itemImage = ExtResource("3_tgd16")
 _itemQuantity = 1
@@ -92,6 +107,13 @@ script = ExtResource("8_aae14")
 _skillName = "Heal"
 _skillType = 2
 _damage = 5
+_attackType = 7
+
+[node name="Revive25" type="Node" parent="SkillDatabase"]
+script = ExtResource("10_lxib7")
+_skillName = "Revive25"
+_damage = 25
+_cost = 20
 _attackType = 7
 
 [node name="DefenseUP" type="Node" parent="SkillDatabase"]

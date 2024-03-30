@@ -19,11 +19,15 @@ public partial class ItemAction : BaseAction
 
     public override void _Ready()
     {
+        base._Ready();
+        Item.ItemUsed += Item_ItemUsed;
         ItemUI.OnConfirmItem += ItemUI_OnConfirmItem;
     }
 
+
     public override void EndingAction()
     {
+        InAction = false;
         _characterReceptorList.Clear();
         OnActionComplete();
     }
@@ -39,28 +43,59 @@ public partial class ItemAction : BaseAction
             character = Character
         });
 
-        foreach(Character character in _characterReceptorList)
+        if(!_currentItem.ForAllReceptors)
         {
-            _currentItem.UseItem(character);
+            _currentItem.UseItem(_characterReceptorList[0]);
         }
-
-        _currentItem.SubtractItem();
-
-        EndingAction();
+        else
+        {
+            foreach(Character character in _characterReceptorList)
+            {
+                _currentItem.UseItem(character);
+            }
+        }
     }
 
     public override void TakeAction(List<Character> characterReceptorList, Action onActionComplete)
     {
         _characterReceptorList = characterReceptorList;
-
         OnActionComplete = onActionComplete;
+
+        InAction = true;
+
         UseItem();
-        OnActionComplete();
         OnActionTaken();
     }
 
     private void ItemUI_OnConfirmItem(object sender, ItemUI.OnConfirmItemEventArgs e)
     {
         _currentItem = e.item;
+    }
+
+    private void Item_ItemUsed(object sender, Item.ItemUsedEventArgs e)
+    {
+        if(!InAction)
+        {
+            return;
+        }
+
+        int finalDamage = e.damage;
+        if(e.damage < 0)
+        {
+            finalDamage = -finalDamage;
+        }
+
+        OnAttackState(new AttackStateEventArgs{
+            current = Character,
+            receptor = e.receptor,
+            damage = finalDamage,
+            isHit = true,
+            baseAction = this
+        });
+
+        e.receptor.DataContainer.Hp -= e.damage;
+        _currentItem.SubtractItem();
+
+        EndingAction();
     }
 }

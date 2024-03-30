@@ -75,13 +75,19 @@ public partial class BattleManager : Node3D
 
     public override void _Ready()
     {
+        // Finding necessary nodes. 
+        _oneMoreManager = GetNode<OneMoreManager>("ManagerContainer/OneMoreManager");
+        _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
+
         // Subcribing to events.
-        CharacterData.OnDie += CharacterData_OnDie;
-        BaseAction.CannotTakeAction += BaseAction_CannotTakeAction;
         ActionButton.OnActionButtonDown += ActionButton_OnActionButtonDown;
+        BattleStarter.OnBattleCharacterSetupFinished += BattleStarter_OnBattleCharacterSetupFinished;
+        BaseAction.CannotTakeAction += BaseAction_CannotTakeAction;
+        CharacterData.OnDie += CharacterData_OnDie;
         KnockDown.CurrentCharacterKnockdown += KnockDown_CurrentCharacterKnockdown;
 
         // TEMP
+        /*
         List<Character> newCharacterTurnList = new List<Character>();
         _characterTurnList = new List<Character>();
         _allyList = new List<Character>();
@@ -90,11 +96,7 @@ public partial class BattleManager : Node3D
         {
             newCharacterTurnList.Add(GetChild(0).GetChild(x) as Character);
         }
-
-        _oneMoreManager = GetNode<OneMoreManager>("ManagerContainer/OneMoreManager");
-        _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
-
-        SetupBattle(newCharacterTurnList);
+        */
     }
 
     public override void _Process(double delta)
@@ -114,6 +116,7 @@ public partial class BattleManager : Node3D
         if(Input.IsActionJustPressed("confirm"))
         {
             ExecuteAction(_battleDatabase.CharacterReceptorSelector.GetCharacterReceptorList());
+            return;
         }
 
         if(Input.IsActionJustPressed("cancel"))
@@ -153,7 +156,7 @@ public partial class BattleManager : Node3D
         }
 
         _inAction = true;
-    
+
         OnActionExecuted?.Invoke(this, new OnActionExecutedEventArgs{
             character = GetCurrentCharacter(),
             selectedAction = GetCurrentCharacter().DataContainer.SelectedAction,
@@ -199,20 +202,25 @@ public partial class BattleManager : Node3D
         DequeueCurrentCharacter();
         _inAction = false; 
 
+        // If somebody is dead, it will skip his turn.
+        if(GetCurrentCharacter().DataContainer.Hp <= 0)
+        {
+            NextTurn();
+            return;
+        }
+
         OnTurnEnd?.Invoke(this, EventArgs.Empty);
 
         OnCurrentCharacterChanged?.Invoke(this, new OnCurrentCharacterChangedEventArgs{
-                currentCharacter = GetCurrentCharacter(),
-                partyList = AllyList,
-                enemyList = EnemyList
+            currentCharacter = GetCurrentCharacter(),
+            partyList = AllyList,
+            enemyList = EnemyList
         });
     }
 
     public void SetupBattle(List<Character> newCharacterTurnList)
     {
         _characterTurnList = newCharacterTurnList;
-        UpdateAllyList();
-        UpdateEnemyList();
         _inCombat = true;
 
         OnBattleStart?.Invoke(this, new OnBattleStartEventArgs{
@@ -285,6 +293,17 @@ public partial class BattleManager : Node3D
 
     private void CharacterData_OnDie(object sender, CharacterData.CharacterDataEventArgs e)
     {
-        RemoveCharacterInTurns(_characterTurnList.FindIndex(c => c.DataContainer.Character == e.character));
+        if(e.character.DataContainer.IsEnemy)
+        {
+            RemoveCharacterInTurns(_characterTurnList.FindIndex(c => c.DataContainer.Character == e.character));
+        }
+    }
+
+    // The event that indicates the battle has begun.
+    private void BattleStarter_OnBattleCharacterSetupFinished(object sender, BattleStarter.OnBattleCharacterSetupFinishedEventArgs e)
+    {
+        _allyList = e.partyMembers;
+        _enemyList = e.enemyMembers;
+        SetupBattle(e.characterTurnList);
     }
 }

@@ -29,5 +29,4 @@ public partial class AttackStatusUIManager : Node
         _battleNode.AddChild(attackStatusUI);
         attackStatusUI.Setup(e, e.receptor.GetMarkerChildTransform(3));
     }
-
 }

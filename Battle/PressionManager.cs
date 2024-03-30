@@ -21,7 +21,7 @@ public partial class PressionManager : Node
             return;
         }
 
-        if(attackState.isPressionAttack)
+        if(attackState.isPressionAttack || attackState.baseAction is ItemAction)
         {
             return;
         }

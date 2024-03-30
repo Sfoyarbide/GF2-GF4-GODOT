@@ -4,3 +4,6 @@
 
 [node name="ItemAction" type="Node3D"]
 script = ExtResource("1_3cpfx")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0

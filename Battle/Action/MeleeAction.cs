@@ -51,10 +51,7 @@ public partial class MeleeAction : BaseAction
 
             // Checks if the receptor was defending, and cancels it.
             DefendAction.TryCancelDefend(characterReceptor);
-            characterReceptor.DataContainer.Hp -= damage; 
         }
-
-        GD.Print(inflictState);
         
         OnAttackState(new AttackStateEventArgs{
             current = Character,
@@ -64,6 +61,8 @@ public partial class MeleeAction : BaseAction
             attack = Character.DataContainer.MeleeAttack,
             inflictState = inflictState
         });
+
+        characterReceptor.DataContainer.Hp -= damage; 
     }
 
     private void ExecuteAttack(float delta) // Does all the visual and logic aspects of Attack Action.

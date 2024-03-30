@@ -42,7 +42,7 @@ public partial class AttackStatusUI : Node3D
 
         if(e.isHit)
         {
-            if(e.isPressionAttack)
+            if(e.isPressionAttack || e.baseAction is ItemAction)
             {
                 _damageTextUI.Text = e.damage.ToString();
                 _damageUI.Show();

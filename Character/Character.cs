@@ -20,9 +20,11 @@ public partial class Character : Node3D
     private CharacterAnimator _characterAnimation;
     [Export	]
     private float _combatPositionModifier;
+    private bool _inCombat;
 
     public CharacterData DataContainer {get {return _dataContainer;} set {_dataContainer = value;}}
     public float CombatPositionModifier {get {return _combatPositionModifier;}}
+    public bool InCombat {get {return _inCombat; } set {_inCombat = value;}}
 
     public override void _Ready()
     {
@@ -33,6 +35,7 @@ public partial class Character : Node3D
         
         _characterAnimation.Setup(this);
 
+        CharacterData.OnDie += CharacterData_OnDie;
         DataContainer.Character = this;
 
         UpdateActionList();
@@ -64,5 +67,13 @@ public partial class Character : Node3D
     public override string ToString()
     {
         return Name;
+    }
+
+    private void CharacterData_OnDie(object sender, CharacterData.CharacterDataEventArgs e)
+    {
+        if(e.character == this)
+        {
+            _inCombat = false;
+        }
     }
 }

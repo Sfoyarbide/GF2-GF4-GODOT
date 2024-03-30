@@ -121,7 +121,6 @@ public partial class CharacterBattlePositionManager : Node
 
             lerpValues = _lerpValuesForPositions[characterListCountList[characterListCountIndex]];
 
-            GD.Print(lerpValues[lerpValueIndex]);
             float finalLerpValue = lerpValues[lerpValueIndex];
 
             if(finalLerpValue != 0)

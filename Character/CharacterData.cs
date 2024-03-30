@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public partial class CharacterData : Node
 {
     private Character _character;
+    [Export]
+    private string _characterName;
 
     // Stats
 
@@ -71,6 +73,13 @@ public partial class CharacterData : Node
         get{ return _character;}
         set{ _character = value;}
     }
+
+    public string CharacterName
+    {
+        get { return _characterName; }
+        set { _characterName = value; }
+    }
+
 	[Export]
     public int Hp 
     {

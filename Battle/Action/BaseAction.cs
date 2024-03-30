@@ -82,7 +82,7 @@ public abstract partial class BaseAction : Node
     public abstract string GetActionName();
 
     protected virtual void BattleManager_OnActionExecuted(object sender, BattleManager.OnActionExecutedEventArgs e)
-    {
+    { 
         if(e.character == Character && e.selectedAction == this)
         {
             TakeAction(e.receptorList, e.onActionCompleted);

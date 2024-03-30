@@ -25,22 +25,27 @@ public partial class SkillAction : BaseAction
 
     private void Skill(Character characterReceptor, Skill skill)
     {  
+        bool isHit = CombatCalculations.IsHitCalculation(Character, characterReceptor);
         Character.DataContainer.Sp -= skill.Cost;
         
         int damage = 0;
         switch(skill)
         {
             case HealSkill healSkill:
-                skill.UseSkill(Character, characterReceptor, out damage);
-                return;
+                isHit = true;
+                //skill.UseSkill(Character, characterReceptor, out damage);
+                break;
             case ModifierSkill modifierSkill:
-                skill.UseSkill(Character, characterReceptor, out damage);
-                return;
+                isHit = true;
+                //skill.UseSkill(Character, characterReceptor, out damage);
+                break;
+            case ReviveSkill reviveSkill:
+                isHit = true;
+                break;
             default:
                 break;
         }
 
-        bool isHit = CombatCalculations.IsHitCalculation(Character, characterReceptor);
         if(isHit)
         {
             skill.UseSkill(Character, characterReceptor, out damage); 
@@ -58,6 +63,8 @@ public partial class SkillAction : BaseAction
             attack = skill,
             baseAction = this
         });
+
+        characterReceptor.DataContainer.Hp -= damage; 
     }
 
     private void ExecuteSkill(Skill skill)
@@ -110,11 +117,6 @@ public partial class SkillAction : BaseAction
         OnActionTaken();
     }
 
-    private void SkillUI_OnConfirmSkill(object sender, SkillUI.OnConfirmSkillEventArgs e)
-    {
-        _currentSkill = e.skill;
-    }
-
     public static bool CanUseSkill(Skill skill, Character character)
     {
         return character.DataContainer.Sp >= skill.Cost;
@@ -124,4 +126,10 @@ public partial class SkillAction : BaseAction
     {
         return "Skill";
     }
+
+    private void SkillUI_OnConfirmSkill(object sender, SkillUI.OnConfirmSkillEventArgs e)
+    {
+        _currentSkill = e.skill;
+    }
+
 }

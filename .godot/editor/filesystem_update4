@@ -1,8 +1,7 @@
 res://Battle/UI/BattleUI.tscn
 res://Character/Character.tscn
-res://Battle/BattleDatabase.tscn
 res://Levels/Level1.tscn
-res://Battle/Position/CharacterBattlePositionManager.tscn
+res://Battle/Action/ItemAction.tscn
 res://Battle/Action/BaseAction.cs
 res://Battle/Action/DefendAction.cs
 res://Battle/Action/ItemAction.cs
@@ -18,6 +17,7 @@ res://Battle/Attack/Skills/AttackSkills/Fire/Fire.cs
 res://Battle/Attack/Skills/AttackSkills/Ice/Ice.cs
 res://Battle/Attack/Skills/HealSkills/Heal.cs
 res://Battle/Attack/Skills/HealSkills/HealSkill.cs
+res://Battle/Attack/Skills/HealSkills/ReviveSkill/ReviveSkill.cs
 res://Battle/Attack/Skills/InflictSkills/InflictSkill.cs
 res://Battle/Attack/Skills/InflictSkills/PoisonSkill.cs
 res://Battle/Attack/Skills/ModifierSkills/AgilityDOWNSkill.cs
@@ -38,9 +38,13 @@ res://Battle/Inventory/Items/Apple/AppleItem.cs
 res://Battle/Inventory/Items/Item.cs
 res://Battle/Inventory/Items/ItemTest.cs
 res://Battle/Inventory/Items/ItemUI.cs
+res://Battle/Inventory/Items/ReviveItem/ReviveItem.cs
 res://Battle/OneMoreManager.cs
 res://Battle/Position/CharacterBattlePositionManager.cs
 res://Battle/PressionManager.cs
+res://Battle/Starter/BattleStarter.cs
+res://Battle/Starter/EnemyGroupInLevel.cs
+res://Battle/Starter/EnemyGroupInLevel1.cs
 res://Battle/UI/ActionButton.cs
 res://Battle/UI/AttackStatus/AttackStatusUI.cs
 res://Battle/UI/AttackStatus/AttackStatusUIManager.cs
@@ -62,3 +66,4 @@ res://Character/Enemy/Slime/Slime.cs
 res://Character/Enemy/Slime/SlimeData.cs
 res://Levels/BrainCamera.cs
 res://Levels/Test.cs
+res://Battle/BattleDatabase.tscn

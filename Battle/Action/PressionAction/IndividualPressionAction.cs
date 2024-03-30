@@ -10,6 +10,11 @@ public partial class IndividualPressionAction : BaseAction
         return "Pression Action";
     }
 
+    public override void _Ready()
+    {
+        base._Ready();
+    }
+
     private void IndividualPression()
     {
         if(Character.DataContainer.PressionLevel == 1)
@@ -18,9 +23,6 @@ public partial class IndividualPressionAction : BaseAction
             
             InflictState inflictState = InflictState.GetInflictStateBasedOnType(Character.DataContainer.IndividualPressionInflictStateType);
             inflictState.InflictCharacter(_characterReceptor);
-
-            _characterReceptor.DataContainer.Hp -= damage;
-            Character.DataContainer.PressionLevel = 0;
 
             OnAttackState(new AttackStateEventArgs{
                 current = Character,
@@ -31,6 +33,9 @@ public partial class IndividualPressionAction : BaseAction
                 baseAction = this,
                 isPressionAttack = true
             });
+
+            _characterReceptor.DataContainer.Hp -= damage;
+            Character.DataContainer.PressionLevel = 0;
         }
     }
 

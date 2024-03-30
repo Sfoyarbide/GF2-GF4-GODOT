@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://srcvtkfedf56"]
+[gd_scene load_steps=17 format=3 uid="uid://srcvtkfedf56"]
 
 [ext_resource type="PackedScene" uid="uid://r4qrwcjt7ph0" path="res://Battle/BattleManager.tscn" id="1_gteq7"]
 [ext_resource type="PackedScene" uid="uid://bd80y56s7uw3v" path="res://Character/Character.tscn" id="2_d5rbv"]
@@ -14,138 +14,14 @@
 [ext_resource type="Script" path="res://Battle/OneMoreManager.cs" id="9_okxvm"]
 [ext_resource type="Script" path="res://Battle/PressionManager.cs" id="11_co8qo"]
 [ext_resource type="PackedScene" uid="uid://vsjgmbxbpayo" path="res://Battle/Position/CharacterBattlePositionManager.tscn" id="13_ps524"]
+[ext_resource type="Script" path="res://Battle/Starter/BattleStarter.cs" id="14_n0mil"]
+[ext_resource type="Script" path="res://Battle/Starter/EnemyGroupInLevel1.cs" id="16_0tkll"]
 
 [node name="Level1" type="Node3D"]
 
 [node name="Battle" parent="." instance=ExtResource("1_gteq7")]
 
 [node name="CharacterContainer" type="Node3D" parent="Battle"]
-
-[node name="Character00" parent="Battle/CharacterContainer" instance=ExtResource("2_d5rbv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="Data" type="Node" parent="Battle/CharacterContainer/Character00"]
-script = ExtResource("3_aa8sn")
-_pressionLevelModifier = 1
-_pressionLevel = 1.0
-Hp = 15
-HpMax = 15
-Sp = 20
-SpMax = 20
-St = 30
-Ma = 50
-Ag = 74
-Co = 5
-Lu = 80
-ArmorDefense = 4
-
-[node name="MeleeAttack" type="Node" parent="Battle/CharacterContainer/Character00/Data"]
-script = ExtResource("4_3g63v")
-_damage = 15
-
-[node name="Character01" parent="Battle/CharacterContainer" instance=ExtResource("2_d5rbv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
-
-[node name="Data" type="Node" parent="Battle/CharacterContainer/Character01"]
-script = ExtResource("3_bxs0c")
-Hp = 15
-HpMax = 15
-Sp = 20
-SpMax = 20
-St = 2
-Ma = 5
-Ag = 74
-Co = 5
-Lu = 80
-ArmorDefense = 4
-
-[node name="MeleeAttack" type="Node" parent="Battle/CharacterContainer/Character01/Data"]
-script = ExtResource("4_3g63v")
-_damage = 15
-
-[node name="Character02" parent="Battle/CharacterContainer" instance=ExtResource("2_d5rbv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -2)
-
-[node name="Data" type="Node" parent="Battle/CharacterContainer/Character02"]
-script = ExtResource("3_bxs0c")
-_pressionLevelModifier = 1
-Hp = 15
-HpMax = 15
-Sp = 20
-SpMax = 20
-St = 2
-Ma = 5
-Ag = 74
-Co = 5
-Lu = 80
-ArmorDefense = 4
-
-[node name="MeleeAttack" type="Node" parent="Battle/CharacterContainer/Character02/Data"]
-script = ExtResource("4_3g63v")
-_damage = 15
-
-[node name="CharacterEnemy_00" parent="Battle/CharacterContainer" instance=ExtResource("2_d5rbv")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 2, 0, 2)
-
-[node name="Data" type="Node" parent="Battle/CharacterContainer/CharacterEnemy_00"]
-script = ExtResource("5_6dwid")
-Hp = 20
-HpMax = 20
-Sp = 40
-SpMax = 40
-IsEnemy = true
-St = 5
-Ma = 4
-Ag = 70
-Co = 3
-Lu = 53
-ArmorDefense = 2
-
-[node name="MeleeAttack" type="Node" parent="Battle/CharacterContainer/CharacterEnemy_00/Data"]
-script = ExtResource("4_3g63v")
-_damage = 10
-
-[node name="CharacterEnemy_01" parent="Battle/CharacterContainer" instance=ExtResource("2_d5rbv")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -1.43584, 0, 1.99205)
-
-[node name="Data" type="Node" parent="Battle/CharacterContainer/CharacterEnemy_01"]
-script = ExtResource("5_6dwid")
-Hp = 20
-HpMax = 20
-Sp = 50
-SpMax = 50
-IsEnemy = true
-St = 2
-Ma = 3
-Ag = 40
-Co = 2
-Lu = 67
-ArmorDefense = 5
-
-[node name="MeleeAttack" type="Node" parent="Battle/CharacterContainer/CharacterEnemy_01/Data"]
-script = ExtResource("4_3g63v")
-_damage = 12
-
-[node name="CharacterEnemy_02" parent="Battle/CharacterContainer" instance=ExtResource("2_d5rbv")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -7.97207, 0, 1.99205)
-
-[node name="Data" type="Node" parent="Battle/CharacterContainer/CharacterEnemy_02"]
-script = ExtResource("5_6dwid")
-Hp = 20
-HpMax = 20
-Sp = 50
-SpMax = 50
-IsEnemy = true
-St = 2
-Ma = 3
-Ag = 40
-Co = 2
-Lu = 67
-ArmorDefense = 5
-
-[node name="MeleeAttack" type="Node" parent="Battle/CharacterContainer/CharacterEnemy_02/Data"]
-script = ExtResource("4_3g63v")
-_damage = 12
 
 [node name="Stage" type="Node3D" parent="Battle"]
 
@@ -187,8 +63,149 @@ script = ExtResource("11_co8qo")
 _canSelect = true
 
 [node name="BattleStarter" type="Node" parent="Battle"]
+script = ExtResource("14_n0mil")
 
-[node name="CharacterContainer" type="Node3D" parent="Battle/BattleStarter"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
+[node name="EnemiesInLevel" type="Node" parent="Battle/BattleStarter"]
+
+[node name="Slime_00" parent="Battle/BattleStarter/EnemiesInLevel" instance=ExtResource("2_d5rbv")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -10, 0)
+visible = false
+
+[node name="Data" type="Node" parent="Battle/BattleStarter/EnemiesInLevel/Slime_00"]
+script = ExtResource("5_6dwid")
+_characterName = "Slime"
+Hp = 20
+HpMax = 20
+Sp = 50
+SpMax = 50
+IsEnemy = true
+St = 4
+Ma = 3
+Ag = 10
+Co = 2
+Lu = 3
+ArmorDefense = 5
+
+[node name="MeleeAttack" type="Node" parent="Battle/BattleStarter/EnemiesInLevel/Slime_00/Data"]
+script = ExtResource("4_3g63v")
+_damage = 12
+
+[node name="Slime_01" parent="Battle/BattleStarter/EnemiesInLevel" instance=ExtResource("2_d5rbv")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -10, 0)
+visible = false
+
+[node name="Data" type="Node" parent="Battle/BattleStarter/EnemiesInLevel/Slime_01"]
+script = ExtResource("5_6dwid")
+_characterName = "Slime"
+Hp = 20
+HpMax = 20
+Sp = 50
+SpMax = 50
+IsEnemy = true
+St = 4
+Ma = 3
+Ag = 10
+Co = 2
+Lu = 3
+ArmorDefense = 5
+
+[node name="MeleeAttack" type="Node" parent="Battle/BattleStarter/EnemiesInLevel/Slime_01/Data"]
+script = ExtResource("4_3g63v")
+_damage = 12
+
+[node name="Slime_02" parent="Battle/BattleStarter/EnemiesInLevel" instance=ExtResource("2_d5rbv")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -10, 0)
+visible = false
+
+[node name="Data" type="Node" parent="Battle/BattleStarter/EnemiesInLevel/Slime_02"]
+script = ExtResource("5_6dwid")
+_characterName = "Slime"
+Hp = 20
+HpMax = 20
+Sp = 50
+SpMax = 50
+IsEnemy = true
+St = 4
+Ma = 3
+Ag = 10
+Co = 2
+Lu = 3
+ArmorDefense = 5
+
+[node name="MeleeAttack" type="Node" parent="Battle/BattleStarter/EnemiesInLevel/Slime_02/Data"]
+script = ExtResource("4_3g63v")
+_damage = 12
+
+[node name="PartyMembers" type="Node" parent="Battle/BattleStarter"]
+
+[node name="Character00" parent="Battle/BattleStarter/PartyMembers" instance=ExtResource("2_d5rbv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Data" type="Node" parent="Battle/BattleStarter/PartyMembers/Character00"]
+script = ExtResource("3_aa8sn")
+_characterName = "Santi"
+_pressionLevelModifier = 1
+_pressionLevel = 1.0
+Hp = 45
+HpMax = 45
+Sp = 20
+SpMax = 20
+St = 8
+Ma = 7
+Ag = 9
+Co = 5
+Lu = 3
+ArmorDefense = 4
+
+[node name="MeleeAttack" type="Node" parent="Battle/BattleStarter/PartyMembers/Character00/Data"]
+script = ExtResource("4_3g63v")
+_damage = 15
+
+[node name="Character01" parent="Battle/BattleStarter/PartyMembers" instance=ExtResource("2_d5rbv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
+
+[node name="Data" type="Node" parent="Battle/BattleStarter/PartyMembers/Character01"]
+script = ExtResource("3_bxs0c")
+_characterName = "Santi2"
+_pressionLevel = 1.0
+HpMax = 15
+Sp = 20
+SpMax = 20
+St = 10
+Ma = 3
+Ag = 8
+Co = 5
+Lu = 4
+ArmorDefense = 4
+
+[node name="MeleeAttack" type="Node" parent="Battle/BattleStarter/PartyMembers/Character01/Data"]
+script = ExtResource("4_3g63v")
+_damage = 15
+
+[node name="Character02" parent="Battle/BattleStarter/PartyMembers" instance=ExtResource("2_d5rbv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -2)
+
+[node name="Data" type="Node" parent="Battle/BattleStarter/PartyMembers/Character02"]
+script = ExtResource("3_bxs0c")
+_characterName = "Santi3"
+_pressionLevelModifier = 1
+_pressionLevel = 1.0
+Hp = 47
+HpMax = 47
+Sp = 20
+SpMax = 20
+St = 2
+Ma = 10
+Ag = 6
+Co = 5
+Lu = 2
+ArmorDefense = 4
+
+[node name="MeleeAttack" type="Node" parent="Battle/BattleStarter/PartyMembers/Character02/Data"]
+script = ExtResource("4_3g63v")
+_damage = 15
+
+[node name="EnemyGroupInLevel" type="Node" parent="Battle/BattleStarter"]
+script = ExtResource("16_0tkll")
 
 [editable path="Battle/ManagerContainer/CharacterBattlePositionManager"]

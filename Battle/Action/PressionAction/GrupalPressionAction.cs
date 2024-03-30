@@ -13,6 +13,11 @@ public partial class GrupalPressionAction : BaseAction
         public bool isEnemy; 
     }
 
+    public override void _Ready()
+    {
+        base._Ready();
+    }
+
     public override string GetActionName()
     {
         return "Grupal Pression";
@@ -47,8 +52,6 @@ public partial class GrupalPressionAction : BaseAction
             InflictState inflictState = new KnockDown();
             inflictState.InflictCharacter(characterReceptor);
 
-            characterReceptor.DataContainer.Hp -= grupalDamage;
-
             OnAttackState(new AttackStateEventArgs{
                 receptor = characterReceptor,
                 damage = grupalDamage,
@@ -57,11 +60,14 @@ public partial class GrupalPressionAction : BaseAction
                 baseAction = this,
                 isPressionAttack = true
             });
+
+            characterReceptor.DataContainer.Hp -= grupalDamage;
         }
 
         OnGrupalPression?.Invoke(this, new OnGrupalPressionEventArgs{
             isEnemy = Character.DataContainer.IsEnemy
         });
+        
     }
 
     public override void EndingAction()

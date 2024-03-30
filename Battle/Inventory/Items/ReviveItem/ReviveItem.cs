@@ -1,23 +1,23 @@
 using Godot;
 using System;
 
-public partial class AppleItem : Item
+public partial class ReviveItem : Item
 {
-    private int _healingValue = 25;
+    [Export]
+    private int _percentageHealed;
 
     public override void _Ready()
     {
         ReceptorCriteriaList.Add(ReceptorCriteria.Ally);
-        ReceptorCriteriaList.Add(ReceptorCriteria.IsBelowMaxHpAndAlive);
-        ItemName = "Apple";
+        ReceptorCriteriaList.Add(ReceptorCriteria.Dead);
     }
 
     public override void UseItem(Character character)
     {
-        //character.DataContainer.Hp += 25;
+        int damage = Mathf.RoundToInt(-(character.DataContainer.HpMax * ((float)_percentageHealed / 100)));
         OnItemUsed(new ItemUsedEventArgs{
             receptor = character,
-            damage = _healingValue
+            damage = damage
         });
     }
 }

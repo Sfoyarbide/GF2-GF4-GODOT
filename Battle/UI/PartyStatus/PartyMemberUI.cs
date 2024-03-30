@@ -25,6 +25,7 @@ public partial class PartyMemberUI : Node
         _memberPressionLevelUI = GetNode<HSlider>("MemberPressionLevelUI");
     
         // Subcribing to events.
+        CharacterData.OnHpChanged += CharacterData_OnHpChanged;
         BaseAction.AttackState += BaseAction_AttackState;
     }
 
@@ -54,7 +55,33 @@ public partial class PartyMemberUI : Node
 
     private void BaseAction_AttackState(object sender, BaseAction.AttackStateEventArgs e)
     {
-        if(e.receptor != _partyMember)
+        if(e.receptor != _partyMember && e.current != _partyMember)
+        {
+            return;
+        }
+
+        if(!_isActive)
+        {
+            return;
+        }
+
+        if(_partyMember.DataContainer.Hp <= 0)
+        {
+            _deadTextUI.Show();
+        }
+        else
+        {
+            _deadTextUI.Hide();
+        }
+
+        _memberHpUI.Text = _partyMember.DataContainer.Hp.ToString() + "/" + _partyMember.DataContainer.HpMax.ToString();
+        _memberSpUI.Text = _partyMember.DataContainer.Sp.ToString() + "/" + _partyMember.DataContainer.SpMax.ToString();
+        _memberPressionLevelUI.Value = _partyMember.DataContainer.PressionLevel;
+    }
+
+    private void CharacterData_OnHpChanged(object sender, CharacterData.OnHpChangedEventArgs e)
+    {
+        if(e.character != _partyMember)
         {
             return;
         }

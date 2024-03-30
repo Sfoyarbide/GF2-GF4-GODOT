@@ -16,7 +16,10 @@ public partial class ItemTest : Item
 
     public override void UseItem(Character character)
     {
-        character.DataContainer.Hp += 15;
+        //character.DataContainer.Hp += 15;
+        OnItemUsed(new ItemUsedEventArgs{
+            damage = 15
+        });
     }
 
 }

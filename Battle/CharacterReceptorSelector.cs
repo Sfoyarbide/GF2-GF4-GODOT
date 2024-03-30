@@ -7,7 +7,8 @@ public enum ReceptorCriteria
     Enemy,
     Ally,
     Self,
-    IsBelowMaxHp
+    IsBelowMaxHpAndAlive,
+    Dead
 }
 
 public partial class CharacterReceptorSelector : Node3D
@@ -74,6 +75,25 @@ public partial class CharacterReceptorSelector : Node3D
 
             // Debug
             //GD.Print("Character Receptor Selected: " + _characterReceptorList[_receptorIndex] + ", Current Character: " + _battleDatabase.BattleManager.GetCurrentCharacter());
+        }
+    }
+
+    private bool MeetCriteria(Character sender, Character receptor, ReceptorCriteria receptorCriteria)
+    {
+        switch(receptorCriteria)
+        {
+            case ReceptorCriteria.Enemy:
+                return sender.DataContainer.IsEnemy != receptor.DataContainer.IsEnemy;
+            case ReceptorCriteria.Ally:
+                return sender.DataContainer.IsEnemy == receptor.DataContainer.IsEnemy;
+            case ReceptorCriteria.IsBelowMaxHpAndAlive:
+                return receptor.DataContainer.Hp < receptor.DataContainer.HpMax && receptor.DataContainer.Hp > 0;
+            case ReceptorCriteria.Dead:
+                return receptor.DataContainer.Hp <= 0;
+            case ReceptorCriteria.Self:
+                return sender == receptor;
+            default:
+                return false;
         }
     }
 
@@ -216,23 +236,6 @@ public partial class CharacterReceptorSelector : Node3D
                 receptorCritiriaList.Add(ReceptorCriteria.Enemy);
                 SetupSelectionPlayer(_currentCharacter, receptorCritiriaList);
                 break;
-        }
-    }
-
-    private bool MeetCriteria(Character sender, Character receptor, ReceptorCriteria receptorCriteria)
-    {
-        switch(receptorCriteria)
-        {
-            case ReceptorCriteria.Enemy:
-                return sender.DataContainer.IsEnemy != receptor.DataContainer.IsEnemy;
-            case ReceptorCriteria.Ally:
-                return sender.DataContainer.IsEnemy == receptor.DataContainer.IsEnemy;
-            case ReceptorCriteria.IsBelowMaxHp:
-                return receptor.DataContainer.Hp < receptor.DataContainer.HpMax;
-            case ReceptorCriteria.Self:
-                return sender == receptor;
-            default:
-                return false;
         }
     }
 

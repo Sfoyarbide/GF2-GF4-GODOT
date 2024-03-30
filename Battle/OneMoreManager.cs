@@ -43,6 +43,11 @@ public partial class OneMoreManager : Node
             return false;
         }
 
+        if(attackState.baseAction is ItemAction)
+        {
+            return false;
+        }
+
         if(attackState.receptor.DataContainer.InflictState is KnockDown)
         {
             return false;
