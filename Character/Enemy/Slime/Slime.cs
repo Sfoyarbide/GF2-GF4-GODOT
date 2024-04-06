@@ -1,30 +1,40 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 public partial class Slime : CharacterEnemy
 {
-    public override void Condicional()
+    public override void _Ready()
     {
-        
+        base._Ready();
     }
 
-    public override void Pattern()
+    protected override void Pattern()
     {
-        if(TurnEnemyPassed == 0)
+        switch(TurnEnemyPassed)
         {
-            DataContainer.SelectedAction = DataContainer.ActionList[0];
-            List<ReceptorCriteria> receptorCriteriaList = new List<ReceptorCriteria>();
-            receptorCriteriaList.Add(ReceptorCriteria.Enemy);
-            OnEnemySearchingReceptorList(new OnEnemySearchingReceptorEventArgs{
-                receptorCriteriaList = receptorCriteriaList,
-            });
+            case 0:
+                CurrentAttack = FindAttack("AttackDOWN");
+                break;
+            case 1:
+                CurrentAttack = FindAttack("AttackUP");
+                break;
+            case 2:
+                CurrentAttack = FindAttack("Fire");
+                break;
+            case 3:
+                CurrentAttack = RandomizeAttack();
+                break;
         }
+        OnEnemySearchingReceptorList();
+        TurnEnemyPassed++;
+        
+        CheckResetPattern(3);
     }
 
-    public override void Randomize()
+    protected override void OnFailedSelection(Attack attack)
     {
-        
+        CurrentAttack = FindAttack("MeleeAttack");
+        OnEnemySearchingReceptorList();
     }
 }

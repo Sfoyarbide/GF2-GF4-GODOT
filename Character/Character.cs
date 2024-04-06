@@ -41,9 +41,10 @@ public partial class Character : Node3D
         UpdateActionList();
 
         DataContainer.Hp = DataContainer.HpMax;
-        BattleDatabase battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
-        List<Skill> skills = battleDatabase.SkillDatabase.SkillList;
-        DataContainer.SkillList.AddRange(skills);
+        DataContainer.SkillNameList.Add("Fire");
+        DataContainer.SkillNameList.Add("Ice");
+        DataContainer.SkillNameList.Add("AttackUP");
+        DataContainer.SkillNameList.Add("AttackDOWN");
     }
 
     public void UpdateActionList()

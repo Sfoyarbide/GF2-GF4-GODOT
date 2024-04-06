@@ -44,10 +44,6 @@ public partial class MeleeAction : BaseAction
                 //inflictState = new KnockDown();
                 //inflictState.InflictCharacter(characterReceptor);
             }
-            else if(characterReceptor.DataContainer.IsElementStatusToAttackType(meleeAttack.AttackType, ElementStatus.Weakness) && !characterReceptor.DataContainer.IsDefending)
-            {
-                characterReceptor.DataContainer.AlreadyHitWeakness = true;
-            }
 
             // Checks if the receptor was defending, and cancels it.
             DefendAction.TryCancelDefend(characterReceptor);
@@ -59,7 +55,8 @@ public partial class MeleeAction : BaseAction
             isHit = isHit,
             damage = damage,
             attack = Character.DataContainer.MeleeAttack,
-            inflictState = inflictState
+            inflictState = inflictState,
+            baseAction = this
         });
 
         characterReceptor.DataContainer.Hp -= damage; 

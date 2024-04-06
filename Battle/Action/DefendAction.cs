@@ -33,6 +33,8 @@ public partial class DefendAction : BaseAction
         OnAttackState(new AttackStateEventArgs{
             damage = 0,
             isHit = false,
+            current = Character,
+            receptor = Character,
             baseAction = this
         });
 

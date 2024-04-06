@@ -43,7 +43,7 @@ public partial class SkillUI : Node
         _character = character;
         _skill = skill;
         _skillIconUI.Texture = skill.SkillIcon;
-        _skillNameUI.Text = skill.SkillName;
+        _skillNameUI.Text = skill.AttackName;
         _skillCostUI.Text = skill.Cost.ToString();
     }
 }

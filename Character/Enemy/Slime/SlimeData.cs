@@ -8,5 +8,6 @@ public partial class SlimeData : CharacterData
         base._Ready();
         CharacterName = "Slime";
         AttackElementStatusDictionary.Add(AttackTypes.Strike, ElementStatus.Weakness);
+        AttackElementStatusDictionary.Add(AttackTypes.Fire, ElementStatus.Weakness);
     }
 }

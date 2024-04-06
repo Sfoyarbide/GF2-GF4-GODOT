@@ -15,7 +15,7 @@ public partial class SkillAction : BaseAction
         public Skill skill;
     }
 
-    public Skill CurrentSkill { get {return _currentSkill; }}
+    public Skill CurrentSkill { get {return _currentSkill; } set {_currentSkill = value;}}
 
     public override void _Ready()
     {
@@ -49,10 +49,6 @@ public partial class SkillAction : BaseAction
         if(isHit)
         {
             skill.UseSkill(Character, characterReceptor, out damage); 
-            if(characterReceptor.DataContainer.IsElementStatusToAttackType(skill.AttackType, ElementStatus.Weakness) && !characterReceptor.DataContainer.IsDefending)
-            {
-                characterReceptor.DataContainer.AlreadyHitWeakness = true;
-            }
         }
 
         OnAttackState(new AttackStateEventArgs{
@@ -69,7 +65,7 @@ public partial class SkillAction : BaseAction
 
     private void ExecuteSkill(Skill skill)
     {
-        if(skill.IsAllReceiveDamage)
+        if(skill.AllReceptors)
         {
             foreach(Character characterReceptor in _characterReceptorList)
             {

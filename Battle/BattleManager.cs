@@ -29,6 +29,7 @@ public partial class BattleManager : Node3D
     {
         public List<Character> partyList;
         public List<Character> enemyList;
+        public List<Character> characterTurnList;
     }
     public class OnBattleEndEventArgs : EventArgs
     {
@@ -85,6 +86,7 @@ public partial class BattleManager : Node3D
         BaseAction.CannotTakeAction += BaseAction_CannotTakeAction;
         CharacterData.OnDie += CharacterData_OnDie;
         KnockDown.CurrentCharacterKnockdown += KnockDown_CurrentCharacterKnockdown;
+        AIManager.OnAIReadyToDoAction += AIManager_OnAIReadyToDoAction;
 
         // TEMP
         /*
@@ -225,7 +227,8 @@ public partial class BattleManager : Node3D
 
         OnBattleStart?.Invoke(this, new OnBattleStartEventArgs{
             partyList = _allyList,
-            enemyList = _enemyList
+            enemyList = _enemyList,
+            characterTurnList = _characterTurnList
         });
 
         OnCurrentCharacterChanged?.Invoke(this, new OnCurrentCharacterChangedEventArgs{
@@ -257,6 +260,10 @@ public partial class BattleManager : Node3D
 
     public Character GetCurrentCharacter()
     {
+        if(!_inCombat)
+        {
+            return null;
+        }
         return _characterTurnList[0];
     }
 
@@ -268,12 +275,30 @@ public partial class BattleManager : Node3D
             OnBattleEnd?.Invoke(this, new OnBattleEndEventArgs{
                 win = true
             });
+
+            _inCombat = false;
+            _characterTurnList.Clear();
         }
     }
 
     public void UpdateAllyList()
     {
         _allyList = CombatCalculations.ObtainCharacterListByIsEnemy(_characterTurnList, false);
+    }
+
+    private void UpdateSelectedActionByAttack(Character character, Attack attack)
+    {
+        switch (attack)
+        {
+            case MeleeAttack:
+                character.DataContainer.SelectedAction = character.DataContainer.ActionList[0];
+                break;
+            case Skill:
+                character.DataContainer.SelectedAction = character.DataContainer.ActionList[1];
+                SkillAction skillAction = (SkillAction)character.DataContainer.ActionList[1];
+                skillAction.CurrentSkill = (Skill)attack;
+                break;
+        }
     }
 
     private void BaseAction_CannotTakeAction(object sender, EventArgs e)
@@ -296,6 +321,7 @@ public partial class BattleManager : Node3D
         if(e.character.DataContainer.IsEnemy)
         {
             RemoveCharacterInTurns(_characterTurnList.FindIndex(c => c.DataContainer.Character == e.character));
+            e.character.DataContainer.SkillList.Clear();
         }
     }
 
@@ -304,6 +330,14 @@ public partial class BattleManager : Node3D
     {
         _allyList = e.partyMembers;
         _enemyList = e.enemyMembers;
+
         SetupBattle(e.characterTurnList);
+    }
+
+    // The event that sends the execution for the AI.
+    private void AIManager_OnAIReadyToDoAction(object sender, AIManager.OnAIReadyToDoActionEventArgs e)
+    {
+        UpdateSelectedActionByAttack(GetCurrentCharacter(), e.attack);
+        ExecuteAction(e.receptorList);
     }
 }

@@ -1,19 +1,21 @@
-[gd_scene load_steps=17 format=3 uid="uid://srcvtkfedf56"]
+[gd_scene load_steps=19 format=3 uid="uid://srcvtkfedf56"]
 
 [ext_resource type="PackedScene" uid="uid://r4qrwcjt7ph0" path="res://Battle/BattleManager.tscn" id="1_gteq7"]
 [ext_resource type="PackedScene" uid="uid://bd80y56s7uw3v" path="res://Character/Character.tscn" id="2_d5rbv"]
 [ext_resource type="Script" path="res://Character/Ally/CharacterAlly.cs" id="3_aa8sn"]
 [ext_resource type="Script" path="res://Character/CharacterData.cs" id="3_bxs0c"]
 [ext_resource type="Script" path="res://Battle/Attack/Melee/MeleeAttack.cs" id="4_3g63v"]
-[ext_resource type="PackedScene" uid="uid://0dp5kn1r6sid" path="res://Battle/CharacterReceptorSelector.tscn" id="4_ickuk"]
+[ext_resource type="PackedScene" uid="uid://0dp5kn1r6sid" path="res://Battle/ReceptorSelection/CharacterReceptorSelector.tscn" id="4_ickuk"]
 [ext_resource type="Script" path="res://Character/Enemy/Slime/SlimeData.cs" id="5_6dwid"]
 [ext_resource type="PackedScene" uid="uid://0xve1xol8ety" path="res://Battle/UI/AttackStatus/AttackStatusUIManager.tscn" id="7_1eth0"]
 [ext_resource type="PackedScene" uid="uid://s6l63avtc468" path="res://Levels/brain_camera.tscn" id="7_jdvbv"]
 [ext_resource type="Script" path="res://Battle/BattleCameraManager.cs" id="8_q6j7v"]
+[ext_resource type="Script" path="res://Battle/AI/AIManager.cs" id="9_aiib7"]
 [ext_resource type="PackedScene" uid="uid://knol63we4wn7" path="res://Battle/UI/BattleUI.tscn" id="9_m5fxk"]
 [ext_resource type="Script" path="res://Battle/OneMoreManager.cs" id="9_okxvm"]
 [ext_resource type="Script" path="res://Battle/PressionManager.cs" id="11_co8qo"]
 [ext_resource type="PackedScene" uid="uid://vsjgmbxbpayo" path="res://Battle/Position/CharacterBattlePositionManager.tscn" id="13_ps524"]
+[ext_resource type="Script" path="res://Character/Enemy/Slime/Slime.cs" id="13_xv711"]
 [ext_resource type="Script" path="res://Battle/Starter/BattleStarter.cs" id="14_n0mil"]
 [ext_resource type="Script" path="res://Battle/Starter/EnemyGroupInLevel1.cs" id="16_0tkll"]
 
@@ -59,6 +61,9 @@ script = ExtResource("11_co8qo")
 
 [node name="CharacterBattlePositionManager" parent="Battle/ManagerContainer" instance=ExtResource("13_ps524")]
 
+[node name="AIManager" type="Node" parent="Battle/ManagerContainer"]
+script = ExtResource("9_aiib7")
+
 [node name="BattleUI" parent="Battle" instance=ExtResource("9_m5fxk")]
 _canSelect = true
 
@@ -70,6 +75,8 @@ script = ExtResource("14_n0mil")
 [node name="Slime_00" parent="Battle/BattleStarter/EnemiesInLevel" instance=ExtResource("2_d5rbv")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -10, 0)
 visible = false
+script = ExtResource("13_xv711")
+_enemyType = 0
 
 [node name="Data" type="Node" parent="Battle/BattleStarter/EnemiesInLevel/Slime_00"]
 script = ExtResource("5_6dwid")
@@ -88,11 +95,14 @@ ArmorDefense = 5
 
 [node name="MeleeAttack" type="Node" parent="Battle/BattleStarter/EnemiesInLevel/Slime_00/Data"]
 script = ExtResource("4_3g63v")
+_attackName = "MeleeAttack"
 _damage = 12
 
 [node name="Slime_01" parent="Battle/BattleStarter/EnemiesInLevel" instance=ExtResource("2_d5rbv")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -10, 0)
 visible = false
+script = ExtResource("13_xv711")
+_enemyType = 0
 
 [node name="Data" type="Node" parent="Battle/BattleStarter/EnemiesInLevel/Slime_01"]
 script = ExtResource("5_6dwid")
@@ -111,11 +121,14 @@ ArmorDefense = 5
 
 [node name="MeleeAttack" type="Node" parent="Battle/BattleStarter/EnemiesInLevel/Slime_01/Data"]
 script = ExtResource("4_3g63v")
+_attackName = "MeleeAttack"
 _damage = 12
 
 [node name="Slime_02" parent="Battle/BattleStarter/EnemiesInLevel" instance=ExtResource("2_d5rbv")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -10, 0)
 visible = false
+script = ExtResource("13_xv711")
+_enemyType = 0
 
 [node name="Data" type="Node" parent="Battle/BattleStarter/EnemiesInLevel/Slime_02"]
 script = ExtResource("5_6dwid")
@@ -134,6 +147,7 @@ ArmorDefense = 5
 
 [node name="MeleeAttack" type="Node" parent="Battle/BattleStarter/EnemiesInLevel/Slime_02/Data"]
 script = ExtResource("4_3g63v")
+_attackName = "MeleeAttack"
 _damage = 12
 
 [node name="PartyMembers" type="Node" parent="Battle/BattleStarter"]

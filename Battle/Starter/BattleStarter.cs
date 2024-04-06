@@ -42,10 +42,6 @@ public partial class BattleStarter : Node
         }
 
         _enemyGroupInLevel = GetNode<EnemyGroupInLevel>("EnemyGroupInLevel");
-
-        /*
-        
-        */
     }
 
     public override void _Process(double delta)

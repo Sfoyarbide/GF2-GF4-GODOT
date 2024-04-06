@@ -1,12 +1,12 @@
 [gd_scene load_steps=19 format=3 uid="uid://cwp8yp0vkt7hr"]
 
-[ext_resource type="Script" path="res://Battle/BattleDatabase.cs" id="1_p1jym"]
+[ext_resource type="Script" path="res://Battle/Database/BattleDatabase.cs" id="1_p1jym"]
 [ext_resource type="Script" path="res://Battle/Inventory/Inventory.cs" id="2_feauj"]
 [ext_resource type="Script" path="res://Battle/Inventory/Items/Apple/AppleItem.cs" id="2_usa7a"]
 [ext_resource type="Texture2D" uid="uid://dmhre602fkf8e" path="res://Battle/Inventory/Items/Apple/Apple.png" id="3_tgd16"]
 [ext_resource type="Script" path="res://Battle/Inventory/Items/ItemTest.cs" id="4_avcat"]
 [ext_resource type="Script" path="res://Battle/Inventory/Items/ReviveItem/ReviveItem.cs" id="5_mm10b"]
-[ext_resource type="Script" path="res://Battle/Attack/Skills/SkillDatabase.cs" id="6_e5h6b"]
+[ext_resource type="Script" path="res://Battle/Database/SkillDatabase.cs" id="6_e5h6b"]
 [ext_resource type="PackedScene" uid="uid://khfrcrk04ldo" path="res://Battle/Attack/Skills/AttackSkills/Fire/Fire.tscn" id="7_bcp4u"]
 [ext_resource type="Script" path="res://Battle/Attack/Skills/HealSkills/Heal.cs" id="8_aae14"]
 [ext_resource type="Script" path="res://Battle/Attack/Skills/AttackSkills/Ice/Ice.cs" id="8_j7wjd"]
@@ -84,73 +84,79 @@ _itemQuantity = 1
 script = ExtResource("6_e5h6b")
 
 [node name="Fire" parent="SkillDatabase" instance=ExtResource("7_bcp4u")]
+_attackName = "Fire"
 _damage = 10
 _cost = 2
 _attackType = 3
 
 [node name="AllFire" parent="SkillDatabase" instance=ExtResource("7_bcp4u")]
-_isAllReceiveDamage = true
+_attackName = "AllFire"
 _damage = 10
 _cost = 5
+_allReceptors = true
 _attackType = 3
 
 [node name="Ice" type="Node" parent="SkillDatabase"]
 script = ExtResource("8_j7wjd")
-_skillName = "Ice"
 _skillType = 1
+_attackName = "Ice"
 _damage = 20
 _cost = 21
 _attackType = 4
 
 [node name="Heal" type="Node" parent="SkillDatabase"]
 script = ExtResource("8_aae14")
-_skillName = "Heal"
 _skillType = 2
-_damage = 5
+_attackName = "Heal"
+_damage = 10
+_cost = 5
 _attackType = 7
 
 [node name="Revive25" type="Node" parent="SkillDatabase"]
 script = ExtResource("10_lxib7")
-_skillName = "Revive25"
+_attackName = "Revive25"
 _damage = 25
 _cost = 20
 _attackType = 7
 
 [node name="DefenseUP" type="Node" parent="SkillDatabase"]
 script = ExtResource("10_wsbpb")
-_skillName = "DefenseUP"
 _skillType = 4
+_attackName = "DefenseUP"
+_attackType = 8
 
 [node name="DefenseDOWN" type="Node" parent="SkillDatabase"]
 script = ExtResource("11_oee7a")
-_skillName = "DefenseDOWN"
 _skillType = 7
+_attackName = "DefenseDOWN"
+_attackType = 7
 
 [node name="AttackDOWN" type="Node" parent="SkillDatabase"]
 script = ExtResource("12_44iai")
-_skillName = "AttackDOWN"
 _skillType = 6
+_attackName = "AttackDOWN"
 _attackType = 8
 
 [node name="AttackUP" type="Node" parent="SkillDatabase"]
 script = ExtResource("10_6ts32")
-_skillName = "AttackUP"
 _skillType = 3
+_attackName = "AttackUP"
 _attackType = 7
 
 [node name="AgilityUP" type="Node" parent="SkillDatabase"]
 script = ExtResource("14_u2arf")
-_skillName = "AgilityUP"
 _skillType = 5
+_attackName = "AgilityUP"
 _attackType = 8
 
 [node name="AgilityDOWN" type="Node" parent="SkillDatabase"]
 script = ExtResource("15_rgbar")
-_skillName = "AgilityDOWN"
 _skillType = 8
+_attackName = "AgilityDOWN"
 _attackType = 8
 
 [node name="Poison" type="Node" parent="SkillDatabase"]
 script = ExtResource("16_7aisu")
-_skillName = "Poison"
+_attackName = "Poison"
+_cost = 5
 _attackType = 8

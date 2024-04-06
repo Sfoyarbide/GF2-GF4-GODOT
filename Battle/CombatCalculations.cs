@@ -271,4 +271,31 @@ public partial class CombatCalculations
         }
         return newIndexValue;
     }
+
+    public static Character GetLowestHpCharacterInCharacterList(List<Character> characterList)
+    {
+        Character characterWithLowestHp = characterList[0];
+        int lowestHp = characterList[0].DataContainer.Hp;
+
+        foreach(Character character in characterList)
+        {
+            int newHp = character.DataContainer.Hp;
+            if(newHp < lowestHp)
+            {
+                lowestHp = newHp;
+                characterWithLowestHp = character;
+            }
+        }
+
+        return characterWithLowestHp;
+    }
+
+    public static Character GetRandomCharacterInCharacterList(List<Character> characterList)
+    {
+        int randomIndex = GD.RandRange(0, characterList.Count-1);
+        
+        Character randomCharacter = characterList[randomIndex];
+
+        return randomCharacter;
+    }
 }

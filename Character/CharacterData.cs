@@ -25,6 +25,7 @@ public partial class CharacterData : Node
     private int _lu;
 
     private List<BaseAction> _actionList = new List<BaseAction>();
+    private List<string> _skillNameList = new List<string>();
     private List<Skill> _skillList = new List<Skill>();
     private BaseAction _selectedAction;
     [Export]
@@ -45,7 +46,7 @@ public partial class CharacterData : Node
 
     // Constant vars.
     private Dictionary<AttackTypes, ElementStatus> _attackElementStatusDictionary = new Dictionary<AttackTypes, ElementStatus>();
-    private Dictionary<int, Skill> _skillGrantByLevel = new Dictionary<int, Skill>();
+    private Dictionary<int, string> _skillGrantByLevel = new Dictionary<int, string>();
     private InflictStates _individualPressionInflictStateType;
 
     private Attack _meleeAttack;
@@ -53,6 +54,9 @@ public partial class CharacterData : Node
     private List<ModifierStatsInflict> _modifierStatsInflictList = new List<ModifierStatsInflict>();
     private InflictState _inflictState;
 
+    // Events.
+
+    public static event EventHandler<CharacterDataEventArgs> OnRevive;
     public static event EventHandler<CharacterDataEventArgs> OnDie;
     public static event EventHandler<OnHpChangedEventArgs> OnHpChanged;
 
@@ -90,6 +94,13 @@ public partial class CharacterData : Node
         set 
         {
             int previousHp = _hp;
+            if(previousHp <= 0 && _hp + previousHp > 0)
+            {
+                OnRevive?.Invoke(this, new CharacterDataEventArgs{
+                    character = Character
+                });
+            }
+
             _hp = value;
 
             if(_hp > HpMax)
@@ -149,10 +160,11 @@ public partial class CharacterData : Node
 
     
     public List<BaseAction> ActionList {get {return _actionList; } set {_actionList = value; }}
-    public List<Skill> SkillList {get {return _skillList; } set {_skillList = value; }}
+    public List<string> SkillNameList {get {return _skillNameList; } set {_skillNameList = value; }}
+    public List<Skill> SkillList { get {return _skillList;} set {_skillList = value;} }
 
     public Dictionary<AttackTypes, ElementStatus> AttackElementStatusDictionary  {get {return _attackElementStatusDictionary;} set {_attackElementStatusDictionary = value;}}
-    public Dictionary<int, Skill> SkillGrantByLevel { get {return _skillGrantByLevel; } }
+    public Dictionary<int, string> SkillGrantByLevel { get {return _skillGrantByLevel; } }
 
     public List<ModifierStatsInflict> ModifierStatsInflictList {get {return _modifierStatsInflictList;}}
 

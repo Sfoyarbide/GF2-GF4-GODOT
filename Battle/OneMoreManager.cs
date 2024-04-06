@@ -17,7 +17,8 @@ public partial class OneMoreManager : Node
         _isOneMore.Clear();
 
         bool isOneMore = IsOneMore(e);
-        if(isOneMore == true)
+
+        if(isOneMore == true || !e.receptor.DataContainer.IsDefending)
         {
             e.receptor.DataContainer.AlreadyHitWeakness = true;
         }
@@ -38,7 +39,7 @@ public partial class OneMoreManager : Node
             return false;
         }
 
-        if(attackState.receptor.DataContainer.AlreadyHitWeakness == true)
+        if(attackState.receptor.DataContainer.AlreadyHitWeakness)
         {
             return false;
         }
