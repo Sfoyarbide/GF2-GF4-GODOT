@@ -13,6 +13,5 @@ public partial class ReviveSkill : Skill
     {
         // Based on percentage.
         damage = Mathf.RoundToInt(-(receptor.DataContainer.HpMax * ((float)Damage / 100)));
-        GD.Print(Damage);
     }
 }

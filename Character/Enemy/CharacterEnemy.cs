@@ -16,6 +16,8 @@ public abstract partial class CharacterEnemy : Character
 
     private int _turnEnemyPassed = 0;
 
+    private BattleRegister _battleRegister;
+
     // Events.
     public static event EventHandler<OnEnemySearchingReceptorEventArgs> EnemySearchingReceptorList;
     public class OnEnemySearchingReceptorEventArgs : EventArgs
@@ -28,12 +30,14 @@ public abstract partial class CharacterEnemy : Character
     public EnemyType EnemyType { get {return _enemyType; } set {_enemyType = value;}}
     public Attack CurrentAttack { get {return _currentAttack; } set {_currentAttack = value;}}
     public List<Attack> AttackList = new List<Attack>();
+    public BattleRegister BattleRegister { get {return _battleRegister;} set {_battleRegister = value;}}
     public int TurnEnemyPassed { get {return _turnEnemyPassed; } set {_turnEnemyPassed = value;}}
 
     public override void _Ready()
     {
         // Finding nodes.
         base._Ready();
+        _battleRegister = GetTree().Root.GetNode<BattleRegister>("BattleRegister");
 
         // Subcribing to events.
         BattleManager.OnBattleStart += BattleManager_OnBattleStart;

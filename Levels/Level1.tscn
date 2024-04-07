@@ -106,7 +106,7 @@ _enemyType = 0
 
 [node name="Data" type="Node" parent="Battle/BattleStarter/EnemiesInLevel/Slime_01"]
 script = ExtResource("5_6dwid")
-_characterName = "Slime"
+_characterName = "Slime1"
 Hp = 20
 HpMax = 20
 Sp = 50
@@ -132,7 +132,7 @@ _enemyType = 0
 
 [node name="Data" type="Node" parent="Battle/BattleStarter/EnemiesInLevel/Slime_02"]
 script = ExtResource("5_6dwid")
-_characterName = "Slime"
+_characterName = "Slime2"
 Hp = 20
 HpMax = 20
 Sp = 50

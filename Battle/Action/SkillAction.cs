@@ -25,7 +25,7 @@ public partial class SkillAction : BaseAction
 
     private void Skill(Character characterReceptor, Skill skill)
     {  
-        bool isHit = CombatCalculations.IsHitCalculation(Character, characterReceptor);
+        bool isHit = false;
         Character.DataContainer.Sp -= skill.Cost;
         
         int damage = 0;
@@ -44,6 +44,11 @@ public partial class SkillAction : BaseAction
                 break;
             default:
                 break;
+        }
+
+        if(!isHit)
+        {
+            isHit = CombatCalculations.IsHitCalculation(Character, characterReceptor);
         }
 
         if(isHit)
@@ -107,6 +112,7 @@ public partial class SkillAction : BaseAction
 
         _characterReceptorList.Clear();
         _characterReceptorList = characterReceptorList;
+
         OnActionComplete = onActionComplete;
         ExecuteSkill(_currentSkill);
 

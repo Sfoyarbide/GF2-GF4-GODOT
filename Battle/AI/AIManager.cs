@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 public partial class AIManager : Node
@@ -19,7 +20,7 @@ public partial class AIManager : Node
     {
         // Subcribing to events. 
         BaseAction.AttackState += BaseAction_AttackState;
-        BattleManager.OnBattleStart += BattleManager_OnBattleStart;
+        BattleStarter.OnBattleCharacterSetupFinished += BattleStarter_OnBattleCharacterSetupFinished;
         BattleManager.OnCurrentCharacterChanged += BattleManager_OnCurrentCharacterChanged;
         CharacterReceptorSelector.OnEnemySearchingReceptorListReady += CharacterReceptorSelector_OnEnemySearchingReceptorListReady;
         CharacterData.OnDie += CharacterData_OnDie;
@@ -27,6 +28,7 @@ public partial class AIManager : Node
     }
 
     // The function that updates the priority/value of the characters inside the dictionary.
+
     private void UpdateCharacterInValueDictionary(Character sender, Character receptor, int damage)
     {
         if(sender is not CharacterEnemy)
@@ -68,68 +70,22 @@ public partial class AIManager : Node
 
         Character receptor = null;
 
-        if(attack.AttackType != AttackTypes.Heal)
+        switch(attack)
         {
-            switch(_currentCharacter.EnemyType)
-            {
-                case EnemyType.HighAgresive:
-                    receptor = GetHighestValueCharacter(characterReceptorList);
-                    break;
-                case EnemyType.MidAgresive:
-                    receptor = CombatCalculations.GetRandomCharacterInCharacterList(characterReceptorList);
-                    break;
-                case EnemyType.LowAgresive:
-                    receptor = GetLowestValueCharacter(characterReceptorList);
-                    break;
-            }
+            case ModifierSkill modifierSkill:
+                receptor = SelectionBasedOnModifierSkill(modifierSkill, characterReceptorList);
+                break;
+            case HealSkill:
+                receptor = GetLowestValueCharacter(characterReceptorList);
+                break;
+            default:
+                receptor = SelectionBasedOnAgresive(attack, characterReceptorList);
+                break;
         }
-        else if(attack is ModifierSkill modifierSkill)
-        {
-            SelectionBasedOnModifierSkill(modifierSkill, characterReceptorList);
-        }
-        else if(attack is HealSkill)
-        {
-            // Means that is healing.
-            receptor = GetLowestValueCharacter(characterReceptorList);
-        }
-
-        GD.Print(receptor.DataContainer.CharacterName == "Santi");
 
         finalReceptorList.Add(receptor);
 
         return finalReceptorList;
-    }
-
-    private Character GetLowestValueCharacter(List<Character> characterReceptorList)
-    {
-        float currentValue = 0;
-        Character lowestCharacter = null; 
-        foreach(Character character in characterReceptorList)
-        {
-            float value = _characterValueDictionary[character];
-            if(value < currentValue)
-            {
-                lowestCharacter = character;
-                currentValue = value;
-            }
-        }
-        return lowestCharacter;
-    }
-
-    private Character GetHighestValueCharacter(List<Character> characterReceptorList)
-    {
-        float currentValue = 0;
-        Character highestCharacter = null; 
-        foreach(Character character in characterReceptorList)
-        {
-            float value = _characterValueDictionary[character];
-            if(value > currentValue)
-            {
-                highestCharacter = character;
-                currentValue = value;
-            }
-        }
-        return highestCharacter;
     }
 
     private Character SelectionBasedOnModifierSkill(ModifierSkill modifierSkill, List<Character> characterReceptorList)
@@ -170,12 +126,62 @@ public partial class AIManager : Node
         return receptor;
     }
 
+    private Character SelectionBasedOnAgresive(Attack attack, List<Character> characterReceptorList)
+    {
+        Character receptor = null;
+        switch(_currentCharacter.EnemyType)
+        {
+            case EnemyType.HighAgresive:
+                receptor = GetHighestValueCharacter(characterReceptorList);
+                break;
+            case EnemyType.MidAgresive:
+                receptor = CombatCalculations.GetRandomCharacterInCharacterList(characterReceptorList);
+                break;
+            case EnemyType.LowAgresive:
+                receptor = GetLowestValueCharacter(characterReceptorList);
+                break;
+        }
+        return receptor;
+    }
+
+    private Character GetLowestValueCharacter(List<Character> characterReceptorList)
+    {
+        float currentValue = 9999;
+        Character lowestCharacter = null; 
+        foreach(Character character in characterReceptorList)
+        {
+            float value = _characterValueDictionary[character];
+            if(value < currentValue)
+            {
+                lowestCharacter = character;
+                currentValue = value;
+            }
+        }
+        return lowestCharacter;
+    }
+
+    private Character GetHighestValueCharacter(List<Character> characterReceptorList)
+    {
+        float currentValue = -9999;
+        Character highestCharacter = null; 
+        foreach(Character character in characterReceptorList)
+        {
+            float value = _characterValueDictionary[character];
+            if(value > currentValue)
+            {
+                highestCharacter = character;
+                currentValue = value;
+            }
+        }
+        return highestCharacter;
+    }
+
     private void BaseAction_AttackState(object sender, BaseAction.AttackStateEventArgs e)
     {
         UpdateCharacterInValueDictionary(e.current, e.receptor, e.damage);
     }
 
-    private void BattleManager_OnBattleStart(object sender, BattleManager.OnBattleStartEventArgs e)
+    private void BattleStarter_OnBattleCharacterSetupFinished(object sender, BattleStarter.OnBattleCharacterSetupFinishedEventArgs e)
     {
         foreach(Character character in e.characterTurnList)
         {
@@ -203,7 +209,6 @@ public partial class AIManager : Node
 
     private void CharacterReceptorSelector_OnEnemySearchingReceptorListReady(object sender, CharacterReceptorSelector.OnEnemySearchingReceptorListReadyEventArgs e)
     {
-        GD.Print(e.characterReceptorList.Find(e => e.DataContainer.CharacterName == "Santi"));
         List<Character> characterReceptorList = GetReceptorListAI(e.attack, e.characterReceptorList);
         OnAIReadyToDoAction(this, new OnAIReadyToDoActionEventArgs{
             attack = e.attack,

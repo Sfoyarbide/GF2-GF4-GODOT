@@ -14,10 +14,24 @@ public partial class Slime : CharacterEnemy
         switch(TurnEnemyPassed)
         {
             case 0:
-                CurrentAttack = FindAttack("AttackDOWN");
+                if(!BattleRegister.QuerryAttackState<AttackUPSkill>(5, true))
+                {
+                    CurrentAttack = FindAttack("AttackUP");
+                }
+                else
+                {
+                    CurrentAttack = FindAttack("MeleeAttack");
+                }
                 break;
             case 1:
-                CurrentAttack = FindAttack("AttackUP");
+                if(!BattleRegister.QuerryAttackState<AttackDOWNSkill>(5, true))
+                {
+                    CurrentAttack = FindAttack("AttackDOWN");
+                }
+                else
+                {
+                    CurrentAttack = FindAttack("MeleeAttack");
+                }
                 break;
             case 2:
                 CurrentAttack = FindAttack("Fire");

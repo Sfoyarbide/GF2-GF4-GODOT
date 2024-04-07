@@ -39,7 +39,6 @@ public partial class DefendAction : BaseAction
         });
 
         EndingAction();
-        GD.Print("Action: " + GetActionName() + ", Defend Status: true, ArmorDefense: " + armorDefense);
     }
 
     public static void TryCancelDefend(Character characterReceptor)
@@ -54,8 +53,6 @@ public partial class DefendAction : BaseAction
             OnCancelDefend?.Invoke(characterReceptor, new OnDefendEventArgs{
                 character = characterReceptor
             });
-
-            GD.Print("Action: DefendAction" + ", Defend Status: false, ArmorDefense: " + armorDefense);
         }
     }
 

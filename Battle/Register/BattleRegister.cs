@@ -11,13 +11,8 @@ public partial class BattleRegister : Node
     {
         // Subcribing to events.
         BaseAction.AttackState += BaseAction_AttackState;
+        BattleManager.OnBattleEnd += BattleManager_OnBattleEnd;
     }
-
-    private void BaseAction_AttackState(object sender, BaseAction.AttackStateEventArgs e)
-    {
-        RegisterAttackState(e);
-    }
-
     private void RegisterAttackState(BaseAction.AttackStateEventArgs attackState)
     {
         GetAttackStateList(attackState.current.DataContainer.IsEnemy).Add(attackState);
@@ -35,18 +30,41 @@ public partial class BattleRegister : Node
         }
     }
 
-    private bool QuerryAttackState<T>(int rewindedTurn, bool isEnemy)
+    public bool QuerryAttackState<T>(int rewindedTurn, bool isEnemy) where T : Attack
     {
         List<BaseAction.AttackStateEventArgs> attackStateList = GetAttackStateList(isEnemy);
-    
-        for(int x = attackStateList.Count; x > rewindedTurn; x--)
+
+        int condicionToRewinded = 0;
+
+        if(attackStateList.Count - 1 < rewindedTurn)
+        {
+            condicionToRewinded = 0;
+        }
+        else
+        {
+            condicionToRewinded = attackStateList.Count - rewindedTurn - 1;
+        }
+
+        for(int x = attackStateList.Count - 1; x >= condicionToRewinded; x--)
         {
             if(attackStateList[x].attack is T)
             {   
+                GD.Print(attackStateList[x].attack.AttackName + "is: t");
                 return true;
             }
         }
 
         return false;
+    }
+
+    private void BaseAction_AttackState(object sender, BaseAction.AttackStateEventArgs e)
+    {
+        RegisterAttackState(e);
+    }
+
+    private void BattleManager_OnBattleEnd(object sender, BattleManager.OnBattleEndEventArgs e)
+    {
+        _attackEnemiesStatesList.Clear();
+        _attackPartyStatesList.Clear();
     }
 }

@@ -121,19 +121,19 @@ _attackType = 7
 
 [node name="DefenseUP" type="Node" parent="SkillDatabase"]
 script = ExtResource("10_wsbpb")
-_skillType = 4
+_skillType = 3
 _attackName = "DefenseUP"
 _attackType = 8
 
 [node name="DefenseDOWN" type="Node" parent="SkillDatabase"]
 script = ExtResource("11_oee7a")
-_skillType = 7
+_skillType = 4
 _attackName = "DefenseDOWN"
-_attackType = 7
+_attackType = 8
 
 [node name="AttackDOWN" type="Node" parent="SkillDatabase"]
 script = ExtResource("12_44iai")
-_skillType = 6
+_skillType = 4
 _attackName = "AttackDOWN"
 _attackType = 8
 
@@ -141,17 +141,17 @@ _attackType = 8
 script = ExtResource("10_6ts32")
 _skillType = 3
 _attackName = "AttackUP"
-_attackType = 7
+_attackType = 8
 
 [node name="AgilityUP" type="Node" parent="SkillDatabase"]
 script = ExtResource("14_u2arf")
-_skillType = 5
+_skillType = 3
 _attackName = "AgilityUP"
 _attackType = 8
 
 [node name="AgilityDOWN" type="Node" parent="SkillDatabase"]
 script = ExtResource("15_rgbar")
-_skillType = 8
+_skillType = 4
 _attackName = "AgilityDOWN"
 _attackType = 8
 

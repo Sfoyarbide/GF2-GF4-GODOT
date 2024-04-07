@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 BattleDatabase="*res://Battle/Database/BattleDatabase.tscn"
+BattleRegister="*res://Battle/Register/BattleRegister.cs"
 
 [dotnet]
 
