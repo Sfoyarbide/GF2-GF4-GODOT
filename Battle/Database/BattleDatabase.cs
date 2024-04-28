@@ -31,8 +31,8 @@ public partial class BattleDatabase : Node
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-    	_battleManager = GetTree().Root.GetNode<BattleManager>("Level1/Battle");	
-		_characterReceptorSelector = GetTree().Root.GetNode<CharacterReceptorSelector>("Level1/Battle/ManagerContainer/CharacterReceptorSelector");	
+    	_battleManager = GetTree().Root.GetNodeOrNull<BattleManager>("Level1/Battle");	
+		_characterReceptorSelector = GetTree().Root.GetNodeOrNull<CharacterReceptorSelector>("Level1/Battle/ManagerContainer/CharacterReceptorSelector");	
 		_inventory = GetNode<Inventory>("Inventory");
 		_skillDatabase = GetNode<SkillDatabase>("SkillDatabase");
 	}

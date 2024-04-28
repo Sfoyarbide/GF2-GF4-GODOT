@@ -1,5 +1,5 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1712497453
+::res://::1714312052
 icon.svg::CompressedTexture2D::4754514356739396661::1694562838::1696793276::1::::<><>::
 ::res://Battle/::1712266388
 BattleCameraManager.cs::CSharpScript::-1::1711730478::0::1::::<>Node<>::
@@ -8,13 +8,13 @@ BattleManager.tscn::PackedScene::1254080286133827219::1706548577::0::1::::<><>::
 CombatCalculations.cs::CSharpScript::-1::1712013860::0::1::::<><>::
 OneMoreManager.cs::CSharpScript::-1::1712084206::0::1::::<>Node<>::
 PressionManager.cs::CSharpScript::-1::1711758349::0::1::::<>Node<>::
-::res://Battle/Action/::1712497355
+::res://Battle/Action/::1714232153
 attack_action.tscn::PackedScene::3336952524973573431::1710259165::0::1::::<><>::res://Battle/Action/MeleeAction.cs
 BaseAction.cs::CSharpScript::-1::1711758622::0::1::::<>Node<>::
 DefendAction.cs::CSharpScript::-1::1712495553::0::1::::<>Node<>::
 DefendAction.tscn::PackedScene::159767420269307417::1698523632::0::1::::<><>::res://Battle/Action/DefendAction.cs
 ItemAction.cs::CSharpScript::-1::1711758882::0::1::::<>Node<>::
-ItemAction.tscn::PackedScene::2932577713660620595::1712497355::0::1::::<><>::res://Battle/Action/ItemAction.cs
+ItemAction.tscn::PackedScene::2932577713660620595::1714232153::0::1::::<><>::res://Battle/Action/ItemAction.cs
 MeleeAction.cs::CSharpScript::-1::1712017715::0::1::::<>Node<>::
 SkillAction.cs::CSharpScript::-1::1712495861::0::1::::<>Node<>::
 SkillAction.tscn::PackedScene::2893821704136063135::1698512293::0::1::::<><>::res://Battle/Action/SkillAction.cs
@@ -22,7 +22,7 @@ SkillAction.tscn::PackedScene::2893821704136063135::1698512293::0::1::::<><>::re
 GrupalPressionAction.cs::CSharpScript::-1::1711757793::0::1::::<>Node<>::
 IndividualPressionAction.cs::CSharpScript::-1::1711757806::0::1::::<>Node<>::
 ::res://Battle/AI/::1712013360
-AIManager.cs::CSharpScript::-1::1712497353::0::1::::<>Node<>::
+AIManager.cs::CSharpScript::-1::1712497533::0::1::::<>Node<>::
 ::res://Battle/Attack/::1710096728
 Attack.cs::CSharpScript::-1::1711892889::0::1::::<>Node<>::
 ::res://Battle/Attack/InflictStates/::1706796181
@@ -65,9 +65,9 @@ AttackUPSkill.cs::CSharpScript::-1::1706974580::0::1::::<>Node<>::
 DefenseDOWNSkill.cs::CSharpScript::-1::1706975304::0::1::::<>Node<>::
 DefenseUPSkill.cs::CSharpScript::-1::1706975304::0::1::::<>Node<>::
 ModifierSkill.cs::CSharpScript::-1::1712496571::0::1::::<>Node<>::
-::res://Battle/Database/::1712497355
-BattleDatabase.cs::CSharpScript::-1::1707258273::0::1::::<>Node<>::
-BattleDatabase.tscn::PackedScene::6350008940987475863::1712497355::0::1::::<><>::res://Battle/Database/BattleDatabase.cs<>res://Battle/Inventory/Inventory.cs<>res://Battle/Inventory/Items/Apple/AppleItem.cs<>uid://dmhre602fkf8e::::res://Battle/Inventory/Items/Apple/Apple.png<>res://Battle/Inventory/Items/ItemTest.cs<>res://Battle/Inventory/Items/ReviveItem/ReviveItem.cs<>res://Battle/Database/SkillDatabase.cs<>uid://khfrcrk04ldo::::res://Battle/Attack/Skills/AttackSkills/Fire/Fire.tscn<>res://Battle/Attack/Skills/HealSkills/Heal.cs<>res://Battle/Attack/Skills/AttackSkills/Ice/Ice.cs<>res://Battle/Attack/Skills/ModifierSkills/AttackUPSkill.cs<>res://Battle/Attack/Skills/HealSkills/ReviveSkill/ReviveSkill.cs<>res://Battle/Attack/Skills/ModifierSkills/DefenseUPSkill.cs<>res://Battle/Attack/Skills/ModifierSkills/DefenseDOWNSkill.cs<>res://Battle/Attack/Skills/ModifierSkills/AttackDOWNSkill.cs<>res://Battle/Attack/Skills/ModifierSkills/AgilityUPSkill.cs<>res://Battle/Attack/Skills/ModifierSkills/AgilityDOWNSkill.cs<>res://Battle/Attack/Skills/InflictSkills/PoisonSkill.cs
+::res://Battle/Database/::1714232153
+BattleDatabase.cs::CSharpScript::-1::1714237031::0::1::::<>Node<>::
+BattleDatabase.tscn::PackedScene::6350008940987475863::1714232153::0::1::::<><>::res://Battle/Database/BattleDatabase.cs<>res://Battle/Inventory/Inventory.cs<>res://Battle/Inventory/Items/Apple/AppleItem.cs<>uid://dmhre602fkf8e::::res://Battle/Inventory/Items/Apple/Apple.png<>res://Battle/Inventory/Items/ItemTest.cs<>res://Battle/Inventory/Items/ReviveItem/ReviveItem.cs<>res://Battle/Database/SkillDatabase.cs<>uid://khfrcrk04ldo::::res://Battle/Attack/Skills/AttackSkills/Fire/Fire.tscn<>res://Battle/Attack/Skills/HealSkills/Heal.cs<>res://Battle/Attack/Skills/AttackSkills/Ice/Ice.cs<>res://Battle/Attack/Skills/ModifierSkills/AttackUPSkill.cs<>res://Battle/Attack/Skills/HealSkills/ReviveSkill/ReviveSkill.cs<>res://Battle/Attack/Skills/ModifierSkills/DefenseUPSkill.cs<>res://Battle/Attack/Skills/ModifierSkills/DefenseDOWNSkill.cs<>res://Battle/Attack/Skills/ModifierSkills/AttackDOWNSkill.cs<>res://Battle/Attack/Skills/ModifierSkills/AgilityUPSkill.cs<>res://Battle/Attack/Skills/ModifierSkills/AgilityDOWNSkill.cs<>res://Battle/Attack/Skills/InflictSkills/PoisonSkill.cs
 SkillDatabase.cs::CSharpScript::-1::1712433955::0::1::::<>Node<>::
 ::res://Battle/Inventory/::1711212128
 Inventory.cs::CSharpScript::-1::1706491464::0::1::::<>Node<>::
@@ -85,7 +85,7 @@ ReviveItem.cs::CSharpScript::-1::1711758802::0::1::::<>Node<>::
 CharacterBattlePositionManager.cs::CSharpScript::-1::1711755523::0::1::::<>Node<>::
 CharacterBattlePositionManager.tscn::PackedScene::1511682316542031206::1711752908::0::1::::<><>::res://Battle/Position/CharacterBattlePositionManager.cs
 ::res://Battle/ReceptorSelection/::1712266388
-CharacterReceptorSelector.cs::CSharpScript::-1::1712496279::0::1::::<>Node3D<>::
+CharacterReceptorSelector.cs::CSharpScript::-1::1712497535::0::1::::<>Node3D<>::
 CharacterReceptorSelector.tscn::PackedScene::1761879099442869859::1712266388::0::1::::<><>::res://Battle/ReceptorSelection/CharacterReceptorSelector.cs
 ::res://Battle/Register/::1711888837
 BattleRegister.cs::CSharpScript::-1::1712495785::0::1::::<>Node<>::
@@ -93,11 +93,11 @@ BattleRegister.cs::CSharpScript::-1::1712495785::0::1::::<>Node<>::
 BattleStarter.cs::CSharpScript::-1::1712424347::0::1::::<>Node<>::
 EnemyGroupInLevel1.cs::CSharpScript::-1::1711646211::0::1::::<>Node<>::
 EnemyGroupInLevel.cs::CSharpScript::-1::1711646134::0::1::::<>Node<>::
-::res://Battle/UI/::1712497355
+::res://Battle/UI/::1714232153
 ActionButton.cs::CSharpScript::-1::1711051416::0::1::::<>Button<>::
 action_button.tscn::PackedScene::5439513586857261405::1711213923::0::1::::<><>::res://Battle/UI/ActionButton.cs
 BattleUI.cs::CSharpScript::-1::1711290742::0::1::::<>Control<>::
-BattleUI.tscn::PackedScene::729596701299253786::1712497355::0::1::::<><>::res://Battle/UI/BattleUI.cs<>uid://cjq682eil87xx::::res://Battle/UI/action_button.tscn<>res://Battle/UI/ActionButton.cs<>uid://fpl65x32dhec::::res://Battle/UI/InventoryUI/InventoryUI.tscn<>uid://cdxih7a6qvhhh::::res://Battle/UI/SkillUI/SkillContainerUI.tscn<>uid://b3k0u20f8d2od::::res://Battle/UI/PartyStatus/PartyBattleStatusUI.tscn
+BattleUI.tscn::PackedScene::729596701299253786::1714232153::0::1::::<><>::res://Battle/UI/BattleUI.cs<>uid://cjq682eil87xx::::res://Battle/UI/action_button.tscn<>res://Battle/UI/ActionButton.cs<>uid://fpl65x32dhec::::res://Battle/UI/InventoryUI/InventoryUI.tscn<>uid://cdxih7a6qvhhh::::res://Battle/UI/SkillUI/SkillContainerUI.tscn<>uid://b3k0u20f8d2od::::res://Battle/UI/PartyStatus/PartyBattleStatusUI.tscn
 ::res://Battle/UI/AttackStatus/::1711752908
 AttackStatusUI.cs::CSharpScript::-1::1711758173::0::1::::<>Node3D<>::
 AttackStatusUI.tscn::PackedScene::5689544070775961017::1710371628::0::1::::<><>::res://Battle/UI/AttackStatus/AttackStatusUI.cs<>uid://db2jhokhmehgt::::res://Battle/UI/AttackStatus/DamageUI.png<>uid://5p61pccs827t::::res://Battle/UI/AttackStatus/HealUI.png
@@ -123,9 +123,9 @@ SkillContainerUI.cs::CSharpScript::-1::1711213263::0::1::::<>Control<>::
 SkillContainerUI.tscn::PackedScene::5031388505321057945::1711213923::0::1::::<><>::res://Battle/UI/SkillUI/SkillContainerUI.cs<>uid://co8caemxykmk6::::res://Battle/UI/SkillUI/SkillUI.tscn
 SkillUI.cs::CSharpScript::-1::1711836120::0::1::::<>Node<>::
 SkillUI.tscn::PackedScene::5823731307896708691::1711212090::0::1::::<><>::uid://dmhre602fkf8e::::res://Battle/Inventory/Items/Apple/Apple.png<>res://Battle/UI/SkillUI/SkillUI.cs
-::res://Character/::1712497355
+::res://Character/::1714232153
 Character.cs::CSharpScript::-1::1712422781::0::1::::<>Node3D<>::
-Character.tscn::PackedScene::2666674088814904005::1712497355::0::1::::<><>::res://Character/Character.cs<>uid://f7mok8e0f216::::res://Character/xbot.tscn<>uid://bnspedmfihk28::::res://Battle/Action/attack_action.tscn<>uid://cjnl1b6fr1q0::::res://Battle/Action/DefendAction.tscn<>uid://bhh125x13531l::::res://Battle/Action/SkillAction.tscn<>uid://bh1tekhr3pm00::::res://Battle/Action/ItemAction.tscn<>res://Battle/Action/PressionAction/IndividualPressionAction.cs<>uid://b80efljl4m58l::::res://icon.svg<>res://Character/CharacterSelectedVisual.cs<>res://Battle/Action/PressionAction/GrupalPressionAction.cs
+Character.tscn::PackedScene::2666674088814904005::1714232153::0::1::::<><>::res://Character/Character.cs<>uid://f7mok8e0f216::::res://Character/xbot.tscn<>uid://bnspedmfihk28::::res://Battle/Action/attack_action.tscn<>uid://cjnl1b6fr1q0::::res://Battle/Action/DefendAction.tscn<>uid://bhh125x13531l::::res://Battle/Action/SkillAction.tscn<>uid://bh1tekhr3pm00::::res://Battle/Action/ItemAction.tscn<>res://Battle/Action/PressionAction/IndividualPressionAction.cs<>uid://b80efljl4m58l::::res://icon.svg<>res://Character/CharacterSelectedVisual.cs<>res://Battle/Action/PressionAction/GrupalPressionAction.cs
 CharacterAnimator.cs::CSharpScript::-1::1710258144::0::1::::<>Node3D<>::
 CharacterData.cs::CSharpScript::-1::1712267623::0::1::::<>Node<>::
 CharacterSelectedVisual.cs::CSharpScript::-1::1706488761::0::1::::<>Sprite3D<>::
@@ -138,10 +138,25 @@ CharacterEnemyData.cs::CSharpScript::-1::1712016326::0::1::::<>Node<>::
 ::res://Character/Enemy/Slime/::1710095900
 Slime.cs::CSharpScript::-1::1712496822::0::1::::<>Node3D<>::
 SlimeData.cs::CSharpScript::-1::1712016392::0::1::::<>Node<>::
-::res://Levels/::1712497355
+::res://DungeonExploration/::1714257035
+DungeonExplorationGym.tscn::PackedScene::2626176664946457305::1714257035::0::1::::<><>::uid://ckqt7mdye56gy::::res://DungeonExploration/GF4_1m x 1m.png<>uid://c3unwm8ebd1bv::::res://DungeonExploration/PlayerMovement/PlayerExploration.tscn
+GF4_1m x 1m.png::CompressedTexture2D::5508971252110627536::1714232774::1714233179::1::::<><>::
+::res://DungeonExploration/PlayerMovement/::1714257035
+PlayerExploration.tscn::PackedScene::6780245834146149639::1714257035::0::1::::<><>::res://DungeonExploration/PlayerMovement/States/PlayerExplorationIdleState.cs<>res://DungeonExploration/PlayerMovement/PlayerExplorationMovement.cs<>res://DungeonExploration/PlayerMovement/States/PlayerExplorationJumpState.cs<>res://DungeonExploration/PlayerMovement/States/PlayerExplorationSprintingState.cs<>res://DungeonExploration/PlayerMovement/States/PlayerExplorationWalkingState.cs<>res://DungeonExploration/PlayerMovement/States/PlayerExplorationCrouchingState.cs<>res://DungeonExploration/PlayerMovement/States/PlayerExplorationSlidingState.cs<>res://DungeonExploration/PlayerMovement/States/PlayerExplorationWallState.cs
+PlayerExplorationMovement.cs::CSharpScript::-1::1714256262::0::1::::<>CharacterBody3D<>::
+::res://DungeonExploration/PlayerMovement/States/::1714255623
+PlayerExplorationBaseState.cs::CSharpScript::-1::1714234471::0::1::::<>Node<>::
+PlayerExplorationCrouchingState.cs::CSharpScript::-1::1714235159::0::1::::<>Node<>::
+PlayerExplorationIdleState.cs::CSharpScript::-1::1714256697::0::1::::<>Node<>::
+PlayerExplorationJumpState.cs::CSharpScript::-1::1714255725::0::1::::<>Node<>::
+PlayerExplorationSlidingState.cs::CSharpScript::-1::1714257012::0::1::::<>Node<>::
+PlayerExplorationSprintingState.cs::CSharpScript::-1::1714257005::0::1::::<>Node<>::
+PlayerExplorationWalkingState.cs::CSharpScript::-1::1714257010::0::1::::<>Node<>::
+PlayerExplorationWallState.cs::CSharpScript::-1::1714257011::0::1::::<>Node<>::
+::res://Levels/::1714232153
 BrainCamera.cs::CSharpScript::-1::1696962147::0::1::::<>Node3D<>::
 brain_camera.tscn::PackedScene::1328119614025370387::1696898248::0::1::::<><>::res://Levels/BrainCamera.cs
-Level1.tscn::PackedScene::1298653556585478951::1712497355::0::1::::<><>::uid://r4qrwcjt7ph0::::res://Battle/BattleManager.tscn<>uid://bd80y56s7uw3v::::res://Character/Character.tscn<>res://Character/Ally/CharacterAlly.cs<>res://Character/CharacterData.cs<>res://Battle/Attack/Melee/MeleeAttack.cs<>uid://0dp5kn1r6sid::::res://Battle/ReceptorSelection/CharacterReceptorSelector.tscn<>res://Character/Enemy/Slime/SlimeData.cs<>uid://0xve1xol8ety::::res://Battle/UI/AttackStatus/AttackStatusUIManager.tscn<>uid://s6l63avtc468::::res://Levels/brain_camera.tscn<>res://Battle/BattleCameraManager.cs<>res://Battle/AI/AIManager.cs<>uid://knol63we4wn7::::res://Battle/UI/BattleUI.tscn<>res://Battle/OneMoreManager.cs<>res://Battle/PressionManager.cs<>uid://vsjgmbxbpayo::::res://Battle/Position/CharacterBattlePositionManager.tscn<>res://Character/Enemy/Slime/Slime.cs<>res://Battle/Starter/BattleStarter.cs<>res://Battle/Starter/EnemyGroupInLevel1.cs
+Level1.tscn::PackedScene::1298653556585478951::1714232153::0::1::::<><>::uid://r4qrwcjt7ph0::::res://Battle/BattleManager.tscn<>uid://bd80y56s7uw3v::::res://Character/Character.tscn<>res://Character/Ally/CharacterAlly.cs<>res://Character/CharacterData.cs<>res://Battle/Attack/Melee/MeleeAttack.cs<>uid://0dp5kn1r6sid::::res://Battle/ReceptorSelection/CharacterReceptorSelector.tscn<>res://Character/Enemy/Slime/SlimeData.cs<>uid://0xve1xol8ety::::res://Battle/UI/AttackStatus/AttackStatusUIManager.tscn<>uid://s6l63avtc468::::res://Levels/brain_camera.tscn<>res://Battle/BattleCameraManager.cs<>res://Battle/AI/AIManager.cs<>uid://knol63we4wn7::::res://Battle/UI/BattleUI.tscn<>res://Battle/OneMoreManager.cs<>res://Battle/PressionManager.cs<>uid://vsjgmbxbpayo::::res://Battle/Position/CharacterBattlePositionManager.tscn<>res://Character/Enemy/Slime/Slime.cs<>res://Battle/Starter/BattleStarter.cs<>res://Battle/Starter/EnemyGroupInLevel1.cs
 Test.cs::CSharpScript::-1::1710454755::0::1::::<>Node<>::
 Test.tscn::PackedScene::337310132899536852::1710455014::0::1::::<><>::res://Levels/Test.cs<>uid://bd80y56s7uw3v::::res://Character/Character.tscn<>res://Character/CharacterData.cs<>res://Battle/Attack/Melee/MeleeAttack.cs
 ::res://Models/::1698520374
