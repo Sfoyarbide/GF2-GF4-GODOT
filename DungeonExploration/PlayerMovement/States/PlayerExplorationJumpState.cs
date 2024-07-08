@@ -1,8 +1,11 @@
 using Godot;
 using System;
+using System.ComponentModel.Design;
+using System.Diagnostics;
 
 public partial class PlayerExplorationJumpState : PlayerExplorationBaseState
 {
+    public const float DEFAULT_JUMP_FORCE = 4f;
     private Vector3 _jumpDirection;
     private float _jumpForceAddition = 0;
 
@@ -14,9 +17,11 @@ public partial class PlayerExplorationJumpState : PlayerExplorationBaseState
     public override void OnEnter(PlayerExplorationMovement context)
     {
         Context = context;
-        //_jumpDirection = Context.Direction;
+        //_jumpDirection = Context.Direction; 
+        //float cancelCurrentSpeed = context.CurrentSpeed;
+        //Context.FinalDirection = new Vector3(Context.FinalDirection.X - cancelCurrentSpeed * JUMP_MOVE_SPEED, Context.FinalDirection.Y, Context.FinalDirection.Z - cancelCurrentSpeed * JUMP_MOVE_SPEED);
         Context.CanMove = false;
-        
+        Context.JumpForce = DEFAULT_JUMP_FORCE; 
         // Obtain inicial the y pos from where the jump will be made.
         _inicialPosY = Context.GlobalPosition.Y;
 
@@ -42,17 +47,36 @@ public partial class PlayerExplorationJumpState : PlayerExplorationBaseState
             Context.Camera3D.Rotation = Context.LerpVector(Context.Camera3D.Rotation, "z", Mathf.DegToRad(0), delta);
         }
 
-        if(Input.IsActionJustPressed("jump"))
+        if(Input.IsActionJustPressed("jump") )
         {
-            if(Context.IsWallCheckerColliding())
+            if(Context.IsClimbingCheckerColliding())
             {
-                Context.SwitchState(Context.wallState);
+                Context.SwitchState(Context.climbingState);
             }
+        }
+
+        // Wall Running State Checker.
+        if(Input.IsActionPressed("jump") && Context.CanMakeWallRunning())
+        {
+            if(Context.GetSlideCollisionCount() > 0)
+            { 
+                Context.SwitchState(Context.wallRunningState);
+            }
+            return;
         }
 
         if(!Context.IsFloorCheckerColliding())
         {
             Context.IsFreelooking = false;
+        }
+
+        // Fall State Checker
+        if(Context.GetSlideCollisionCount() > 0 && Context.PreviousCollisionObject3D == Context.GetSlideCollision(0))
+        {
+            // We let the player move, in this case.
+            Context.CanMove = true;
+            GD.Print("Changing to fall state");
+            Context.SwitchState(Context.fallState);
         }
 
         //Context.Direction = _jumpDirection;

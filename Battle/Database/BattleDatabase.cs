@@ -6,17 +6,33 @@ public partial class BattleDatabase : Node
 	private BattleManager _battleManager;
 	private CharacterReceptorSelector _characterReceptorSelector;
 	private Inventory _inventory;
+	private BattleStarter _battleStarter;
+	private DebugTools_Battle _debugTools_Battle;
 	private SkillDatabase _skillDatabase;
 
 	public BattleManager BattleManager 
 	{ 
 		get { return _battleManager; } 
-		set { _battleManager = value; } 
+		set 
+		{ 
+			_battleManager = value; 
+		} 
 	}
 	public CharacterReceptorSelector CharacterReceptorSelector 
 	{
 		get { return _characterReceptorSelector; } 
-		set { _characterReceptorSelector = value; }
+		set 
+		{
+			_characterReceptorSelector = value;
+		}
+	}
+	public BattleStarter BattleStarter
+	{
+		get { return _battleStarter;}
+		set 
+		{
+			_battleStarter = value; 
+		}
 	}
 	public Inventory Inventory
 	{
@@ -31,8 +47,11 @@ public partial class BattleDatabase : Node
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-    	_battleManager = GetTree().Root.GetNodeOrNull<BattleManager>("Level1/Battle");	
-		_characterReceptorSelector = GetTree().Root.GetNodeOrNull<CharacterReceptorSelector>("Level1/Battle/ManagerContainer/CharacterReceptorSelector");	
+		// DungeonExplorationGym/
+    	_battleManager = GetTree().Root.GetNode<BattleManager>("DungeonExplorationGym/Level1/Battle");	
+		_characterReceptorSelector = GetTree().Root.GetNode<CharacterReceptorSelector>("DungeonExplorationGym/Level1/Battle/ManagerContainer/CharacterReceptorSelector");	
+		_battleStarter = _battleManager.GetNode<BattleStarter>("BattleStarter");
+		_debugTools_Battle = GetTree().Root.GetNode<DebugTools_Battle>("DungeonExplorationGym/DebugToolBattleUI/MarginContainer/TabContainer/Battle");
 		_inventory = GetNode<Inventory>("Inventory");
 		_skillDatabase = GetNode<SkillDatabase>("SkillDatabase");
 	}
@@ -41,5 +60,5 @@ public partial class BattleDatabase : Node
 	{
 		return _battleManager.GetCurrentCharacter();
 	}
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
+
 }

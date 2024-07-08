@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 public partial class BattleRegister : Node
@@ -34,22 +33,22 @@ public partial class BattleRegister : Node
     {
         List<BaseAction.AttackStateEventArgs> attackStateList = GetAttackStateList(isEnemy);
 
-        int condicionToRewinded = 0;
+        int conditionToRewinded = 0;
 
         if(attackStateList.Count - 1 < rewindedTurn)
         {
-            condicionToRewinded = 0;
+            conditionToRewinded = 0;
         }
         else
         {
-            condicionToRewinded = attackStateList.Count - rewindedTurn - 1;
+            conditionToRewinded = attackStateList.Count - rewindedTurn - 1;
         }
 
-        for(int x = attackStateList.Count - 1; x >= condicionToRewinded; x--)
+        for(int x = attackStateList.Count - 1; x >= conditionToRewinded; x--)
         {
             if(attackStateList[x].attack is T)
             {   
-                GD.Print(attackStateList[x].attack.AttackName + "is: t");
+                //GD.Print(attackStateList[x].attack.AttackName + "is: t");
                 return true;
             }
         }

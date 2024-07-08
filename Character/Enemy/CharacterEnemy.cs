@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 public abstract partial class CharacterEnemy : Character
 {
@@ -41,6 +40,7 @@ public abstract partial class CharacterEnemy : Character
 
         // Subcribing to events.
         BattleManager.OnBattleStart += BattleManager_OnBattleStart;
+        BattleManager.OnBattleEnd += BattleManager_OnBattleEnd;
         BattleManager.OnCurrentCharacterChanged += BattleManager_OnCurrentCharacterChanged;
         CharacterData.OnDie += CharacterData_OnDie;
         CharacterReceptorSelector.OnSelectionFailed += CharacterReceptorSelector_OnSelectionFailed;
@@ -101,7 +101,7 @@ public abstract partial class CharacterEnemy : Character
 
     private void BattleManager_OnCurrentCharacterChanged(object sender, BattleManager.OnCurrentCharacterChangedEventArgs e)
     {
-        if(e.currentCharacter == this)
+        if(e.currentCharacter == this && DataContainer.Hp > 0)
         {
             Pattern();
         }
@@ -116,9 +116,18 @@ public abstract partial class CharacterEnemy : Character
         }
     }
 
-    private void CharacterData_OnDie(object sender, CharacterData.CharacterDataEventArgs e)
+    private void BattleManager_OnBattleEnd(object sender, BattleManager.OnBattleEndEventArgs e)
     {
         _attackList.Clear();
+    }
+
+    private void CharacterData_OnDie(object sender, CharacterData.CharacterDataEventArgs e)
+    {
+        if(e.character == this)
+        {
+            InCombat = false;
+            _attackList.Clear();
+        }
     }
 
     private void CharacterReceptorSelector_OnSelectionFailed(object sender, CharacterReceptorSelector.ReceptionSelectorEventArgs e)

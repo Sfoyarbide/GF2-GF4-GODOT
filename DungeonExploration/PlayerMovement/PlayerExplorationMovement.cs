@@ -1,6 +1,11 @@
 using Godot;
 using System;
 
+/* Sources of improving:
+1- https://www.youtube.com/watch?v=A3HLeyaBCq4&list=PLQZiuyZoMHcgqP-ERsVE4x4JSFojLdcBZ&ab_channel=LegionGames - General Juice Improve.
+2- https://www.youtube.com/watch?v=tF36jenSDD4&ab_channel=Garbaj - wall Running
+*/
+
 public partial class PlayerExplorationMovement : CharacterBody3D
 {
     // States
@@ -11,11 +16,13 @@ public partial class PlayerExplorationMovement : CharacterBody3D
     public PlayerExplorationJumpState jumpState;
     public PlayerExplorationBaseState crouchingState;
     public PlayerExplorationBaseState slidingState;
-    public PlayerExplorationBaseState wallState;
+    public PlayerExplorationBaseState climbingState;
     public PlayerExplorationBaseState rollState;
     public PlayerExplorationBaseState fallState;
+    public PlayerExplorationWallRunningState wallRunningState;
 
     // bool states.
+    private bool _isPlayerActive;
     private bool _canMove;
 
     private bool _isFreelooking;
@@ -27,11 +34,15 @@ public partial class PlayerExplorationMovement : CharacterBody3D
     [Export]
     private float _currentSpeed = 5f;
     [Export]
-    private float _jumpForce = 3.5f;
+    private float _jumpForce = 4f;
     private float _gravity = 9.8f;
 
     // Position vars.
+    private Vector2 _axisInput;
+    private Vector3 _acceleration;
     private Vector3 _direction;
+    private Vector3 _finalDirection;
+    private Vector3 _currentPosition;
     public float yHeadStandPosition = 0.8f;
     public float yPositionCrouchHead = 0.3f;
     private float lastInicialPosY;
@@ -44,10 +55,12 @@ public partial class PlayerExplorationMovement : CharacterBody3D
 
     private CollisionShape3D _standCollisionShape;
     private CollisionShape3D _crouchCollisionShape;
+    private KinematicCollision3D _previousCollisionObject3D;
 
     private RayCast3D _floorChecker;
-    private RayCast3D _wallChecker;
+    private RayCast3D _climbChecker;
     private RayCast3D _crouchChecker;
+    private RayCast3D _wallChecker;
 
     // Sensitivity vars.
     private float _freeLookTiltAmount = 40f;
@@ -58,7 +71,9 @@ public partial class PlayerExplorationMovement : CharacterBody3D
     private AnimationPlayer _animationPlayerHead;
 
     // Getters and Setters
+    public Vector2 AxisInput {get {return _axisInput;}}
     public Vector3 Direction {get {return _direction;} set {_direction = value;}}
+    public Vector3 FinalDirection { get {return _finalDirection;} set {_finalDirection = value;}}
     public bool IsFreelooking {get {return _isFreelooking; } set {_isFreelooking = value;}}
     public float JumpForce {get {return _jumpForce; } set {_jumpForce = value;}}
     public float CurrentSpeed {get {return _currentSpeed; } set {_currentSpeed = value;}}
@@ -71,6 +86,9 @@ public partial class PlayerExplorationMovement : CharacterBody3D
     public CollisionShape3D CrouchCollisionShape {get {return _crouchCollisionShape;}}
     public RayCast3D CrouchChecker {get {return _crouchChecker;}}
     public AnimationPlayer AnimationPlayerHead {get {return _animationPlayerHead;} set {_animationPlayerHead = value;}}
+    public float Gravity {get {return _gravity;} set {_gravity = value;}}
+    public KinematicCollision3D PreviousCollisionObject3D {get {return _previousCollisionObject3D;} set{_previousCollisionObject3D = value;}}
+    public RayCast3D WallChecker {get {return _wallChecker;}}
 
     public override void _Ready()
     {
@@ -86,8 +104,9 @@ public partial class PlayerExplorationMovement : CharacterBody3D
         
         // RayCast Checkers.
         _crouchChecker = _crouchCollisionShape.GetNode<RayCast3D>("CrouchChecker");
-        _wallChecker = _standCollisionShape.GetNode<RayCast3D>("WallChecker");
+        _climbChecker = _standCollisionShape.GetNode<RayCast3D>("ClimbChecker");
         _floorChecker = _standCollisionShape.GetNode<RayCast3D>("FloorChecker");
+        _wallChecker = _standCollisionShape.GetNode<RayCast3D>("WallChecker");
 
         // States.
         _stateContainer = GetNode<Node>("StateContainer");
@@ -97,9 +116,10 @@ public partial class PlayerExplorationMovement : CharacterBody3D
         crouchingState = _stateContainer.GetNode<PlayerExplorationCrouchingState>("Crouching");
         sprintingState = _stateContainer.GetNode<PlayerExplorationSprintingState>("Sprinting");
         slidingState = _stateContainer.GetNode<PlayerExplorationSlidingState>("Sliding");
-        wallState = _stateContainer.GetNode<PlayerExplorationWallState>("Wall");
+        climbingState = _stateContainer.GetNode<PlayerExplorationClimbingState>("Climbing");
         rollState = _stateContainer.GetNode<PlayerExplorationRollState>("Roll");
         fallState = _stateContainer.GetNode<PlayerExplorationFallState>("Fall");
+        wallRunningState = _stateContainer.GetNode<PlayerExplorationWallRunningState>("WallRunning");
 
         // Animation.
         _animationPlayerHead = Head.GetNode<AnimationPlayer>("AnimationPlayerHead");
@@ -109,7 +129,29 @@ public partial class PlayerExplorationMovement : CharacterBody3D
         _currentState.OnEnter(this);
 
         // Capturing Mouse.
+        //Input.MouseMode = Input.MouseModeEnum.Captured;
+
+        // Subcribing to events.
+        BattleManager.OnBattleStart += BattleManager_OnBattleStart;
+        BattleManager.OnBattleEnd += BattleManager_OnBattleEnd;
+
+        //_previousPosition = GlobalPosition;
+        _currentPosition = GlobalPosition;
+    }
+
+    private void BattleManager_OnBattleEnd(object sender, BattleManager.OnBattleEndEventArgs e)
+    {
+        GD.Print("Player Exploration Movement: Battle end");
         Input.MouseMode = Input.MouseModeEnum.Captured;
+        _camera.Current = true;
+    }
+
+    private void BattleManager_OnBattleStart(object sender, BattleManager.OnBattleStartEventArgs e)
+    {
+        // Confining Mouse.
+        GD.Print("Player Exploration Movement: Battle start");
+        Input.MouseMode = Input.MouseModeEnum.Visible;
+        _camera.Current = false;
     }
 
     public override void _Input(InputEvent @event)
@@ -129,20 +171,29 @@ public partial class PlayerExplorationMovement : CharacterBody3D
 
     public override void _PhysicsProcess(double delta)
     {
+        _axisInput = Input.GetVector("left","right","forward","down");
+
         // Handle Direction Calculation.
         if(_canMove)
         {
-            Vector2 input = Input.GetVector("left","right","forward","down");
-            Vector3 finalDirection = (Transform.Basis * new Vector3(input.X, 0, input.Y)).Normalized();
-            LerpDirection(finalDirection, (float)delta);
+            _finalDirection = (Transform.Basis * new Vector3(_axisInput.X, 0, _axisInput.Y)).Normalized();
         }
+
+        LerpDirection(_finalDirection, (float)delta);
+
+        //Vector3 accelaration = GetAccelaration();
+        //Vector3 nextPosition = 2 * _currentPosition - _previousPosition + accelaration * (float)delta * (float)delta;
+        //Velocity = nextPosition;
 
         if(!_isFreelooking && !Neck.Rotation.Equals(Vector3.Zero))
         {
             LerpNeck(0f, (float)delta);
         }
 
-        // Generic All Valid Methods in all States.
+        //_previousPosition = _currentPosition;
+        //_currentPosition = nextPosition;
+
+        // Global conditions and methods for all States.
         if(!IsOnFloor())
         {
             Fall((float)delta);
@@ -163,9 +214,25 @@ public partial class PlayerExplorationMovement : CharacterBody3D
 
     public void SwitchState(PlayerExplorationBaseState newState)
     {
-
         _currentState = newState;
         _currentState.OnEnter(this);
+    }
+
+    private Vector3 GetAccelaration()
+    {
+        Vector3 gravityAccelaration = new Vector3(0, -9.81f, 0);
+        Vector3 inputAccelaration = GetPlayerInputAccelaration();
+        
+        Vector3 finalAccelaration = inputAccelaration + gravityAccelaration;
+        return finalAccelaration;
+    }
+
+    private Vector3 GetPlayerInputAccelaration()
+    {
+        float verticalInput = Input.GetActionStrength("forward") - Input.GetActionStrength("down");
+        float horizontalInput = Input.GetActionStrength("right") - Input.GetActionStrength("left");
+        Vector3 inputAcceleration = new Vector3(horizontalInput, 0f, verticalInput);
+        return inputAcceleration;
     }
 
     public void Move()
@@ -313,13 +380,23 @@ public partial class PlayerExplorationMovement : CharacterBody3D
         _camera.Rotation = new Vector3(_camera.Rotation.X, yCameraRotation, _camera.Rotation.Z);
     }
 
+    public bool IsWallCheckerColliding()
+    {
+        return _wallChecker.IsColliding();
+    }
+
     public bool IsFloorCheckerColliding()
     {
         return _floorChecker.IsColliding();
     }
 
-    public bool IsWallCheckerColliding()
+    public bool IsClimbingCheckerColliding()
     {
-        return _wallChecker.IsColliding();
+        return _climbChecker.IsColliding();
+    }
+
+    public bool CanMakeWallRunning()
+    {
+        return !IsOnFloor() && !IsFloorCheckerColliding() && !wallRunningState.InCooldown;
     }
 }

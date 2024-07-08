@@ -20,13 +20,23 @@ public partial class PlayerExplorationSprintingState : PlayerExplorationBaseStat
 
         if(Input.IsActionJustPressed("jump"))
         {
-            if(Context.IsWallCheckerColliding())
+            if(Context.IsClimbingCheckerColliding())
             {
-                Context.SwitchState(Context.wallState);
+                Context.SwitchState(Context.climbingState);
             }
             else
             {
                 Context.SwitchState(Context.jumpState);
+            }
+            return;
+        }
+
+        // Wall Running State Checker.
+        if(Input.IsActionPressed("jump") && Context.CanMakeWallRunning())
+        {
+            if(Context.GetSlideCollisionCount() > 0)
+            { 
+                Context.SwitchState(Context.wallRunningState);
             }
             return;
         }

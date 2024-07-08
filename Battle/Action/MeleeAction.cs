@@ -49,6 +49,8 @@ public partial class MeleeAction : BaseAction
             DefendAction.TryCancelDefend(characterReceptor);
         }
         
+        GD.Print(_characterReceptor);
+
         OnAttackState(new AttackStateEventArgs{
             current = Character,
             receptor = _characterReceptor,

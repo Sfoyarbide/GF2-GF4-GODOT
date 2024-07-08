@@ -25,6 +25,8 @@ public partial class BattleCameraManager : Node
         _currentCamera = _currentCharacterCamera;
 
         _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
+        BattleManager.OnBattleStart += BattleManager_OnBattleStart;
+        BattleManager.OnBattleEnd += BattleManager_OnBattleEnd;
         BattleManager.OnTurnEnd += BattleManager_OnTurnEnd;
         BattleManager.OnCurrentCharacterChanged += BattleManager_OnCurrentCharacterChanged;
         CharacterReceptorSelector.OnCharacterSelectorStarted += CharacterReceptorSelector_OnCharacterSelectorStarted;
@@ -48,7 +50,7 @@ public partial class BattleCameraManager : Node
         else
         {
             newCamera.Current = true;
-            _currentCamera.Current = false;
+            //_currentCamera.Current = false;
             _currentCamera = newCamera;
         }
     }
@@ -62,7 +64,7 @@ public partial class BattleCameraManager : Node
         }
         if(!isOnlyLookAt) // if is only lookAt then, we won't change the follow.
         {
-            camera.Transform = newCameraTransform;
+            camera.GlobalTransform = newCameraTransform;
         }
         
         //_currentCamera = camera;
@@ -71,7 +73,7 @@ public partial class BattleCameraManager : Node
     private void UpdateCurrentCharacterCamera() // Updates the CharacterSelectedCamera to his position.
     {
         Character currentCharacter = _battleDatabase.BattleManager.GetCurrentCharacter();
-        Vector3 currentCharacterPosition = currentCharacter.Position;
+        Vector3 currentCharacterPosition = currentCharacter.GlobalPosition;
         _currentCharacterCamera.GlobalTransform = currentCharacter.GetMarkerChildTransform(0);
         UpdateCamera(_currentCharacterCamera, currentCharacter.GetMarkerChildTransform(0), currentCharacterPosition);
         UpdateCamera(_characterSelectorCamera, currentCharacter.GetMarkerChildTransform(1), currentCharacterPosition, false, true); // Update the characterSelectingReceptorCamera follow
@@ -80,7 +82,7 @@ public partial class BattleCameraManager : Node
     private void UpdateCharacterSelectorCamera() // Updates the CharacterSelectingReceptorCamera.
     {
         Character currentCharacterReceptor = _battleDatabase.CharacterReceptorSelector.GetCharacterReceptor();
-        Vector3 currentCharacterReceptorPosition = currentCharacterReceptor.Position;
+        Vector3 currentCharacterReceptorPosition = currentCharacterReceptor.GlobalPosition;
         UpdateCamera(_characterSelectorCamera, currentCharacterReceptor.GetMarkerChildTransform(1), currentCharacterReceptorPosition, true);
     }
 
@@ -90,22 +92,6 @@ public partial class BattleCameraManager : Node
         Vector3 currentCharacterPosition = currentCharacter.Position;
         UpdateCamera(_skillCamera, currentCharacter.GetMarkerChildTransform(0), currentCharacterPosition);
     }
-
-    private void SetAllCamerasToState(bool state, Camera3D notThisCamera=null)
-    {
-        if(notThisCamera != _currentCamera)
-        {
-            _currentCharacterCamera.Current = false;
-        }
-        if(notThisCamera != _characterSelectorCamera)
-        {
-            _characterSelectorCamera.Current = false;
-        }
-        if(notThisCamera != _skillCamera)
-        {
-            _skillCamera.Current = false;
-        }
-    } 
 
     private void CharacterReceptorSelector_OnCharacterSelectorStarted(object sender, EventArgs e)
     {
@@ -128,33 +114,21 @@ public partial class BattleCameraManager : Node
     private void BattleManager_OnCurrentCharacterChanged(object sender, BattleManager.OnCurrentCharacterChangedEventArgs e)
     {
         // Updates the camera if the character changes.
-        UpdateCurrentCharacterCamera();
-    }
-
-    /*
-    private void BattleManager_OnActionExecute(object sender, BattleManager.OnActionExecuteEventArgs e)
-    {
-        // Checks the selected action, and based on that we can set the proper camera.
-        BaseAction baseAction = _battleDatabase.BattleManager.GetCurrentCharacter().DataContainer.SelectedAction;
-        switch(baseAction)
+        if(e.inCombat)
         {
-            case MeleeAction attackAction:
-                ChangeCamera(_currentCharacterCamera, false);
-                UpdateCurrentCharacterCamera();
-                break;
-            case SkillAction skillAction:
-                ChangeCamera(_characterSelectorCamera, false);
-                UpdateCharacterSkillCamera();
-
-                OnActionIsSkill?.Invoke(this, new OnActionIsSkillEventArgs{
-                    skill = skillAction.GetCurrentSkill()
-                });
-
-                
-                break;
+            UpdateCurrentCharacterCamera();
         }
     }
-    */
+
+    private void BattleManager_OnBattleStart(object sender, BattleManager.OnBattleStartEventArgs e)
+    {
+        _currentCharacterCamera.Current = true;
+    }
+
+    private void BattleManager_OnBattleEnd(object sender, BattleManager.OnBattleEndEventArgs e)
+    {
+        _currentCharacterCamera.Current = false;
+    }
     
     private void BattleManager_OnTurnEnd(object sender, EventArgs e)
     {

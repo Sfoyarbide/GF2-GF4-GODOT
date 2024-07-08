@@ -3,10 +3,13 @@ using System;
 
 public partial class PlayerExplorationIdleState : PlayerExplorationBaseState
 {
+    private const float DEFAULT_MOVE_SPEED = 5f;
+
     public override void OnEnter(PlayerExplorationMovement context)
     {
         Context = context;
         Context.CanMove = true;
+        Context.CurrentSpeed = DEFAULT_MOVE_SPEED;
         Context.StandCollisionShape.Disabled = false;
         Context.CrouchCollisionShape.Disabled = true;
     }
@@ -29,9 +32,9 @@ public partial class PlayerExplorationIdleState : PlayerExplorationBaseState
 
         if(Input.IsActionJustPressed("jump"))
         {
-            if(Context.IsWallCheckerColliding())
+            if(Context.IsClimbingCheckerColliding())
             {
-                Context.SwitchState(Context.wallState);
+                Context.SwitchState(Context.climbingState);
             }
             else
             {

@@ -1,7 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://bdoe0mmdhften"]
+[gd_scene load_steps=10 format=3 uid="uid://bdoe0mmdhften"]
 
 [ext_resource type="Texture2D" uid="uid://ckqt7mdye56gy" path="res://DungeonExploration/GF4_1m x 1m.png" id="1_h45a0"]
 [ext_resource type="PackedScene" uid="uid://c3unwm8ebd1bv" path="res://DungeonExploration/PlayerMovement/PlayerExploration.tscn" id="2_782wr"]
+[ext_resource type="PackedScene" uid="uid://srcvtkfedf56" path="res://Levels/Level1.tscn" id="2_kjyxl"]
+[ext_resource type="PackedScene" uid="uid://7v1uxoktn64k" path="res://DebugingTools/DebugTool_UI.tscn" id="3_6bgjn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nriey"]
 albedo_texture = ExtResource("1_h45a0")
@@ -17,26 +19,61 @@ sky_material = SubResource("ProceduralSkyMaterial_u68u5")
 
 [sub_resource type="Environment" id="Environment_5xyvq"]
 background_mode = 2
+background_energy_multiplier = 1.5
 sky = SubResource("Sky_ulm77")
+ambient_light_color = Color(1, 1, 1, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_b4up1"]
+resource_local_to_scene = true
 
 [node name="DungeonExplorationGym" type="Node3D"]
 
 [node name="Floor" type="CSGBox3D" parent="."]
 material_override = SubResource("StandardMaterial3D_nriey")
 use_collision = true
-size = Vector3(20, 1, 20)
+size = Vector3(40, 1, 40)
+
+[node name="Floor5" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.62795, 0)
+material_override = SubResource("StandardMaterial3D_nriey")
+use_collision = true
+size = Vector3(40, 1, 50)
 
 [node name="Floor2" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 17)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.78157, 17)
 material_override = SubResource("StandardMaterial3D_nriey")
 use_collision = true
 size = Vector3(20, 1, 20)
 
-[node name="Floor3" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 5, 4.5)
+[node name="Floor4" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.27148, 5.11487, -26.0626)
 material_override = SubResource("StandardMaterial3D_nriey")
 use_collision = true
-size = Vector3(5, 1, 5)
+size = Vector3(7.45703, 1, 20)
+
+[node name="Floor3" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 5.40171, 3.50732)
+material_override = SubResource("StandardMaterial3D_nriey")
+use_collision = true
+size = Vector3(5, 1, 6.98535)
+
+[node name="Wall" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.75, 8.57736, -1.25)
+material_override = SubResource("StandardMaterial3D_nriey")
+use_collision = true
+size = Vector3(1, 5, 19.5)
+
+[node name="Wall2" type="CSGBox3D" parent="."]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 6.88626, 8.57736, -7.28647)
+material_override = SubResource("StandardMaterial3D_nriey")
+use_collision = true
+size = Vector3(1, 5, 15)
+
+[node name="Wall4" type="CSGBox3D" parent="."]
+transform = Transform3D(0.822824, 0.0554916, 0.565581, -0.117531, 0.990322, 0.0738223, -0.556011, -0.127216, 0.821382, -1.19283, 9.22461, -9.16577)
+material_override = SubResource("StandardMaterial3D_nriey")
+use_collision = true
+size = Vector3(1, 5, 15)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_5xyvq")
@@ -45,4 +82,36 @@ environment = SubResource("Environment_5xyvq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
 [node name="PlayerExploration" parent="PlayerPivot" instance=ExtResource("2_782wr")]
-transform = Transform3D(-1, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, -1, 0, 1, 2.00089)
+transform = Transform3D(-1, 0, 1.19209e-07, 0, 1, 0, -1.19209e-07, 0, -1, 0, 0.793509, 2.00089)
+
+[node name="StandCollisionShape" parent="PlayerPivot/PlayerExploration" index="0"]
+shape = SubResource("CapsuleShape3D_b4up1")
+
+[node name="Camera3D" parent="PlayerPivot/PlayerExploration/Neck/Head" index="0"]
+current = true
+
+[node name="Level1" parent="." instance=ExtResource("2_kjyxl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="CurrentCharacter" parent="Level1/Battle/Stage/CameraManager" index="0"]
+current = false
+
+[node name="DirectionalLight3D" parent="Level1/Battle/Stage" index="1"]
+visible = false
+
+[node name="Data" parent="Level1/Battle/BattleStarter/EnemiesInLevel/Slime_00" index="4"]
+_pressionLevelModifier = 1
+
+[node name="Data" parent="Level1/Battle/BattleStarter/EnemiesInLevel/Slime_01" index="4"]
+_pressionLevelModifier = 1
+
+[node name="Data" parent="Level1/Battle/BattleStarter/EnemiesInLevel/Slime_02" index="4"]
+_pressionLevelModifier = 1
+
+[node name="DebugToolBattleUI" parent="." instance=ExtResource("3_6bgjn")]
+
+[editable path="PlayerPivot/PlayerExploration"]
+[editable path="Level1"]
+[editable path="Level1/Battle/BrainCamera"]
+[editable path="Level1/Battle/ManagerContainer/CharacterBattlePositionManager"]
+[editable path="DebugToolBattleUI"]

@@ -47,7 +47,7 @@ light_bake_mode = 1
 
 [node name="BrainCamera" parent="Battle" instance=ExtResource("7_jdvbv")]
 
-[node name="ManagerContainer" type="Node" parent="Battle"]
+[node name="ManagerContainer" type="Node3D" parent="Battle"]
 
 [node name="CharacterReceptorSelector" parent="Battle/ManagerContainer" instance=ExtResource("4_ickuk")]
 
@@ -67,10 +67,10 @@ script = ExtResource("9_aiib7")
 [node name="BattleUI" parent="Battle" instance=ExtResource("9_m5fxk")]
 _canSelect = true
 
-[node name="BattleStarter" type="Node" parent="Battle"]
+[node name="BattleStarter" type="Node3D" parent="Battle"]
 script = ExtResource("14_n0mil")
 
-[node name="EnemiesInLevel" type="Node" parent="Battle/BattleStarter"]
+[node name="EnemiesInLevel" type="Node3D" parent="Battle/BattleStarter"]
 
 [node name="Slime_00" parent="Battle/BattleStarter/EnemiesInLevel" instance=ExtResource("2_d5rbv")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -10, 0)
@@ -150,7 +150,7 @@ script = ExtResource("4_3g63v")
 _attackName = "MeleeAttack"
 _damage = 12
 
-[node name="PartyMembers" type="Node" parent="Battle/BattleStarter"]
+[node name="PartyMembers" type="Node3D" parent="Battle/BattleStarter"]
 
 [node name="Character00" parent="Battle/BattleStarter/PartyMembers" instance=ExtResource("2_d5rbv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
@@ -219,7 +219,7 @@ ArmorDefense = 4
 script = ExtResource("4_3g63v")
 _damage = 15
 
-[node name="EnemyGroupInLevel" type="Node" parent="Battle/BattleStarter"]
+[node name="EnemyGroupInLevel" type="Node3D" parent="Battle/BattleStarter"]
 script = ExtResource("16_0tkll")
 
 [editable path="Battle/ManagerContainer/CharacterBattlePositionManager"]

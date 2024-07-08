@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class PlayerExplorationWallState : PlayerExplorationBaseState
+public partial class PlayerExplorationClimbingState : PlayerExplorationBaseState
 {
     private Vector3 _jumpDirection;
 
@@ -29,9 +29,19 @@ public partial class PlayerExplorationWallState : PlayerExplorationBaseState
             Context.Camera3D.Rotation = Context.LerpVector(Context.Camera3D.Rotation, "z", Mathf.DegToRad(0), delta);
         }
 
-        if(!Context.IsOnFloor() && !Context.IsFloorCheckerColliding() && !Context.IsWallCheckerColliding())
+        if(!Context.IsOnFloor() && !Context.IsFloorCheckerColliding() && !Context.IsClimbingCheckerColliding())
         {
             Context.SwitchState(Context.fallState);
+            return;
+        }
+
+        // Wall Running State Checker.
+        if(Input.IsActionPressed("jump") && Context.CanMakeWallRunning())
+        {
+            if(Context.GetSlideCollisionCount() > 0)
+            { 
+                Context.SwitchState(Context.wallRunningState);
+            }
             return;
         }
 
@@ -40,6 +50,6 @@ public partial class PlayerExplorationWallState : PlayerExplorationBaseState
 
     public override string ToString()
     {
-        return "Wall";
+        return "Climbing";
     }
 }

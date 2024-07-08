@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 public partial class CharacterBattlePositionManager : Node
 {
@@ -66,7 +65,9 @@ public partial class CharacterBattlePositionManager : Node
         // Subcribing to events.
         CharacterData.OnDie += CharacterData_OnDie;
         BattleManager.OnBattleStart += BattleManager_OnBattleStart;
+        BattleManager.OnBattleEnd += BattleManager_OnBattleEnd;
         BattleManager.OnCurrentCharacterChanged += BattleManager_OnCurrentCharacterChanged;
+        BattleManager.OnCharacterTurnListChanged += BattleManager_OnCharacterTurnListChanged;
     }
 
     private void SendCharacterToWaitArea(Character character)
@@ -119,8 +120,10 @@ public partial class CharacterBattlePositionManager : Node
             Vector3 startPosition = startPositions[positionIndex].GlobalPosition;
             Vector3 endPosition = endPositions[positionIndex].GlobalPosition;
 
+            // Access the entire list for lerp values for the positions, based on the quantity for characters in each row.
             lerpValues = _lerpValuesForPositions[characterListCountList[characterListCountIndex]];
 
+            // Getting the value that this character is going to use.
             float finalLerpValue = lerpValues[lerpValueIndex];
 
             if(finalLerpValue != 0)
@@ -135,6 +138,7 @@ public partial class CharacterBattlePositionManager : Node
                 }
             }
 
+            // Passing the lerp position to the global position of the character.
             character.GlobalPosition = startPosition.Lerp(endPosition, finalLerpValue);
 
             lerpValueIndex++;
@@ -164,12 +168,23 @@ public partial class CharacterBattlePositionManager : Node
         RearrangeCharacterList(e.enemyList, _enemyAdvantageStartPos, _enemyAdvantageEndPos);
     }
 
+    private void BattleManager_OnBattleEnd(object sender, BattleManager.OnBattleEndEventArgs e)
+    {
+        // We make this false for not making rearrenges unnecessarily. 
+        _hasToRearrangeEnemy = false;
+    }
+
     private void BattleManager_OnCurrentCharacterChanged(object sender, BattleManager.OnCurrentCharacterChangedEventArgs e)
     {
-        // In case of advantage
+        // In case of some enemy has died.
         if(_hasToRearrangeEnemy)
         {
             RearrangeCharacterList(e.enemyList, _enemyAdvantageStartPos, _enemyAdvantageEndPos);
         }
+    }
+
+    private void BattleManager_OnCharacterTurnListChanged(object sender, BattleManager.OnCurrentCharacterChangedEventArgs e)
+    {
+        RearrangeCharacterList(e.enemyList, _enemyAdvantageStartPos, _enemyAdvantageStartPos);
     }
 }

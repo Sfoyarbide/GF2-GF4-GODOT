@@ -1,10 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
 
 public enum ReceptorCriteria
 {
@@ -134,6 +130,7 @@ public partial class CharacterReceptorSelector : Node3D
         _selectsAll = selectsAll;
         _characterReceptorList.Clear();
 
+
         foreach(Character character in _battleDatabase.BattleManager.CharacterTurnList)
         {
             bool hasMeetCriterias = false;
@@ -218,6 +215,7 @@ public partial class CharacterReceptorSelector : Node3D
         }
 
         // The selects all will always be true, because will always need the entire list, and not only one.
+        GD.Print("SetupSelectionEnemy, Sender Name: " + sender.Name + " Attack Name: " + attack.Name);
         SetupSelection(sender, attack, true);
 
         if(addedExtraCriteria)
@@ -253,8 +251,10 @@ public partial class CharacterReceptorSelector : Node3D
         }
 
         // In this case, there is only one receptor, but we use the list, to make more dynamic the code. 
-        List<Character> characterReceptorList = new List<Character>();
-        characterReceptorList.Add(GetCharacterReceptor()); 
+        List<Character> characterReceptorList = new List<Character>
+        {
+            GetCharacterReceptor()
+        };
         return characterReceptorList;
     }
 

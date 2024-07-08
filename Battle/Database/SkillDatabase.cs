@@ -37,6 +37,7 @@ public partial class SkillDatabase : Node
     {
         foreach(Character character in e.characterTurnList)
         {
+            character.DataContainer.SkillList.Clear();
             foreach(string skillName in character.DataContainer.SkillNameList)
             {
                 Skill skill = FindSkill(skillName);

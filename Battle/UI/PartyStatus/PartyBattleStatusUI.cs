@@ -16,7 +16,8 @@ public partial class PartyBattleStatusUI : Node
             GD.PrintErr("Party Member UI Scene has not been assigned. Plese add it in Party Battle Status UI.");
         }
 
-        BattleManager.OnBattleStart += BattleManager_OnBattleManager;        
+        BattleStarter.OnFindingPartyMembersFinished += BattleStarter_OnFindingPartyMembersFinished;
+        //BattleManager.OnBattleEnd += BattleManager_OnBattleEnd;   
     }
 
     public void Setup(List<Character> partyList)
@@ -29,8 +30,21 @@ public partial class PartyBattleStatusUI : Node
         }
     }
 
-    private void BattleManager_OnBattleManager(object sender, BattleManager.OnBattleStartEventArgs e)
+    public void CleanPartyBattleStatusUI()
+    {
+        foreach(PartyMemberUI partyMember in _partyMembersContainerUI.GetChildren())
+        {
+            partyMember.QueueFree();
+        }
+    }
+
+    private void BattleManager_OnBattleStart(object sender, BattleManager.OnBattleStartEventArgs e)
     {
         Setup(e.partyList);
+    }
+
+    private void BattleStarter_OnFindingPartyMembersFinished(object sender, BattleStarter.OnBattleCharacterSetupFinishedEventArgs e)
+    {
+        Setup(e.partyMembers);
     }
 }

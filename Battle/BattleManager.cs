@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 public partial class BattleManager : Node3D
 {
@@ -11,6 +10,8 @@ public partial class BattleManager : Node3D
     private List<Character> _allyList; 
     private List<Character> _enemyList;
     private int _indexTurn = 0;
+
+    // Main Vars
     private bool _inCombat;
     private bool _inAction;
 
@@ -24,6 +25,7 @@ public partial class BattleManager : Node3D
     public static event EventHandler<OnActionExecutedEventArgs> OnActionExecuted;
     public static event EventHandler<OnSelectionStartedEventArgs> OnSelectionStarted;
     public static event EventHandler OnItemSelectionStarted;
+    public static event EventHandler<OnCurrentCharacterChangedEventArgs> OnCharacterTurnListChanged;
     public static event EventHandler<OnSkillSelectionStartedEventArgs> OnSkillSelectionStarted;
     public class OnBattleStartEventArgs : EventArgs
     {
@@ -48,6 +50,7 @@ public partial class BattleManager : Node3D
         public Character currentCharacter;
         public List<Character> partyList;
         public List<Character> enemyList;
+        public bool inCombat;
     }
     public class OnSelectionStartedEventArgs : EventArgs
     {
@@ -74,6 +77,11 @@ public partial class BattleManager : Node3D
         get{ return _enemyList; }
     }
 
+    public bool IsInCombat
+    {
+        get {return _inCombat;}
+    }
+
     public override void _Ready()
     {
         // Finding necessary nodes. 
@@ -87,6 +95,8 @@ public partial class BattleManager : Node3D
         CharacterData.OnDie += CharacterData_OnDie;
         KnockDown.CurrentCharacterKnockdown += KnockDown_CurrentCharacterKnockdown;
         AIManager.OnAIReadyToDoAction += AIManager_OnAIReadyToDoAction;
+
+        _inCombat = false;
 
         // TEMP
         /*
@@ -178,6 +188,11 @@ public partial class BattleManager : Node3D
 
             _inAction = false;
 
+            if(!_inCombat)
+            {
+                return;
+            }
+
             OnOneMore?.Invoke(this, new OnCurrentCharacterChangedEventArgs{
                 currentCharacter = GetCurrentCharacter()
             });
@@ -185,7 +200,8 @@ public partial class BattleManager : Node3D
             OnCurrentCharacterChanged?.Invoke(this, new OnCurrentCharacterChangedEventArgs{
                 currentCharacter = GetCurrentCharacter(),
                 partyList = _allyList,
-                enemyList = _enemyList
+                enemyList = _enemyList,
+                inCombat = _inCombat
             });
         }
         else
@@ -200,6 +216,11 @@ public partial class BattleManager : Node3D
         UpdateEnemyList();
 
         // CheckBattle();
+
+        if(!_inCombat)
+        {
+            return;
+        }
 
         DequeueCurrentCharacter();
         _inAction = false; 
@@ -216,7 +237,8 @@ public partial class BattleManager : Node3D
         OnCurrentCharacterChanged?.Invoke(this, new OnCurrentCharacterChangedEventArgs{
             currentCharacter = GetCurrentCharacter(),
             partyList = AllyList,
-            enemyList = EnemyList
+            enemyList = EnemyList,
+            inCombat = _inCombat
         });
     }
 
@@ -232,7 +254,10 @@ public partial class BattleManager : Node3D
         });
 
         OnCurrentCharacterChanged?.Invoke(this, new OnCurrentCharacterChangedEventArgs{
-            currentCharacter = GetCurrentCharacter()
+            currentCharacter = GetCurrentCharacter(),
+            partyList = _allyList,
+            enemyList = _enemyList,
+            inCombat = _inCombat
         });
     }
 
@@ -270,15 +295,23 @@ public partial class BattleManager : Node3D
     public void UpdateEnemyList()
     {
         _enemyList = CombatCalculations.ObtainCharacterListByIsEnemy(_characterTurnList, true);
-        if(_enemyList.Count < 1)
+        if(_enemyList.Count == 0)
         {
-            OnBattleEnd?.Invoke(this, new OnBattleEndEventArgs{
-                win = true
-            });
-
-            _inCombat = false;
-            _characterTurnList.Clear();
+            Win();
         }
+    }
+
+    private void Win()
+    {
+        OnBattleEnd?.Invoke(this, new OnBattleEndEventArgs{
+            win = true
+        });
+
+        _inCombat = false;
+        _inAction = false;
+        _allyList.Clear();
+        _enemyList.Clear();
+        _characterTurnList.Clear();
     }
 
     public void UpdateAllyList()
@@ -299,6 +332,40 @@ public partial class BattleManager : Node3D
                 skillAction.CurrentSkill = (Skill)attack;
                 break;
         }
+    }
+
+    public void DebugTool_EndBattle()
+    {
+        int index = 0;
+        foreach(Character character in _characterTurnList)
+        {
+            if(character.DataContainer.IsEnemy)
+            {
+                _characterTurnList.RemoveAt(index);
+            }
+            index++;
+        }
+
+        Win();
+    }
+
+    public void DebugTool_AddCharacter(Character character)
+    {
+        AddCharacterInTurns(character, _characterTurnList.Count-1);
+        UpdateAllyList();
+        UpdateEnemyList();
+
+        OnCharacterTurnListChanged?.Invoke(this, new OnCurrentCharacterChangedEventArgs{
+            currentCharacter = GetCurrentCharacter(),
+            partyList = _allyList,
+            enemyList = _enemyList
+        });
+    }
+
+    public void DebugTool_RemoveCharacter(int index)
+    {
+        _characterTurnList[index].DataContainer.Hp = 0;
+        //_characterTurnList.RemoveAt(_characterTurnList.FindIndex(c => c == character));
     }
 
     private void BaseAction_CannotTakeAction(object sender, EventArgs e)

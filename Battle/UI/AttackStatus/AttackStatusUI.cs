@@ -35,7 +35,7 @@ public partial class AttackStatusUI : Node3D
 
     public void Setup(BaseAction.AttackStateEventArgs e, Transform3D transform)
     {
-        Transform = transform;
+        GlobalTransform = transform;
         _camera = GetTree().Root.GetCamera3D();
         _dirToCamera = (_camera.GlobalPosition - GlobalPosition).Normalized();
         LookAt(GlobalPosition + _dirToCamera * -1);

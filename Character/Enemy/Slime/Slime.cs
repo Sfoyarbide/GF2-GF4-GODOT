@@ -40,6 +40,7 @@ public partial class Slime : CharacterEnemy
                 CurrentAttack = RandomizeAttack();
                 break;
         }
+        
         OnEnemySearchingReceptorList();
         TurnEnemyPassed++;
         

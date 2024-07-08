@@ -21,6 +21,7 @@ public partial class AIManager : Node
         // Subcribing to events. 
         BaseAction.AttackState += BaseAction_AttackState;
         BattleStarter.OnBattleCharacterSetupFinished += BattleStarter_OnBattleCharacterSetupFinished;
+        BattleManager.OnBattleEnd += BattleManager_OnBattleEnd;
         BattleManager.OnCurrentCharacterChanged += BattleManager_OnCurrentCharacterChanged;
         CharacterReceptorSelector.OnEnemySearchingReceptorListReady += CharacterReceptorSelector_OnEnemySearchingReceptorListReady;
         CharacterData.OnDie += CharacterData_OnDie;
@@ -28,7 +29,6 @@ public partial class AIManager : Node
     }
 
     // The function that updates the priority/value of the characters inside the dictionary.
-
     private void UpdateCharacterInValueDictionary(Character sender, Character receptor, int damage)
     {
         if(sender is not CharacterEnemy)
@@ -205,6 +205,11 @@ public partial class AIManager : Node
     private void CharacterData_OnRevive(object sender, CharacterData.CharacterDataEventArgs e)
     {
         _characterValueDictionary.Add(e.character, 0);
+    }
+
+    private void BattleManager_OnBattleEnd(object sender, BattleManager.OnBattleEndEventArgs e)
+    {
+        _characterValueDictionary.Clear();
     }
 
     private void CharacterReceptorSelector_OnEnemySearchingReceptorListReady(object sender, CharacterReceptorSelector.OnEnemySearchingReceptorListReadyEventArgs e)

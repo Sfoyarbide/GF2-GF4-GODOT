@@ -45,6 +45,7 @@ public partial class BattleUI : Control
         }
 
         // Subscribing to events
+        BattleManager.OnBattleStart += BattleManager_OnBattleStart;
         BattleManager.OnBattleEnd += BattleManager_OnBattleEnd;
         BattleManager.OnCurrentCharacterChanged += BattleManager_OnCurrentCharacterChanged;
         BattleManager.OnOneMore += BattleManager_OneMore;
@@ -59,6 +60,13 @@ public partial class BattleUI : Control
         };
     }
 
+    private void BattleManager_OnBattleStart(object sender, BattleManager.OnBattleStartEventArgs e)
+    {
+        _battleEndUI.Text = "";
+        _battleEndUI.Hide();
+    }
+
+
     private void BattleManager_OnBattleEnd(object sender, BattleManager.OnBattleEndEventArgs e)
     {
         if(e.win)
@@ -67,7 +75,6 @@ public partial class BattleUI : Control
             _battleEndUI.Show();
         }
     }
-
 
     private void BattleManager_OnCurrentCharacterChanged(object sender, BattleManager.OnCurrentCharacterChangedEventArgs e)
     {

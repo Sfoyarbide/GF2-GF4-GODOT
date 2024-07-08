@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 public partial class BattleStarter : Node
 {
+    // Vars.
+    private BattleDatabase _battleDatabase;
+
     // Party members in exploration.
     private List<Character> _partyMembers = new List<Character>();
     
@@ -15,7 +18,17 @@ public partial class BattleStarter : Node
     // TEMP
     private EnemyGroupInLevel _enemyGroupInLevel;
 
+    public EnemyGroupInLevel EnemyGroupInLevel 
+    {
+        get{ return _enemyGroupInLevel; }
+    }
+
+    public static event EventHandler<OnBattleCharacterSetupFinishedEventArgs> OnFindingPartyMembersFinished;
     public static event EventHandler<OnBattleCharacterSetupFinishedEventArgs> OnBattleCharacterSetupFinished;
+    public class OnFindingPartyMembersFinishedEventArgs : EventArgs
+    {
+        public List<Character> partyMembers;
+    }
     public class OnBattleCharacterSetupFinishedEventArgs : EventArgs
     {
         public List<Character> characterTurnList;
@@ -26,6 +39,8 @@ public partial class BattleStarter : Node
 
     public override void _Ready()
     {
+        _battleDatabase = GetTree().Root.GetNode<BattleDatabase>("BattleDatabase");
+
         _enemiesInLevelParent = GetNode<Node>("EnemiesInLevel");
         for(int x = 0; x < _enemiesInLevelParent.GetChildCount(); x++)
         {
@@ -42,12 +57,16 @@ public partial class BattleStarter : Node
         }
 
         _enemyGroupInLevel = GetNode<EnemyGroupInLevel>("EnemyGroupInLevel");
+
+        OnFindingPartyMembersFinished?.Invoke(this, new OnBattleCharacterSetupFinishedEventArgs{
+            partyMembers = _partyMembers
+        });
     }
 
     public override void _Process(double delta)
     {
         // TEMP
-        if(Input.IsActionJustPressed("test"))
+        if(Input.IsActionJustPressed("test") && !_battleDatabase.BattleManager.IsInCombat)
         {
             BattleCharacterSetup(true);
         }
@@ -79,9 +98,13 @@ public partial class BattleStarter : Node
         return enemiesList;
     }
 
-    private void BattleCharacterSetup(bool isAdvantage)
+    public void BattleCharacterSetup(bool isAdvantage, int randomGroup = -1)
     {
-        int randomGroup = GD.RandRange(0, _enemyGroupInLevel.EnemyGroupInLevelList.Count-1);
+        if(randomGroup == -1)
+        {
+            randomGroup = GD.RandRange(0, _enemyGroupInLevel.EnemyGroupInLevelList.Count-1);
+        }
+
         List<Character> characterTurnList = new List<Character>();
         List<Character> enemiesList = GetEnemiesList(randomGroup);
 
@@ -96,11 +119,18 @@ public partial class BattleStarter : Node
             characterTurnList.AddRange(_partyMembers);
         }
 
+        GD.Print("New character turn list count: " + characterTurnList.Count);
+
         OnBattleCharacterSetupFinished?.Invoke(this, new OnBattleCharacterSetupFinishedEventArgs{
             characterTurnList = characterTurnList,
             partyMembers = _partyMembers,
             enemyMembers = enemiesList,
             isAdvantage = isAdvantage,
         });
+    }
+
+    public void DebugTool_SetupBattle(bool isAdvantage, int randomGroup)
+    {
+        BattleCharacterSetup(isAdvantage, randomGroup);
     }
 }

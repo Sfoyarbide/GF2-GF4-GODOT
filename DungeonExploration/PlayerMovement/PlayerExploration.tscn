@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c3unwm8ebd1bv"]
+[gd_scene load_steps=17 format=3 uid="uid://c3unwm8ebd1bv"]
 
 [ext_resource type="Script" path="res://DungeonExploration/PlayerMovement/States/PlayerExplorationIdleState.cs" id="1_765na"]
 [ext_resource type="Script" path="res://DungeonExploration/PlayerMovement/PlayerExplorationMovement.cs" id="1_slw2r"]
@@ -7,15 +7,16 @@
 [ext_resource type="Script" path="res://DungeonExploration/PlayerMovement/States/PlayerExplorationWalkingState.cs" id="3_xnp5k"]
 [ext_resource type="Script" path="res://DungeonExploration/PlayerMovement/States/PlayerExplorationCrouchingState.cs" id="4_pfd41"]
 [ext_resource type="Script" path="res://DungeonExploration/PlayerMovement/States/PlayerExplorationSlidingState.cs" id="5_phixw"]
-[ext_resource type="Script" path="res://DungeonExploration/PlayerMovement/States/PlayerExplorationWallState.cs" id="8_r8cbs"]
+[ext_resource type="Script" path="res://DungeonExploration/PlayerMovement/States/PlayerExplorationClimbingState.cs" id="8_r8cbs"]
 [ext_resource type="Script" path="res://DungeonExploration/PlayerMovement/States/PlayerExplorationRollState.cs" id="9_mwulc"]
 [ext_resource type="Script" path="res://DungeonExploration/PlayerMovement/States/PlayerExplorationFallState.cs" id="10_e51vr"]
+[ext_resource type="Script" path="res://DungeonExploration/PlayerMovement/States/PlayerExplorationWallRunningState.cs" id="11_eluoh"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sgw0m"]
 resource_local_to_scene = true
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gtlul"]
-height = 1.4
+height = 1.2
 
 [sub_resource type="Animation" id="Animation_e5t80"]
 length = 1.1
@@ -84,10 +85,14 @@ _stateDebuger = NodePath("StateDebuger")
 [node name="StandCollisionShape" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_sgw0m")
 
-[node name="WallChecker" type="RayCast3D" parent="StandCollisionShape"]
+[node name="ClimbChecker" type="RayCast3D" parent="StandCollisionShape"]
 target_position = Vector3(0, 0.9, -1)
 collide_with_areas = true
 debug_shape_custom_color = Color(0.981496, 0, 0.358138, 1)
+
+[node name="WallChecker" type="RayCast3D" parent="StandCollisionShape"]
+target_position = Vector3(0.75, 0, 0)
+collide_with_areas = true
 
 [node name="FloorChecker" type="RayCast3D" parent="StandCollisionShape"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
@@ -100,12 +105,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 shape = SubResource("CapsuleShape3D_gtlul")
 
 [node name="CrouchChecker" type="RayCast3D" parent="CrouchCollisionShape"]
-target_position = Vector3(0, 1, 0)
+target_position = Vector3(0, 1.2, 0)
 
 [node name="Neck" type="Node3D" parent="."]
 
 [node name="Head" type="Node3D" parent="Neck"]
-transform = Transform3D(1, 0, 0, 0, 1, 1.74846e-07, 0, -1.74846e-07, 1, 0, 0.8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 4.46638e-06, 0, -4.46638e-06, 1, 0, 0.8, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Neck/Head"]
 
@@ -137,7 +142,7 @@ script = ExtResource("5_phixw")
 [node name="SliderTimer" type="Timer" parent="StateContainer/Sliding"]
 one_shot = true
 
-[node name="Wall" type="Node" parent="StateContainer"]
+[node name="Climbing" type="Node" parent="StateContainer"]
 script = ExtResource("8_r8cbs")
 
 [node name="Roll" type="Node" parent="StateContainer"]
@@ -146,9 +151,27 @@ script = ExtResource("9_mwulc")
 [node name="Fall" type="Node" parent="StateContainer"]
 script = ExtResource("10_e51vr")
 
+[node name="WallRunning" type="Node" parent="StateContainer"]
+script = ExtResource("11_eluoh")
+
+[node name="JumpGapTimer" type="Timer" parent="StateContainer/WallRunning"]
+wait_time = 0.5
+one_shot = true
+
+[node name="CooldownTimer" type="Timer" parent="StateContainer/WallRunning"]
+wait_time = 0.2
+one_shot = true
+
+[node name="EnterStateTimer" type="Timer" parent="StateContainer/WallRunning"]
+wait_time = 0.2
+one_shot = true
+
 [node name="StateDebuger" type="Label" parent="."]
 offset_right = 40.0
 offset_bottom = 23.0
 
 [connection signal="animation_finished" from="Neck/Head/AnimationPlayerHead" to="StateContainer/Roll" method="OnAnimationPlayerHeadAnimationFinished"]
 [connection signal="timeout" from="StateContainer/Sliding/SliderTimer" to="StateContainer/Sliding" method="OnSliderTimerTimeout"]
+[connection signal="timeout" from="StateContainer/WallRunning/JumpGapTimer" to="StateContainer/WallRunning" method="OnJumpGapTimerTimeout"]
+[connection signal="timeout" from="StateContainer/WallRunning/CooldownTimer" to="StateContainer/WallRunning" method="OnCooldownTimerTimeout"]
+[connection signal="timeout" from="StateContainer/WallRunning/EnterStateTimer" to="StateContainer/WallRunning" method="OnEnterStateTimerTimeout"]
